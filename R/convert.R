@@ -129,8 +129,3 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet 
   return(df_out)
 }
 
-# Example usage of convert_gene function
-# Uncomment to test:
-# input_df <- read.csv("input.csv", stringsAsFactors = FALSE)
-# converted_df <- convert_gene(input_df, frm = "tenx", to = "adaptive", species = "human")
-# write.csv(converted_df, "output.csv", row.names = FALSE)

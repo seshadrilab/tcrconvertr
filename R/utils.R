@@ -13,7 +13,3 @@ get_example_path <- function(file_name) {
   
   return(file_path)
 }
-
-# Example usage:
-# Assuming the "tcrconvert" package contains an "examples" folder
-# print(get_example_path("tenx.csv"))
