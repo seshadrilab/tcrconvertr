@@ -93,11 +93,11 @@ build_lookup_from_fastas <- function(data_dir) {
   lookup[grepl("C", lookup[["imgt"]]), c("adaptive", "adaptivev2")] <- NA
   
   # Create from_tenx and from_adaptive tables
-  from_tenx <- aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
-  from_adaptive <- aggregate(. ~ adaptive, data = subset(lookup, !is.na(adaptive)), FUN = function(x) x[1])
+  from_tenx <- stats::aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
+  from_adaptive <- stats::aggregate(. ~ adaptive, data = subset(lookup, !is.na(adaptive)), FUN = function(x) x[1])
   
   # Save to files
-  write.csv(lookup, file.path(data_dir, "lookup.csv"), row.names = FALSE)
-  write.csv(from_tenx, file.path(data_dir, "lookup_from_tenx.csv"), row.names = FALSE)
-  write.csv(from_adaptive, file.path(data_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
+  utils::write.csv(lookup, file.path(data_dir, "lookup.csv"), row.names = FALSE)
+  utils::write.csv(from_tenx, file.path(data_dir, "lookup_from_tenx.csv"), row.names = FALSE)
+  utils::write.csv(from_adaptive, file.path(data_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
 }

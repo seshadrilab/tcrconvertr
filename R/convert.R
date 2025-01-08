@@ -1,7 +1,3 @@
-# Load required packages
-library(tools)  # For file path manipulation
-library(utils)  # For reading and writing data files
-
 # Set up logging
 log_message <- function(level, message) {
   cat(paste0("[", level, "] ", message, "\n"))
@@ -103,7 +99,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet 
   
   # Load lookup table
   lookup_f <- choose_lookup(frm, to, species)
-  lookup <- read.csv(lookup_f, stringsAsFactors = FALSE)
+  lookup <- utils::read.csv(lookup_f, stringsAsFactors = FALSE)
   
   # Determine columns to use
   cols_from <- which_frm_cols(df, frm, frm_cols)
