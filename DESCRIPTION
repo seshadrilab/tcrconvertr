@@ -1,16 +1,19 @@
-Package: tcrconvertr
+Package: TCRconvertR
 Type: Package
 Title: Decompose and Recompose Functions
 Description: Convert TCRs between 10X, Adaptive, and IMGT formats.
 Version: 0.1
 Authors@R: c(person("Emma", "Bishop", role = c("aut", "cre"),
-    email = "emmab5@uw.edu"))
+    email = "emmab5@uw.edu", comment = c(ORCID = "0000-0003-4484-3336")))
 License: MIT + file LICENSE
 URL: https://github.com/seshadrilab/tcrconvertr
 BugReports: https://github.com/seshadrilab/tcrconvertr/issues
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Imports:
-    tools,
+    stats,
     utils
 RoxygenNote: 7.3.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
