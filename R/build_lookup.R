@@ -28,7 +28,7 @@ extract_imgt_genes <- function(data_dir) {
   
   # Create and sort a data frame
   lookup <- data.frame(imgt = imgt, stringsAsFactors = FALSE)
-  lookup_sorted <- lookup[order(lookup$imgt), , drop = FALSE]
+  lookup_sorted <- lookup[order(lookup[["imgt"]]), , drop = FALSE]
   rownames(lookup_sorted) <- NULL
   
   return(lookup_sorted)
@@ -69,7 +69,7 @@ build_lookup_from_fastas <- function(data_dir) {
   lookup <- extract_imgt_genes(data_dir)
   
   # Create the 10X column
-  lookup$tenx <- sub("/DV", "DV", substr(lookup$imgt, 1, nchar(lookup$imgt) - 3))
+  lookup[["tenx"]] <- sub("/DV", "DV", substr(lookup[["imgt"]], 1, nchar(lookup[["imgt"]]) - 3))
   
   # Create the Adaptive column
   adaptive_replacements <- c(
@@ -80,17 +80,17 @@ build_lookup_from_fastas <- function(data_dir) {
     "TRAV21/DV12" = "TRAV21-1", "TRAV15-2/DV6-2" = "TRAV15-2", "TRAV15D-2/DV6D-2" = "TRAV15D-2",
     "TR" = "TCR", "-" = "-0", "/OR9-02" = "-or09_02"
   )
-  lookup$adaptive <- lookup$imgt
+  lookup[["adaptive"]] <- lookup[["imgt"]]
   for (pattern in names(adaptive_replacements)) {
     replacement <- adaptive_replacements[[pattern]]
-    lookup$adaptive <- gsub(pattern, replacement, lookup$adaptive)
+    lookup[["adaptive"]] <- gsub(pattern, replacement, lookup[["adaptive"]])
   }
-  lookup$adaptive <- sapply(lookup$adaptive, add_dash_one)
-  lookup$adaptive <- sapply(lookup$adaptive, pad_single_digit)
-  lookup$adaptivev2 <- lookup$adaptive
+  lookup[["adaptive"]] <- sapply(lookup[["adaptive"]], add_dash_one)
+  lookup[["adaptive"]] <- sapply(lookup[["adaptive"]], pad_single_digit)
+  lookup[["adaptivev2"]] <- lookup[["adaptive"]]
   
   # Set Adaptive columns to NA for constant genes
-  lookup[grepl("C", lookup$imgt), c("adaptive", "adaptivev2")] <- NA
+  lookup[grepl("C", lookup[["imgt"]]), c("adaptive", "adaptivev2")] <- NA
   
   # Create from_tenx and from_adaptive tables
   from_tenx <- aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
