@@ -15,6 +15,13 @@ col_ref <- list(
   tenx = c("v_gene", "d_gene", "j_gene", "c_gene")
 )
 
+#' Determine which lookup table to use and get filepath.
+#'
+#' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
+#' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
+#' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to "human".
+#'
+#' @return A string, the path to correct lookup table.
 choose_lookup <- function(frm, to, species = "human") {
   # Determine the lookup table path
   data_path <- system.file("data", species, package = "tcrconvert")
@@ -40,6 +47,13 @@ choose_lookup <- function(frm, to, species = "human") {
   }
 }
 
+#' Determine input columns to use for converting gene names.
+#'
+#' @param df Dataframe containing TCR gene names.
+#' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
+#' @param frm_cols A character vector, the custom column names to use.
+#'
+#' @return A character vector, column names to use.
 which_frm_cols <- function(df, frm, frm_cols = NULL) {
   # Determine input columns for conversion
   if (frm == "imgt" && is.null(frm_cols)) {
@@ -61,6 +75,17 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
   return(cols_from)
 }
 
+#' Convert T-cell receptor V, D, J, and/or C gene names from one naming convention to another.
+#'
+#' @param df Dataframe containing TCR gene names.
+#' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
+#' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
+#' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to "human".
+#' @param frm_cols A character vector of custom V/D/J/C gene column names. Optional; defaults to NULL.
+#' @param quiet A boolean, whether to suppress warning messages. Optional; defaults to FALSE.
+#'
+#' @return A dataframe of converted TCR data.
+#' @export
 convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet = FALSE) {
   # Check input and output formats
   if (frm == to) {

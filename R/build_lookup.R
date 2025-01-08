@@ -1,13 +1,9 @@
+#' Extract gene names from a reference FASTA.
+#'
+#' @param infile A string, the path to FASTA file.
+#'
+#' @return A character vector of gene names.
 parse_imgt_fasta <- function(infile) {
-  # Extract gene names from a reference FASTA file
-  #
-  # Args:
-  #   infile: Path to the FASTA file
-  #
-  # Returns:
-  #   A vector of gene names
-  
-  # Read lines from the file
   lines <- readLines(infile)
   
   # Extract gene names from headers
@@ -18,15 +14,12 @@ parse_imgt_fasta <- function(infile) {
   return(imgt_list)
 }
 
+#' Extract gene names from all reference FASTA files in a folder.
+#'
+#' @param data_dir A string, the path to directory containing FASTA files.
+#'
+#' @return A dataframe of gene names.
 extract_imgt_genes <- function(data_dir) {
-  # Extract gene names from all FASTA files in a folder
-  #
-  # Args:
-  #   data_dir: Path to the directory containing FASTA files
-  #
-  # Returns:
-  #   A sorted data frame with gene names
-  
   # List all FASTA files
   fasta_files <- list.files(data_dir, pattern = "\\.(fa|fasta)$", full.names = TRUE)
   
@@ -41,42 +34,37 @@ extract_imgt_genes <- function(data_dir) {
   return(lookup_sorted)
 }
 
+#' Add a `-01` to genes without IMGT gene-level designation.
+#'
+#' @param gene_str A string, the gene name.
+#'
+#' @return A string, the updated gene name.
 add_dash_one <- function(gene_str) {
-  # Add "-01" to genes without IMGT gene-level designation
-  #
-  # Args:
-  #   gene_str: Gene name as a string
-  #
-  # Returns:
-  #   Modified gene name
-  
   if (!grepl("-", gene_str)) {
     return(sub("\\*", "-01*", gene_str))
   }
   return(gene_str)
 }
 
+#' Add a zero to single-digit gene-level designatinon in gene names.
+#'
+#' @param gene_str A string, the gene name.
+#'
+#' @return A string, the updated gene name.
 pad_single_digit <- function(gene_str) {
-  # Add a leading zero to single-digit gene-level designation
-  #
-  # Args:
-  #   gene_str: Gene name as a string
-  #
-  # Returns:
-  #   Modified gene name
-  
   return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\1\\02\\3", gene_str))
 }
 
+#' Create these lookup tables within in a given directory that contains FASTA files:
+#'    - lookup.csv
+#'    - lookup_from_tenx.csv
+#'    - lookup_from_adaptive.csv
+#'
+#' @param data_dir A string, the directory containing FASTA files.
+#'
+#' @return Nothing.
+#' @export
 build_lookup_from_fastas <- function(data_dir) {
-  # Create lookup tables from FASTA files in a directory
-  #
-  # Args:
-  #   data_dir: Directory containing FASTA files
-  #
-  # Returns:
-  #   None (saves lookup tables to files)
-  
   # Extract IMGT gene names
   lookup <- extract_imgt_genes(data_dir)
   

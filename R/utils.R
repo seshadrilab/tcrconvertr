@@ -1,13 +1,10 @@
+#' Get full path to given example file or directory.
+#'
+#' @param file_name A string, the name of the example file or directory.
+#'
+#' @return A string, the path to example file or directory.
+#' @export
 get_example_path <- function(file_name) {
-  # Get full path to a given example file or directory
-  #
-  # Args:
-  #   file_name: Name of the example file or directory (string)
-  #
-  # Returns:
-  #   Full path to the example file or directory (string)
-  
-  # Assuming the "tcrconvert" package has an "examples" folder
   # Use system.file to locate the directory
   example_dir <- system.file("examples", package = "tcrconvert")
   
