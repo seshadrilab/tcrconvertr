@@ -20,7 +20,7 @@ col_ref <- list(
 #' @return A string, the path to correct lookup table.
 choose_lookup <- function(frm, to, species = "human") {
   # Determine the lookup table path
-  data_path <- system.file("data", species, package = "tcrconvert")
+  data_path <- system.file("extdata", species, package = "TCRconvertR")
   
   if (frm == "tenx") {
     lookup_f <- file.path(data_path, "lookup_from_tenx.csv")
