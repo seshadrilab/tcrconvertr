@@ -6,7 +6,7 @@
 #' @export
 get_example_path <- function(file_name) {
   # Use system.file to locate the directory
-  example_dir <- system.file("extdata/examples", species, package = "TCRconvertR")
+  example_dir <- system.file("extdata/examples", package = "TCRconvertR")
   
   # Construct the full path
   file_path <- file.path(example_dir, file_name)
