@@ -8,12 +8,16 @@ Authors@R: c(person("Emma", "Bishop", role = c("aut", "cre"),
 License: MIT + file LICENSE
 URL: https://github.com/seshadrilab/tcrconvertr
 BugReports: https://github.com/seshadrilab/tcrconvertr/issues
-Roxygen: list(markdown = TRUE)
+Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace", "rd",
+    "roxyglobals::global_roclet"))
 Encoding: UTF-8
 Imports:
     stats,
     utils
 RoxygenNote: 7.3.2
 Suggests: 
+    roxyglobals,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Config/roxyglobals/filename: globals.R
+Config/roxyglobals/unique: FALSE

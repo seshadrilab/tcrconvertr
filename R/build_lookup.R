@@ -63,6 +63,7 @@ pad_single_digit <- function(gene_str) {
 #' @param data_dir A string, the directory containing FASTA files.
 #'
 #' @return Nothing.
+#' @autoglobal
 #' @export
 build_lookup_from_fastas <- function(data_dir) {
   # Extract IMGT gene names
