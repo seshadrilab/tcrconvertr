@@ -46,7 +46,7 @@ add_dash_one <- function(gene_str) {
   return(gene_str)
 }
 
-#' Add a zero to single-digit gene-level designatinon in gene names.
+#' Add a zero to single-digit gene-level designation in gene names.
 #'
 #' @param gene_str A string, the gene name.
 #'
