@@ -52,7 +52,7 @@ add_dash_one <- function(gene_str) {
 #'
 #' @return A string, the updated gene name.
 pad_single_digit <- function(gene_str) {
-  return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\1\\02\\3", gene_str))
+  return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str))
 }
 
 #' Create these lookup tables within in a given directory that contains FASTA files:
