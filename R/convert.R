@@ -1,7 +1,3 @@
-# Set up logging
-log_message <- function(level, message) {
-  cat(paste0("[", level, "] ", message, "\n"))
-}
 
 # Standard column names for different sources of TCR data
 col_ref <- list(
@@ -24,11 +20,11 @@ choose_lookup <- function(frm, to, species = "human") {
   
   if (frm == "tenx") {
     lookup_f <- file.path(data_path, "lookup_from_tenx.csv")
-    log_message("WARNING", "Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.")
+    message("Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.")
   } else if (frm %in% c("adaptive", "adaptivev2")) {
     lookup_f <- file.path(data_path, "lookup_from_adaptive.csv")
     if (to == "imgt") {
-      log_message("WARNING", "Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.")
+      message("Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.")
     }
   } else {
     lookup_f <- file.path(data_path, "lookup.csv")
@@ -38,8 +34,7 @@ choose_lookup <- function(frm, to, species = "human") {
   if (file.exists(lookup_f)) {
     return(lookup_f)
   } else {
-    log_message("ERROR", "Lookup table not found, please ensure reference files are available.")
-    stop("FileNotFoundError")
+    stop("Lookup table not found, please ensure reference files are available.")
   }
 }
 
@@ -54,15 +49,14 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
   # Determine input columns for conversion
   if (frm == "imgt" && is.null(frm_cols)) {
     cols_from <- col_ref$tenx
-    log_message("INFO", paste("No column names provided for IMGT data. Using 10X column names:", paste(cols_from, collapse = ", ")))
+    message(paste("No column names provided for IMGT data. Using 10X column names:", paste(cols_from, collapse = ", ")))
   } else if (!is.null(frm_cols)) {
     missing_cols <- setdiff(frm_cols, colnames(df))
     if (length(missing_cols) > 0) {
-      log_message("ERROR", paste("These columns are not in the input dataframe:", paste(missing_cols, collapse = ", ")))
-      stop("ValueError")
+      stop(paste("These columns are not in the input dataframe:", paste(missing_cols, collapse = ", ")))
     } else {
       cols_from <- frm_cols
-      log_message("INFO", paste("Using custom column names:", paste(cols_from, collapse = ", ")))
+      message(paste("Using custom column names:", paste(cols_from, collapse = ", ")))
     }
   } else {
     cols_from <- col_ref[[frm]]
@@ -85,16 +79,14 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
 convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet = FALSE) {
   # Check input and output formats
   if (frm == to) {
-    log_message("ERROR", '"frm" and "to" formats should be different.')
-    stop("ValueError")
+    stop('"frm" and "to" formats should be different.')
   }
   if (nrow(df) == 0) {
-    log_message("ERROR", "Input data is empty.")
-    stop("ValueError")
+    stop("Input data is empty.")
   }
   
   if (to %in% c("adaptive", "adaptivev2")) {
-    log_message("WARNING", "Adaptive only captures VDJ genes, any C genes will become NA.")
+    message("Adaptive only captures VDJ genes, any C genes will become NA.")
   }
   
   # Load lookup table
@@ -117,7 +109,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet 
   }
   
   if (length(bad_genes) > 0) {
-    log_message("WARNING", paste("These genes are not in IMGT for this species and will be replaced with NA:", paste(unique(bad_genes), collapse = ", ")))
+    warning(paste("These genes are not in IMGT for this species and will be replaced with NA:", paste(unique(bad_genes), collapse = ", ")))
   }
   
   # Replace columns in original dataframe
