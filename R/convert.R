@@ -100,19 +100,22 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet 
 
   # Loop over gene columns, doing a merge to get converted gene names
   new_genes <- list()
-  bad_genes <- c()
+  bad_genes_all <- c()
   
   for (col in cols_from) {
     if (col %in% colnames(df)) {
       merged <- merge(df[, c(col, "id"), drop = FALSE], lookup, by.x = col, by.y = frm, all.x = TRUE)
       merged <- merged[order(merged$id), ]
       new_genes[[col]] <- merged[, to]
-      bad_genes <- c(bad_genes, merged[is.na(merged[, to]), col])
+      # Note genes where the merge produced an NA on the 'to' format side
+      bad_genes_all <- c(bad_genes_all, merged[is.na(merged[, to]), col])
     }
   }
   
-  if (length(bad_genes) > 0) {
-    warning(paste("These genes are not in IMGT for this species and will be replaced with NA:", paste(unique(bad_genes), collapse = ", ")))
+  # Display genes we couldn't convert
+  if (!all(is.na(bad_genes_all))){
+    bad_genes <- unique(bad_genes_all)
+    warning(paste("These genes are not in IMGT for this species and will be replaced with NA:\n", paste(unique(bad_genes), collapse = ", ")))
   }
   
   # Replace columns in original dataframe
