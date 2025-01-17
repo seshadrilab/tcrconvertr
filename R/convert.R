@@ -95,13 +95,17 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet 
   # Determine columns to use
   cols_from <- which_frm_cols(df, frm, frm_cols)
   
-  # Perform conversion
+  # Add column of row numbers so we can keep order straight
+  df$id  <- 1:nrow(df)
+
+  # Loop over gene columns, doing a merge to get converted gene names
   new_genes <- list()
   bad_genes <- c()
   
   for (col in cols_from) {
     if (col %in% colnames(df)) {
-      merged <- merge(df[, col, drop = FALSE], lookup, by.x = col, by.y = frm, all.x = TRUE)
+      merged <- merge(df[, c(col, "id"), drop = FALSE], lookup, by.x = col, by.y = frm, all.x = TRUE)
+      merged <- merged[order(merged$id), ]
       new_genes[[col]] <- merged[, to]
       bad_genes <- c(bad_genes, merged[is.na(merged[, to]), col])
     }
@@ -117,6 +121,12 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet 
     df_out[, col] <- new_genes[[col]]
   }
   
+  # Remove row numbers column
+  df_out <- subset(df_out, select = -c(id))
+
+  # Replace NoData with NA
+  df_out[df_out == "NoData"] <- NA
+
   return(df_out)
 }
 
