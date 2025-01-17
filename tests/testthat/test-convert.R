@@ -54,10 +54,10 @@ test_that("can convert genes", {
   custom_to_tenx_df <- tenx_df
   colnames(custom_to_tenx_df) <- c("myV", "myD", "myJ", "myC", "myCDR3")
 
-  adapt_no_allele_df <- data.frame(v_resolved = c('TCRAV12-01', 'TCRBV15-01*01'),
-                                   d_resolved = c(NA, 'TCRBD01-01'),
-                                   j_resolved = c('TCRAJ16-01*01', 'TCRBJ02-05'),
-                                   cdr3_amino_acid = c('CAVLIF', 'CASSGF'))
+  adapt_no_allele_df <- data.frame(v_resolved = c("TCRAV12-01", "TCRBV15-01*01"),
+                                   d_resolved = c(NA, "TCRBD01-01"),
+                                   j_resolved = c("TCRAJ16-01*01", "TCRBJ02-05"),
+                                   cdr3_amino_acid = c("CAVLIF", "CASSGF"))
   # TODO: Fix this and finish building out all possible parameter combos
   # 10X <-> Adaptive
   expect_equal(convert_gene(tenx_df, 'tenx', 'adaptive'), tenx_to_adapt_df)
