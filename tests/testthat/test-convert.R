@@ -4,7 +4,7 @@ test_that("can convert genes", {
   # First, define all the dataframes we need
   imgt_df <- data.frame(v_gene = c('TRAV12-1*01', 'TRBV15*01'),
                         d_gene = c(NA, 'TRBD1*01'),
-                        j_gene = c('TRAJ16*0', 'TRBJ2-5*01'),
+                        j_gene = c('TRAJ16*01', 'TRBJ2-5*01'),
                         c_gene = c('TRAC*01', 'TRBC2*01'),
                         cdr3 = c('CAVLIF', 'CASSGF'))
 
@@ -34,22 +34,23 @@ test_that("can convert genes", {
     tenx_to_adapt_df[, 1:3],
     c_gene = NA,
     tenx_to_adapt_df["cdr3"])
+  tenx_to_adapt_df$c_gene <- as.character(tenx_to_adapt_df$c_gene)
 
   adapt_to_tenx_df <- tenx_df
-  colnames(adapt_to_tenx_df) <- c("v_resolved", "d_resolved", "j_resolved", "cdr3_amino_acid")
   adapt_to_tenx_df$c_gene <- NULL
+  colnames(adapt_to_tenx_df) <- c("v_resolved", "d_resolved", "j_resolved", "cdr3_amino_acid")
 
   adapt_to_imgt_df <- imgt_df
-  colnames(adapt_to_imgt_df) <- c("v_resolved", "d_resolved", "j_resolved", "cdr3_amino_acid")
   adapt_to_imgt_df$c_gene <- NULL
+  colnames(adapt_to_imgt_df) <- c("v_resolved", "d_resolved", "j_resolved", "cdr3_amino_acid")
 
   adaptv2_to_tenx_df <- tenx_df
+  adaptv2_to_tenx_df$c_gene <- NULL
   colnames(adaptv2_to_tenx_df) <- c("vMaxResolved", "dMaxResolved", "jMaxResolved", "aminoAcid")
-  adaptv2_to_tenx_df <- NULL
 
   adaptv2_to_imgt_df <- imgt_df
+  adaptv2_to_imgt_df$c_gene <- NULL
   colnames(adaptv2_to_imgt_df) <- c("vMaxResolved", "dMaxResolved", "jMaxResolved", "aminoAcid")
-  adaptv2_to_imgt_df <- NULL
 
   custom_to_tenx_df <- tenx_df
   colnames(custom_to_tenx_df) <- c("myV", "myD", "myJ", "myC", "myCDR3")
