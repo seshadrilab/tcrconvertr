@@ -74,7 +74,8 @@ test_that("can convert genes", {
   expect_equal(convert_gene(adapt_df, "adaptive", "imgt"), adapt_to_imgt_df)
   expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt"), adaptv2_to_imgt_df)
   # Custom column names
-  expect_equal(convert_gene(custom_df, "imgt", "tenx"), custom_to_tenx_df)
+  expect_equal(convert_gene(custom_df, "imgt", "tenx", 
+                            frm_cols = c("myV", "myD", "myJ", "myC")), custom_to_tenx_df)
   # MOUSE
   expect_equal(convert_gene(tenx_df, "tenx", "adaptive", species = "mouse"), tenx_to_adapt_df)
   expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2", species = "mouse"), tenx_to_adapt_df)
@@ -86,7 +87,8 @@ test_that("can convert genes", {
   expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2", species = "mouse"), tenx_to_adapt_df)
   expect_equal(convert_gene(adapt_df, "adaptive", "imgt", species = "mouse"), adapt_to_imgt_df)
   expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt", species = "mouse"), adaptv2_to_imgt_df)
-  expect_equal(convert_gene(custom_df, "imgt", "tenx", species = "mouse"), custom_to_tenx_df)
+  expect_equal(convert_gene(custom_df, "imgt", "tenx", species = "mouse", 
+                            frm_cols = c("myV", "myD", "myJ", "myC")), custom_to_tenx_df)
   # RHESUS MACAQUE
   expect_equal(convert_gene(tenx_df, "tenx", "adaptive", species = "rhesus"), tenx_to_adapt_df)
   expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2", species = "rhesus"), tenx_to_adapt_df)
@@ -98,7 +100,8 @@ test_that("can convert genes", {
   expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2", species = "rhesus"), tenx_to_adapt_df)
   expect_equal(convert_gene(adapt_df, "adaptive", "imgt", species = "rhesus"), adapt_to_imgt_df)
   expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt", species = "rhesus"), adaptv2_to_imgt_df)
-  expect_equal(convert_gene(custom_df, "imgt", "tenx", species = "rhesus"), custom_to_tenx_df)
+  expect_equal(convert_gene(custom_df, "imgt", "tenx", species = "rhesus",
+                            frm_cols = c("myV", "myD", "myJ", "myC")), custom_to_tenx_df)
   # Some Adaptive genes without allele
   expect_equal(convert_gene(adapt_no_allele_df, "adaptive", "imgt"), adapt_to_imgt_df)
 })
