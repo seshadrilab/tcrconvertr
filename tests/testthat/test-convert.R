@@ -60,7 +60,46 @@ test_that("can convert genes", {
                                    cdr3_amino_acid = c("CAVLIF", "CASSGF"))
   # TODO: Fix this and finish building out all possible parameter combos
   # 10X <-> Adaptive
-  expect_equal(convert_gene(tenx_df, 'tenx', 'adaptive'), tenx_to_adapt_df)
+  expect_equal(convert_gene(tenx_df, "tenx", "adaptive"), tenx_to_adapt_df)
+  expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2"), tenx_to_adapt_df)
+  expect_equal(convert_gene(adapt_df, "adaptive", "tenx"), adapt_to_tenx_df)
+  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx"), adaptv2_to_tenx_df)
+  # 10X <-> IMGT
+  expect_equal(convert_gene(tenx_df, "tenx", "imgt"), imgt_df)
+  expect_equal(convert_gene(imgt_df, "imgt", "tenx"), tenx_df)
+  # IMGT <-> Adaptive
+  expect_equal(convert_gene(imgt_df, "imgt", "adaptive"), tenx_to_adapt_df)
+  expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2"), tenx_to_adapt_df)
+  expect_equal(convert_gene(adapt_df, "adaptive", "imgt"), adapt_to_imgt_df)
+  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt"), adaptv2_to_imgt_df)
+  # Custom column names
+  expect_equal(convert_gene(custom_df, "imgt", "tenx"), custom_to_tenx_df)
+  # MOUSE
+  expect_equal(convert_gene(tenx_df, "tenx", "adaptive", species = "mouse"), tenx_to_adapt_df)
+  expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2", species = "mouse"), tenx_to_adapt_df)
+  expect_equal(convert_gene(adapt_df, "adaptive", "tenx", species = "mouse"), adapt_to_tenx_df)
+  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx", species = "mouse"), adaptv2_to_tenx_df)
+  expect_equal(convert_gene(tenx_df, "tenx", "imgt", species = "mouse"), imgt_df)
+  expect_equal(convert_gene(imgt_df, "imgt", "tenx", species = "mouse"), tenx_df)
+  expect_equal(convert_gene(imgt_df, "imgt", "adaptive", species = "mouse"), tenx_to_adapt_df)
+  expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2", species = "mouse"), tenx_to_adapt_df)
+  expect_equal(convert_gene(adapt_df, "adaptive", "imgt", species = "mouse"), adapt_to_imgt_df)
+  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt", species = "mouse"), adaptv2_to_imgt_df)
+  expect_equal(convert_gene(custom_df, "imgt", "tenx", species = "mouse"), custom_to_tenx_df)
+  # RHESUS MACAQUE
+  expect_equal(convert_gene(tenx_df, "tenx", "adaptive", species = "rhesus"), tenx_to_adapt_df)
+  expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2", species = "rhesus"), tenx_to_adapt_df)
+  expect_equal(convert_gene(adapt_df, "adaptive", "tenx", species = "rhesus"), adapt_to_tenx_df)
+  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx", species = "rhesus"), adaptv2_to_tenx_df)
+  expect_equal(convert_gene(tenx_df, "tenx", "imgt", species = "rhesus"), imgt_df)
+  expect_equal(convert_gene(imgt_df, "imgt", "tenx", species = "rhesus"), tenx_df)
+  expect_equal(convert_gene(imgt_df, "imgt", "adaptive", species = "rhesus"), tenx_to_adapt_df)
+  expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2", species = "rhesus"), tenx_to_adapt_df)
+  expect_equal(convert_gene(adapt_df, "adaptive", "imgt", species = "rhesus"), adapt_to_imgt_df)
+  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt", species = "rhesus"), adaptv2_to_imgt_df)
+  expect_equal(convert_gene(custom_df, "imgt", "tenx", species = "rhesus"), custom_to_tenx_df)
+  # Some Adaptive genes without allele
+  expect_equal(convert_gene(adapt_no_allele_df, "adaptive", "imgt"), adapt_to_imgt_df)
 })
 
 
