@@ -77,14 +77,13 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
 #' @return A dataframe of converted TCR data.
 #' @export
 convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet = FALSE) {
-  # Check input and output formats
+  # Check that input is ok
   if (frm == to) {
     stop('"frm" and "to" formats should be different.')
   }
-  if (nrow(df) == 0) {
+  if (is.null(nrow(df))) {
     stop("Input data is empty.")
   }
-  
   if (to %in% c("adaptive", "adaptivev2")) {
     message("Adaptive only captures VDJ genes, any C genes will become NA.")
   }
