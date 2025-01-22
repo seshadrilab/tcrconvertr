@@ -1,0 +1,55 @@
+name: tests
+
+on: [push, pull_request]
+
+# PY VERSION
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    name: Run pytest on Python ${{ matrix.python-version }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install requirements
+      run: pip install .[dev]
+    - name: Run tests
+      run: pytest
+
+###############
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        r-version: ['4.4', '4.3', 'devel']
+        exclude:
+          - os: windows-latest
+            r-version: 'devel' # R devel is unstable on Windows
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.r-version }}
+      - name: Set up dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install libgit2 -y
+          choco install rtools -y
+          refreshenv
+      - name: Install dependencies
+        run: |
+          install.packages('devtools')
+          install.packages('testthat')
+          devtools::install_deps(dependencies = TRUE)
+      - name: Run tests
+        run: |
+          devtools::test()
