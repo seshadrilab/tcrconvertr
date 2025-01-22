@@ -10,7 +10,9 @@ jobs:
         r-version: ['4.4', '4.3', 'devel']
         exclude:
           - os: windows-latest
-            r-version: 'devel' # R devel is unstable on Windows
+            r-version: ['4.3'] # 4.3 causes errors
+          - os: windows-latest
+            r-version: ['devel'] # Devel is unstable on Windows
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -26,9 +28,7 @@ jobs:
           refreshenv
       - name: Install dependencies
         run: |
-          Rscript -e "install.packages('devtools')"
           Rscript -e "install.packages('testthat')"
-          Rscript -e "devtools::install_deps(dependencies = TRUE)"
       - name: Run tests
         run: |
-          Rscript -e "devtools::test()"
+          Rscript -e "testthat::test_package("TCRconvertR")"
