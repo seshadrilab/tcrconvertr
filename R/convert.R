@@ -81,6 +81,7 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
 #' @param quiet A boolean, whether to suppress warning messages. Optional; defaults to FALSE.
 #'
 #' @return A dataframe of converted TCR data.
+#' @autoglobal
 #' @export
 #' @examples
 #' tcr_file <- get_example_path('tenx.csv')
