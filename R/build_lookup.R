@@ -103,12 +103,12 @@ build_lookup_from_fastas <- function(data_dir) {
   lookup[["adaptive"]] <- sapply(lookup[["adaptive"]], pad_single_digit)
   lookup[["adaptivev2"]] <- lookup[["adaptive"]]
   
-  # Set Adaptive columns to NA for constant genes
-  lookup[grepl("C", lookup[["imgt"]]), c("adaptive", "adaptivev2")] <- NA
+  # Set Adaptive columns to 'NoData' for constant genes (Adaptive only captures VDJ)
+  # 'NoData' gets converted to NA by convert.convert_gene()
+  lookup[grepl("C", lookup[["imgt"]]), c("adaptive", "adaptivev2")] <- "NoData"
   
   # Create from_tenx and from_adaptive tables
   from_tenx <- stats::aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
-  from_adaptive <- stats::aggregate(. ~ adaptive, data = subset(lookup, !is.na(adaptive)), FUN = function(x) x[1])
   
   # Save to files
   utils::write.csv(lookup, file.path(data_dir, "lookup.csv"), row.names = FALSE)
