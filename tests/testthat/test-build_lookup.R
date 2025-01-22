@@ -32,7 +32,6 @@ test_that("will pad single digits", {
 })
 
 
-# TODO: Make it so files are written to a temp dir (withr::local_tempfile() ?)
 test_that("can build lookup tables from fastas", {
   # Generate a temporary directory
   fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
