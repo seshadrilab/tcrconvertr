@@ -39,7 +39,13 @@ test_that("will pad single digits", {
 
 # TODO: Make it so files are written to a temp dir (withr::local_tempfile() ?)
 test_that("can build lookup tables from fastas", {
-  fastadir <- system.file("extdata/examples/fasta_dir", package = "TCRconvertR")
+  # Generate a temporary directory
+  fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
+  dir.create(fastadir)
+  # Copy test files into it
+  example_dir <- system.file("extdata/examples/fasta_dir", package = "TCRconvertR")
+  example_fastas <- list.files(example_dir, pattern = "\\.fa$", full.names = TRUE)
+  file.copy(example_fastas, fastadir)
 
   # Create lookup tables
   build_lookup_from_fastas(fastadir)
@@ -151,4 +157,7 @@ test_that("can build lookup tables from fastas", {
                                                "TCRBV29-or09_02*01",
                                                "TCRBVA-or09_02*01"))
   expect_equal(lookup, expected_lookup)
+
+  # Delete temp directory
+  unlink(fastadir, recursive = TRUE)
 })
