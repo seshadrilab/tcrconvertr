@@ -4,6 +4,8 @@
 #'
 #' @return A string, the path to example file or directory.
 #' @export
+#' @examples
+#' get_example_path('tenx.csv')
 get_example_path <- function(file_name) {
   # Use system.file to locate the directory
   example_dir <- system.file("extdata/examples", package = "TCRconvertR")

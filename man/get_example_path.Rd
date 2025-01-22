@@ -15,3 +15,6 @@ A string, the path to example file or directory.
 \description{
 Get full path to given example file or directory.
 }
+\examples{
+get_example_path('tenx.csv')
+}

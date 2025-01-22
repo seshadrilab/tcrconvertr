@@ -19,3 +19,8 @@ A character vector, column names to use.
 \description{
 Determine input columns to use for converting gene names.
 }
+\examples{
+tcr_file <- get_example_path('tenx.csv')
+df <- read.csv(tcr_file)
+which_frm_cols(df, 'tenx')
+}

@@ -15,3 +15,11 @@ A character vector of gene names.
 \description{
 Extract gene names from a reference FASTA.
 }
+\examples{
+# Given a FASTA file containing this header:
+#   >SomeText|TRBV29/OR9-2*01|MoreText|
+#   >SomeText|TRBVA/OR9-2*01|MoreText|
+
+fasta <- get_example_path("fasta_dir/test_trbv.fa")
+parse_imgt_fasta(fasta)
+}

@@ -2,12 +2,7 @@
 % Please edit documentation in R/build_lookup.R
 \name{build_lookup_from_fastas}
 \alias{build_lookup_from_fastas}
-\title{Create these lookup tables within in a given directory that contains FASTA files:
-\itemize{
-\item lookup.csv
-\item lookup_from_tenx.csv
-\item lookup_from_adaptive.csv
-}}
+\title{Create lookup tables from reference FASTAs}
 \usage{
 build_lookup_from_fastas(data_dir)
 }
@@ -18,10 +13,24 @@ build_lookup_from_fastas(data_dir)
 Nothing.
 }
 \description{
-Create these lookup tables within in a given directory that contains FASTA files:
+Create lookup tables within in a given directory that contains FASTA files:
 \itemize{
 \item lookup.csv
 \item lookup_from_tenx.csv
 \item lookup_from_adaptive.csv
 }
+}
+\examples{
+# For the example, create and use a temporary folder
+fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
+dir.create(fastadir)
+trav <- get_example_path('fasta_dir/test_trav.fa')
+trbv <- get_example_path('fasta_dir/test_trbv.fa')
+file.copy(c(trav, trbv), fastadir)
+
+# Build lookup tables
+build_lookup_from_fastas(fastadir)
+
+# Clean up temporary folder
+unlink(fastadir, recursive = TRUE)
 }

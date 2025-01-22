@@ -19,3 +19,6 @@ A string, the path to correct lookup table.
 \description{
 Determine which lookup table to use and get filepath.
 }
+\examples{
+choose_lookup("imgt", "adaptive")
+}

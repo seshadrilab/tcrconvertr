@@ -25,3 +25,8 @@ A dataframe of converted TCR data.
 \description{
 Convert T-cell receptor V, D, J, and/or C gene names from one naming convention to another.
 }
+\examples{
+tcr_file <- get_example_path('tenx.csv')
+df <- read.csv(tcr_file)
+convert_gene(df, 'tenx', 'adaptive', quiet=True)
+}

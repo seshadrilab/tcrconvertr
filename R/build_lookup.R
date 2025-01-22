@@ -3,6 +3,13 @@
 #' @param infile A string, the path to FASTA file.
 #'
 #' @return A character vector of gene names.
+#' @examples
+#' # Given a FASTA file containing this header:
+#' #   >SomeText|TRBV29/OR9-2*01|MoreText|
+#' #   >SomeText|TRBVA/OR9-2*01|MoreText|
+#'
+#' fasta <- get_example_path("fasta_dir/test_trbv.fa")
+#' parse_imgt_fasta(fasta)
 parse_imgt_fasta <- function(infile) {
   lines <- readLines(infile)
   
@@ -19,6 +26,18 @@ parse_imgt_fasta <- function(infile) {
 #' @param data_dir A string, the path to directory containing FASTA files.
 #'
 #' @return A dataframe of gene names.
+#' @examples
+#' # Given a folder with FASTA files containing these headers:
+#' # >SomeText|TRAC*01|MoreText|
+#' # >SomeText|TRAV1-1*01|MoreText|
+#' # >SomeText|TRAV1-1*02|MoreText|
+#' # >SomeText|TRAV14/DV4*01|MoreText|
+#' # >SomeText|TRAV38-2/DV8*01|MoreText|
+#' # >SomeText|TRBV29/OR9-2*01|MoreText|
+#' # >SomeText|TRBVA/OR9-2*01|MoreText|
+#'
+#' fastadir <- get_example_path('fasta_dir/')
+#' extract_imgt_genes(fastadir)
 extract_imgt_genes <- function(data_dir) {
   # List all FASTA files
   fasta_files <- list.files(data_dir, pattern = "\\.(fa|fasta)$", full.names = TRUE)
@@ -39,6 +58,8 @@ extract_imgt_genes <- function(data_dir) {
 #' @param gene_str A string, the gene name.
 #'
 #' @return A string, the updated gene name.
+#' @examples
+#' add_dash_one('TRBV2*01')
 add_dash_one <- function(gene_str) {
   if (!grepl("-", gene_str)) {
     return(sub("\\*", "-01*", gene_str))
@@ -51,11 +72,15 @@ add_dash_one <- function(gene_str) {
 #' @param gene_str A string, the gene name.
 #'
 #' @return A string, the updated gene name.
+#' @examples
+#' pad_single_digit('TCRBV1-2')
 pad_single_digit <- function(gene_str) {
   return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str))
 }
 
-#' Create these lookup tables within in a given directory that contains FASTA files:
+#' Create lookup tables from reference FASTAs
+#'
+#' Create lookup tables within in a given directory that contains FASTA files:
 #'    - lookup.csv
 #'    - lookup_from_tenx.csv
 #'    - lookup_from_adaptive.csv
@@ -65,6 +90,19 @@ pad_single_digit <- function(gene_str) {
 #' @return Nothing.
 #' @autoglobal
 #' @export
+#' @examples
+#' # For the example, create and use a temporary folder
+#' fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
+#' dir.create(fastadir)
+#' trav <- get_example_path('fasta_dir/test_trav.fa')
+#' trbv <- get_example_path('fasta_dir/test_trbv.fa')
+#' file.copy(c(trav, trbv), fastadir)
+#'
+#' # Build lookup tables
+#' build_lookup_from_fastas(fastadir)
+#'
+#' # Clean up temporary folder
+#' unlink(fastadir, recursive = TRUE)
 build_lookup_from_fastas <- function(data_dir) {
   # Extract IMGT gene names
   lookup <- extract_imgt_genes(data_dir)

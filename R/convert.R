@@ -14,6 +14,8 @@ col_ref <- list(
 #' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to "human".
 #'
 #' @return A string, the path to correct lookup table.
+#' @examples
+#' choose_lookup("imgt", "adaptive")
 choose_lookup <- function(frm, to, species = "human") {
   # Determine the lookup table path
   data_path <- system.file("extdata", species, package = "TCRconvertR")
@@ -45,6 +47,10 @@ choose_lookup <- function(frm, to, species = "human") {
 #' @param frm_cols A character vector, the custom column names to use.
 #'
 #' @return A character vector, column names to use.
+#' @examples
+#' tcr_file <- get_example_path('tenx.csv')
+#' df <- read.csv(tcr_file)
+#' which_frm_cols(df, 'tenx')
 which_frm_cols <- function(df, frm, frm_cols = NULL) {
   # Determine input columns for conversion
   if (frm == "imgt" && is.null(frm_cols)) {
@@ -76,6 +82,10 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
 #'
 #' @return A dataframe of converted TCR data.
 #' @export
+#' @examples
+#' tcr_file <- get_example_path('tenx.csv')
+#' df <- read.csv(tcr_file)
+#' convert_gene(df, 'tenx', 'adaptive', quiet=True)
 convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet = FALSE) {
   # Check that input is ok
   if (frm == to) {
