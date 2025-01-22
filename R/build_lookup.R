@@ -9,7 +9,7 @@
 #' #   >SomeText|TRBVA/OR9-2*01|MoreText|
 #'
 #' fasta <- get_example_path("fasta_dir/test_trbv.fa")
-#' parse_imgt_fasta(fasta)
+#' TCRconvertR:::parse_imgt_fasta(fasta)
 parse_imgt_fasta <- function(infile) {
   lines <- readLines(infile)
   
@@ -37,7 +37,7 @@ parse_imgt_fasta <- function(infile) {
 #' # >SomeText|TRBVA/OR9-2*01|MoreText|
 #'
 #' fastadir <- get_example_path('fasta_dir/')
-#' extract_imgt_genes(fastadir)
+#' TCRconvertR:::extract_imgt_genes(fastadir)
 extract_imgt_genes <- function(data_dir) {
   # List all FASTA files
   fasta_files <- list.files(data_dir, pattern = "\\.(fa|fasta)$", full.names = TRUE)
@@ -59,7 +59,7 @@ extract_imgt_genes <- function(data_dir) {
 #'
 #' @return A string, the updated gene name.
 #' @examples
-#' add_dash_one('TRBV2*01')
+#' TCRconvertR:::add_dash_one('TRBV2*01')
 add_dash_one <- function(gene_str) {
   if (!grepl("-", gene_str)) {
     return(sub("\\*", "-01*", gene_str))
@@ -73,7 +73,7 @@ add_dash_one <- function(gene_str) {
 #'
 #' @return A string, the updated gene name.
 #' @examples
-#' pad_single_digit('TCRBV1-2')
+#' TCRconvertR:::pad_single_digit('TCRBV1-2')
 pad_single_digit <- function(gene_str) {
   return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str))
 }

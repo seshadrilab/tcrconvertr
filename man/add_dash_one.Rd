@@ -16,5 +16,5 @@ A string, the updated gene name.
 Add a \code{-01} to genes without IMGT gene-level designation.
 }
 \examples{
-add_dash_one('TRBV2*01')
+TCRconvertR:::add_dash_one('TRBV2*01')
 }

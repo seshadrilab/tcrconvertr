@@ -16,5 +16,5 @@ A string, the updated gene name.
 Add a zero to single-digit gene-level designation in gene names.
 }
 \examples{
-pad_single_digit('TCRBV1-2')
+TCRconvertR:::pad_single_digit('TCRBV1-2')
 }

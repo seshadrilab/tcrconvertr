@@ -15,7 +15,7 @@ col_ref <- list(
 #'
 #' @return A string, the path to correct lookup table.
 #' @examples
-#' choose_lookup("imgt", "adaptive")
+#' TCRconvertR:::choose_lookup("imgt", "adaptive")
 choose_lookup <- function(frm, to, species = "human") {
   # Determine the lookup table path
   data_path <- system.file("extdata", species, package = "TCRconvertR")
@@ -50,7 +50,7 @@ choose_lookup <- function(frm, to, species = "human") {
 #' @examples
 #' tcr_file <- get_example_path('tenx.csv')
 #' df <- read.csv(tcr_file)
-#' which_frm_cols(df, 'tenx')
+#' TCRconvertR:::which_frm_cols(df, 'tenx')
 which_frm_cols <- function(df, frm, frm_cols = NULL) {
   # Determine input columns for conversion
   if (frm == "imgt" && is.null(frm_cols)) {

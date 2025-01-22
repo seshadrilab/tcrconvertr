@@ -21,5 +21,5 @@ Extract gene names from a reference FASTA.
 #   >SomeText|TRBVA/OR9-2*01|MoreText|
 
 fasta <- get_example_path("fasta_dir/test_trbv.fa")
-parse_imgt_fasta(fasta)
+TCRconvertR:::parse_imgt_fasta(fasta)
 }

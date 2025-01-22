@@ -20,5 +20,5 @@ A string, the path to correct lookup table.
 Determine which lookup table to use and get filepath.
 }
 \examples{
-choose_lookup("imgt", "adaptive")
+TCRconvertR:::choose_lookup("imgt", "adaptive")
 }
