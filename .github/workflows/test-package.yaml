@@ -26,9 +26,9 @@ jobs:
           refreshenv
       - name: Install dependencies
         run: |
-          install.packages('devtools')
-          install.packages('testthat')
-          devtools::install_deps(dependencies = TRUE)
+          Rscript -e "install.packages('devtools')"
+          Rscript -e "install.packages('testthat')"
+          Rscript -e "devtools::install_deps(dependencies = TRUE)"
       - name: Run tests
         run: |
-          devtools::test()
+          Rscript -e "devtools::test()"
