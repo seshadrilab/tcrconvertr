@@ -2,11 +2,6 @@
 test_that("can parse an imgt fasta", {
   fasta <- system.file("extdata/examples/fasta_dir", "test_trav.fa", package = "TCRconvertR")
   expected_out <- c("TRAV1-1*01", "TRAV1-1*02", "TRAV14/DV4*01", "TRAV38-2/DV8*01", "TRAC*01")
-  names(expected_out) <- c('>AE000658|TRAV1-1*01|Homo sapiens|F|V-REGION|128090..128364|275 nt|1| | | | |275+0=275| | |',
-                           '>X04939|TRAV1-1*02|Homo sapiens|(F)|V-REGION|52..320|269 nt|1| | | | |269+0=269| | |',
-                           '>M21626|TRAV14/DV4*01|Homo sapiens|F|V-REGION|226..515|290 nt|1| | | | |290+0=290| | |', 
-                           '>AE000661|TRAV38-2/DV8*01|Homo sapiens|F|V-REGION|34309..34597|289 nt|1| | | | |289+0=289| | |',
-                           '>X02883|TRAC*01|Homo sapiens|F|EX1|n,273..544|273 nt|1|+1|-1| | |273+0=273| | |')
   expect_equal(parse_imgt_fasta(fasta), expected_out)
 })
 

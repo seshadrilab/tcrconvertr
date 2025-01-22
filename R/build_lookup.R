@@ -9,7 +9,7 @@ parse_imgt_fasta <- function(infile) {
   # Extract gene names from headers
   imgt_list <- sapply(lines[grep("^>", lines)], function(line) {
     strsplit(line, "\\|")[[1]][2]
-  })
+  }, USE.NAMES = FALSE)
   
   return(imgt_list)
 }
