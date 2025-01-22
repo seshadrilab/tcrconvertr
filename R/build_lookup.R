@@ -107,9 +107,26 @@ build_lookup_from_fastas <- function(data_dir) {
   # 'NoData' gets converted to NA by convert.convert_gene()
   lookup[grepl("C", lookup[["imgt"]]), c("adaptive", "adaptivev2")] <- "NoData"
   
-  # Create from_tenx and from_adaptive tables
+  # If converting from 10X will just need the first *01 allele
   from_tenx <- stats::aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
   
+  # Make table for Adaptive genes with or without allele
+  lookup2 <- subset(lookup, !grepl("NoData", lookup$adaptivev2))
+  from_adapt <- lookup2[c("adaptivev2", "imgt", "tenx")]
+  from_adapt["adaptive"] <-  substr(from_adapt[["adaptivev2"]], 1,
+                                    nchar(from_adapt[["adaptivev2"]]) - 3)
+  from_adapt <- stats::aggregate(. ~ adaptive,
+                                 data = subset(from_adapt, select = -adaptivev2),
+                                 FUN = function(x) x[1])
+  from_adapt["adaptivev2"] <- from_adapt["adaptive"]
+  from_adaptive <- rbind(lookup2, from_adapt)
+  from_adaptive <- from_adaptive[, c("adaptive", "adaptivev2", "imgt", "tenx")]
+
+  # Remove any duplicate rows and save
+  lookup <- lookup[!duplicated(lookup), ]
+  from_tenx <- from_tenx[!duplicated(from_tenx), ]
+  from_adaptive <- from_adaptive[!duplicated(from_adaptive), ]
+
   # Save to files
   utils::write.csv(lookup, file.path(data_dir, "lookup.csv"), row.names = FALSE)
   utils::write.csv(from_tenx, file.path(data_dir, "lookup_from_tenx.csv"), row.names = FALSE)
