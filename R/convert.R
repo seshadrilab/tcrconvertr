@@ -97,7 +97,10 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   if (frm == to) {
     stop('"frm" and "to" formats should be different.')
   }
-  if (nrow(df) < 1 | is.null(nrow(df))) {
+  if (!is.data.frame(df)) {
+    stop("Input is not a data.frame.")
+  }
+  if (nrow(df) == 0) {
     stop("Input data is empty.")
   }
   if (to %in% c("adaptive", "adaptivev2")) {
