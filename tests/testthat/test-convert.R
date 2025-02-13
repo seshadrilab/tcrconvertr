@@ -59,7 +59,6 @@ test_that("can convert genes", {
                                    d_resolved = c(NA, "TCRBD01-01"),
                                    j_resolved = c("TCRAJ16-01*01", "TCRBJ02-05"),
                                    cdr3_amino_acid = c("CAVLIF", "CASSGF"))
-  # TODO: Fix this and finish building out all possible parameter combos
   # 10X <-> Adaptive
   expect_equal(convert_gene(tenx_df, "tenx", "adaptive"), tenx_to_adapt_df)
   expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2"), tenx_to_adapt_df)
