@@ -4,7 +4,7 @@
 \alias{convert_gene}
 \title{Convert T-cell receptor V, D, J, and/or C gene names from one naming convention to another.}
 \usage{
-convert_gene(df, frm, to, species = "human", frm_cols = NULL, quiet = FALSE)
+convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
 }
 \arguments{
 \item{df}{Dataframe containing TCR gene names.}
@@ -17,7 +17,7 @@ convert_gene(df, frm, to, species = "human", frm_cols = NULL, quiet = FALSE)
 
 \item{frm_cols}{A character vector of custom V/D/J/C gene column names. Optional; defaults to NULL.}
 
-\item{quiet}{A boolean, whether to suppress warning messages. Optional; defaults to FALSE.}
+\item{verbose}{A boolean, whether to show messages. Optional; defaults to TRUE}
 }
 \value{
 A dataframe of converted TCR data.
@@ -28,5 +28,5 @@ Convert T-cell receptor V, D, J, and/or C gene names from one naming convention 
 \examples{
 tcr_file <- get_example_path('tenx.csv')
 df <- read.csv(tcr_file)
-convert_gene(df, 'tenx', 'adaptive', quiet=True)
+convert_gene(df, 'tenx', 'adaptive', verbose = FALSE)
 }

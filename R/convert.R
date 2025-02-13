@@ -22,10 +22,13 @@ choose_lookup <- function(frm, to, species = "human") {
   
   if (frm == "tenx") {
     lookup_f <- file.path(data_path, "lookup_from_tenx.csv")
-    message("Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.")
+    if (verbose) {
+      message("Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.")
+    }
+    
   } else if (frm %in% c("adaptive", "adaptivev2")) {
     lookup_f <- file.path(data_path, "lookup_from_adaptive.csv")
-    if (to == "imgt") {
+    if (to == "imgt" && verbose) {
       message("Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.")
     }
   } else {
@@ -55,14 +58,16 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
   # Determine input columns for conversion
   if (frm == "imgt" && is.null(frm_cols)) {
     cols_from <- col_ref$tenx
-    message(paste("No column names provided for IMGT data. Using 10X column names:", paste(cols_from, collapse = ", ")))
+    warning(paste("No column names provided for IMGT data. Using 10X column names:", paste(cols_from, collapse = ", ")))
   } else if (!is.null(frm_cols)) {
     missing_cols <- setdiff(frm_cols, colnames(df))
     if (length(missing_cols) > 0) {
       stop(paste("These columns are not in the input dataframe:", paste(missing_cols, collapse = ", ")))
     } else {
       cols_from <- frm_cols
-      message(paste("Using custom column names:", paste(cols_from, collapse = ", ")))
+      if (verbose) {
+        message(paste("Using custom column names:", paste(cols_from, collapse = ", ")))
+      }
     }
   } else {
     cols_from <- col_ref[[frm]]
@@ -78,7 +83,7 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
 #' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to "human".
 #' @param frm_cols A character vector of custom V/D/J/C gene column names. Optional; defaults to NULL.
-#' @param quiet A boolean, whether to suppress warning messages. Optional; defaults to FALSE.
+#' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
 #'
 #' @return A dataframe of converted TCR data.
 #' @autoglobal
@@ -86,8 +91,8 @@ which_frm_cols <- function(df, frm, frm_cols = NULL) {
 #' @examples
 #' tcr_file <- get_example_path('tenx.csv')
 #' df <- read.csv(tcr_file)
-#' convert_gene(df, 'tenx', 'adaptive', quiet=True)
-convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet = FALSE) {
+#' convert_gene(df, 'tenx', 'adaptive', verbose = FALSE)
+convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE) {
   # Check that input is ok
   if (frm == to) {
     stop('"frm" and "to" formats should be different.')
@@ -96,7 +101,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, quiet 
     stop("Input data is empty.")
   }
   if (to %in% c("adaptive", "adaptivev2")) {
-    message("Adaptive only captures VDJ genes, any C genes will become NA.")
+    warning("Adaptive only captures VDJ genes, any C genes will become NA.")
   }
   
   # Load lookup table
