@@ -1,12 +1,12 @@
 
 test_that("can parse an imgt fasta", {
-  fasta <- system.file("extdata/examples/fasta_dir", "test_trav.fa", package = "TCRconvertR")
+  fasta <- get_example_path("fasta_dir/test_trav.fa")
   expected_out <- c("TRAV1-1*01", "TRAV1-1*02", "TRAV14/DV4*01", "TRAV38-2/DV8*01", "TRAC*01")
   expect_equal(parse_imgt_fasta(fasta), expected_out)
 })
 
 test_that("can extract imgt genes", {
-  fastadir <- system.file("extdata/examples/fasta_dir", package = "TCRconvertR")
+  fastadir <- get_example_path("fasta_dir")
   expected_out <- data.frame(imgt = c('TRAC*01',
                                       'TRAV1-1*01',
                                       'TRAV1-1*02',
@@ -37,7 +37,7 @@ test_that("can build lookup tables from fastas", {
   fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
   dir.create(fastadir)
   # Copy test files into it
-  example_dir <- system.file("extdata/examples/fasta_dir", package = "TCRconvertR")
+  example_dir <- get_example_path("fasta_dir")
   example_fastas <- list.files(example_dir, pattern = "\\.fa$", full.names = TRUE)
   file.copy(example_fastas, fastadir)
 
@@ -45,7 +45,7 @@ test_that("can build lookup tables from fastas", {
   build_lookup_from_fastas(fastadir)
 
   # Check adaptive lookup table
-  adapt <- read.csv(system.file("extdata/examples/fasta_dir", "lookup_from_adaptive.csv", package = "TCRconvertR"))
+  adapt <- read.csv(get_example_path("fasta_dir/lookup_from_adaptive.csv"))
   expected_adapt <- data.frame(adaptive = c("TCRAV01-01*01",
                                             "TCRAV01-01*02",
                                             "TCRAV14-01*01",
@@ -93,7 +93,7 @@ test_that("can build lookup tables from fastas", {
   expect_equal(adapt, expected_adapt)
   
   # Check 10X lookup table
-  tenx <- read.csv(system.file("extdata/examples/fasta_dir", "lookup_from_tenx.csv", package = "TCRconvertR"))
+  tenx <- read.csv(get_example_path("fasta_dir/lookup_from_tenx.csv"))
   expected_tenx <- data.frame(tenx = c("TRAC",
                                        "TRAV1-1",
                                        "TRAV14DV4",
@@ -121,7 +121,7 @@ test_that("can build lookup tables from fastas", {
   expect_equal(tenx, expected_tenx)
   
   # Check regular lookup table
-  lookup <- read.csv(system.file("extdata/examples/fasta_dir", "lookup.csv", package = "TCRconvertR"))
+  lookup <- read.csv(get_example_path("fasta_dir/lookup.csv"))
   expected_lookup <- data.frame(imgt = c("TRAC*01",
                                          "TRAV1-1*01",
                                          "TRAV1-1*02",
