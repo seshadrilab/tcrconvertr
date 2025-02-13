@@ -147,7 +147,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   df_out <- subset(df_out, select = -c(id))
 
   # Replace NoData with NA
-  df_out[df_out == "NoData"] <- NA
+  df_out[df_out == "NoData"] <- NA_character_
 
   return(df_out)
 }
