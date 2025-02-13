@@ -26,5 +26,6 @@ Extract gene names from all reference FASTA files in a folder.
 # >SomeText|TRBVA/OR9-2*01|MoreText|
 
 fastadir <- get_example_path('fasta_dir/')
-TCRconvertR:::extract_imgt_genes(fastadir)
+extract_imgt_genes(fastadir)
 }
+\keyword{internal}

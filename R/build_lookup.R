@@ -3,13 +3,15 @@
 #' @param infile A string, the path to FASTA file.
 #'
 #' @return A character vector of gene names.
+#' @export
+#' @keywords internal
 #' @examples
 #' # Given a FASTA file containing this header:
 #' #   >SomeText|TRBV29/OR9-2*01|MoreText|
 #' #   >SomeText|TRBVA/OR9-2*01|MoreText|
 #'
 #' fasta <- get_example_path("fasta_dir/test_trbv.fa")
-#' TCRconvertR:::parse_imgt_fasta(fasta)
+#' parse_imgt_fasta(fasta)
 parse_imgt_fasta <- function(infile) {
   lines <- readLines(infile)
   
@@ -26,6 +28,8 @@ parse_imgt_fasta <- function(infile) {
 #' @param data_dir A string, the path to directory containing FASTA files.
 #'
 #' @return A dataframe of gene names.
+#' @export
+#' @keywords internal
 #' @examples
 #' # Given a folder with FASTA files containing these headers:
 #' # >SomeText|TRAC*01|MoreText|
@@ -37,7 +41,7 @@ parse_imgt_fasta <- function(infile) {
 #' # >SomeText|TRBVA/OR9-2*01|MoreText|
 #'
 #' fastadir <- get_example_path('fasta_dir/')
-#' TCRconvertR:::extract_imgt_genes(fastadir)
+#' extract_imgt_genes(fastadir)
 extract_imgt_genes <- function(data_dir) {
   # List all FASTA files
   fasta_files <- list.files(data_dir, pattern = "\\.(fa|fasta)$", full.names = TRUE)
@@ -58,8 +62,10 @@ extract_imgt_genes <- function(data_dir) {
 #' @param gene_str A string, the gene name.
 #'
 #' @return A string, the updated gene name.
+#' @export
+#' @keywords internal
 #' @examples
-#' TCRconvertR:::add_dash_one('TRBV2*01')
+#' add_dash_one('TRBV2*01')
 add_dash_one <- function(gene_str) {
   if (!length(gene_str) == 1) {
     stop("Attempting to add '-01' to more than one gene name at a time.")
@@ -75,8 +81,10 @@ add_dash_one <- function(gene_str) {
 #' @param gene_str A string, the gene name.
 #'
 #' @return A string, the updated gene name.
+#' @export
+#' @keywords internal
 #' @examples
-#' TCRconvertR:::pad_single_digit('TCRBV1-2')
+#' pad_single_digit("TCRBV1-2")
 pad_single_digit <- function(gene_str) {
   return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str))
 }

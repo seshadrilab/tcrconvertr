@@ -24,5 +24,6 @@ Determine input columns to use for converting gene names.
 \examples{
 tcr_file <- get_example_path('tenx.csv')
 df <- read.csv(tcr_file)
-TCRconvertR:::which_frm_cols(df, 'tenx')
+which_frm_cols(df, 'tenx')
 }
+\keyword{internal}

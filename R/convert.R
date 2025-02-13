@@ -15,8 +15,10 @@ col_ref <- list(
 #' @param verbose A boolean, whether to show messages.
 #'
 #' @return A string, the path to correct lookup table.
+#' @export
+#' @keywords internal
 #' @examples
-#' TCRconvertR:::choose_lookup("imgt", "adaptive")
+#' choose_lookup("imgt", "adaptive")
 choose_lookup <- function(frm, to, species = "human", verbose) {
   # Determine the lookup table path
   data_path <- system.file("extdata", species, package = "TCRconvertR")
@@ -52,10 +54,12 @@ choose_lookup <- function(frm, to, species = "human", verbose) {
 #' @param verbose A boolean, whether to show messages.
 #'
 #' @return A character vector, column names to use.
+#' @export
+#' @keywords internal
 #' @examples
 #' tcr_file <- get_example_path('tenx.csv')
 #' df <- read.csv(tcr_file)
-#' TCRconvertR:::which_frm_cols(df, 'tenx')
+#' which_frm_cols(df, 'tenx')
 which_frm_cols <- function(df, frm, frm_cols = NULL, verbose) {
   # Determine input columns for conversion
   if (frm == "imgt" && is.null(frm_cols)) {
