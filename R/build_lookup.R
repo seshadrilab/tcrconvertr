@@ -107,7 +107,6 @@ pad_single_digit <- function(gene_str) {
 #' # Clean up temporary folder
 #' unlink(fastadir, recursive = TRUE)
 build_lookup_from_fastas <- function(data_dir) {
-  # Extract IMGT gene names
   lookup <- extract_imgt_genes(data_dir)
   
   # Create the 10X column by removing allele info (e.g. *01) and slash from "/DV".
