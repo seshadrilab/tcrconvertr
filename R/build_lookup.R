@@ -61,6 +61,9 @@ extract_imgt_genes <- function(data_dir) {
 #' @examples
 #' TCRconvertR:::add_dash_one('TRBV2*01')
 add_dash_one <- function(gene_str) {
+  if (!length(gene_str) == 1) {
+    stop("Attempting to add '-01' to more than one gene name at a time.")
+  }
   if (!grepl("-", gene_str)) {
     return(sub("\\*", "-01*", gene_str))
   }
