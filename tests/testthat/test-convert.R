@@ -127,12 +127,12 @@ test_that("chooses correct lookup", {
   lookup_imgt <- system.file("extdata/human", "lookup.csv", package = "TCRconvertR")
   
   # Species we don't have lookups for
-  expect_error(choose_lookup("tenx", "imgt", "non-existent-species"), 
+  expect_error(choose_lookup("tenx", "imgt", "non-existent-species", verbose = FALSE), 
                "Lookup table not found, please ensure reference files are available.")
   # From different 'frm' formats
-  expect_equal(choose_lookup("tenx", "imgt"), lookup_tenx)
-  expect_equal(choose_lookup("adaptivev2", "imgt"), lookup_adapt)
-  expect_equal(choose_lookup("imgt", "tenx"), lookup_imgt)
+  expect_equal(choose_lookup("tenx", "imgt", verbose = FALSE), lookup_tenx)
+  expect_equal(choose_lookup("adaptivev2", "imgt", verbose = FALSE), lookup_adapt)
+  expect_equal(choose_lookup("imgt", "tenx", verbose = FALSE), lookup_imgt)
 })
 
 
@@ -171,15 +171,15 @@ test_that("chooses correct frm_cols", {
                         myC = c("TRAC*01", "TRBC2*01"),
                         myCDR3 = c("CAVLIF", "CASSGF"))
 
-  expect_equal(which_frm_cols(adapt_df, "adaptive"), col_ref$adaptive)
-  expect_equal(which_frm_cols(adapt_v2_df, "adaptivev2"), col_ref$adaptivev2)
-  expect_equal(which_frm_cols(imgt_df, "imgt"), col_ref$imgt)
-  expect_equal(which_frm_cols(tenx_df, "tenx"), col_ref$tenx)
+  expect_equal(which_frm_cols(adapt_df, "adaptive", verbose = FALSE), col_ref$adaptive)
+  expect_equal(which_frm_cols(adapt_v2_df, "adaptivev2", verbose = FALSE), col_ref$adaptivev2)
+  expect_equal(which_frm_cols(imgt_df, "imgt", verbose = FALSE), col_ref$imgt)
+  expect_equal(which_frm_cols(tenx_df, "tenx", verbose = FALSE), col_ref$tenx)
   # Custom columns
   custom_col <- c("myV", "myD", "myJ", "myC")
-  expect_equal(which_frm_cols(custom_df, "tenx", frm_cols = custom_col), custom_col)
+  expect_equal(which_frm_cols(custom_df, "tenx", frm_cols = custom_col, verbose = FALSE), custom_col)
   # Non-existent column
-  expect_error(which_frm_cols(tenx_df, "tenx", frm_cols = c("v_gene", "j_gene", "x_gene")),
+  expect_error(which_frm_cols(tenx_df, "tenx", frm_cols = c("v_gene", "j_gene", "x_gene"), verbose = FALSE),
                "These columns are not in the input dataframe: x_gene")
 })
 

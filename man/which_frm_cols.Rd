@@ -4,7 +4,7 @@
 \alias{which_frm_cols}
 \title{Determine input columns to use for converting gene names.}
 \usage{
-which_frm_cols(df, frm, frm_cols = NULL)
+which_frm_cols(df, frm, frm_cols = NULL, verbose)
 }
 \arguments{
 \item{df}{Dataframe containing TCR gene names.}
@@ -12,6 +12,8 @@ which_frm_cols(df, frm, frm_cols = NULL)
 \item{frm}{A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
 
 \item{frm_cols}{A character vector, the custom column names to use.}
+
+\item{verbose}{A boolean, whether to show messages.}
 }
 \value{
 A character vector, column names to use.

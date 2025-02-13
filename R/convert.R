@@ -12,11 +12,12 @@ col_ref <- list(
 #' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to "human".
+#' @param verbose A boolean, whether to show messages.
 #'
 #' @return A string, the path to correct lookup table.
 #' @examples
 #' TCRconvertR:::choose_lookup("imgt", "adaptive")
-choose_lookup <- function(frm, to, species = "human") {
+choose_lookup <- function(frm, to, species = "human", verbose) {
   # Determine the lookup table path
   data_path <- system.file("extdata", species, package = "TCRconvertR")
   
@@ -48,13 +49,14 @@ choose_lookup <- function(frm, to, species = "human") {
 #' @param df Dataframe containing TCR gene names.
 #' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param frm_cols A character vector, the custom column names to use.
+#' @param verbose A boolean, whether to show messages.
 #'
 #' @return A character vector, column names to use.
 #' @examples
 #' tcr_file <- get_example_path('tenx.csv')
 #' df <- read.csv(tcr_file)
 #' TCRconvertR:::which_frm_cols(df, 'tenx')
-which_frm_cols <- function(df, frm, frm_cols = NULL) {
+which_frm_cols <- function(df, frm, frm_cols = NULL, verbose) {
   # Determine input columns for conversion
   if (frm == "imgt" && is.null(frm_cols)) {
     cols_from <- col_ref$tenx
@@ -108,11 +110,11 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   }
   
   # Load lookup table
-  lookup_f <- choose_lookup(frm, to, species)
+  lookup_f <- choose_lookup(frm, to, species, verbose)
   lookup <- utils::read.csv(lookup_f, stringsAsFactors = FALSE)
   
   # Determine columns to use
-  cols_from <- which_frm_cols(df, frm, frm_cols)
+  cols_from <- which_frm_cols(df, frm, frm_cols, verbose)
   
   # Add column of row numbers so we can keep order straight
   df$id  <- 1:nrow(df)
