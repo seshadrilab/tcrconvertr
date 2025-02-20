@@ -42,7 +42,8 @@ test_that("can build lookup tables from fastas", {
   file.copy(example_fastas, fastadir)
 
   # Create lookup tables
-  build_lookup_from_fastas(fastadir)
+  lookup_dir <- build_lookup_from_fastas(fastadir)
+  expect_equal(lookup_dir, fastadir)
 
   # Check adaptive lookup table
   adapt <- read.csv(get_example_path("fasta_dir/lookup_from_adaptive.csv"))

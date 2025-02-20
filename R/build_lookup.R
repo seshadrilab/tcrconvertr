@@ -179,4 +179,6 @@ build_lookup_from_fastas <- function(data_dir) {
   utils::write.csv(lookup, file.path(data_dir, "lookup.csv"), row.names = FALSE)
   utils::write.csv(from_tenx, file.path(data_dir, "lookup_from_tenx.csv"), row.names = FALSE)
   utils::write.csv(from_adaptive, file.path(data_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
+
+  return(data_dir)
 }
