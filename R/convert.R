@@ -12,14 +12,14 @@ col_ref <- list(
 #' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to "human".
-#' @param verbose A boolean, whether to show messages.
+#' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
 #'
 #' @return A string, the path to correct lookup table.
 #' @export
 #' @keywords internal
 #' @examples
 #' choose_lookup("imgt", "adaptive")
-choose_lookup <- function(frm, to, species = "human", verbose) {
+choose_lookup <- function(frm, to, species = "human", verbose = TRUE) {
   # Determine the lookup table path
   data_path <- system.file("extdata", species, package = "TCRconvertR")
   
@@ -51,7 +51,7 @@ choose_lookup <- function(frm, to, species = "human", verbose) {
 #' @param df Dataframe containing TCR gene names.
 #' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param frm_cols A character vector, the custom column names to use.
-#' @param verbose A boolean, whether to show messages.
+#' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
 #'
 #' @return A character vector, column names to use.
 #' @export
@@ -60,7 +60,7 @@ choose_lookup <- function(frm, to, species = "human", verbose) {
 #' tcr_file <- get_example_path('tenx.csv')
 #' df <- read.csv(tcr_file)
 #' which_frm_cols(df, 'tenx')
-which_frm_cols <- function(df, frm, frm_cols = NULL, verbose) {
+which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
   # Determine input columns for conversion
   if (frm == "imgt" && is.null(frm_cols)) {
     cols_from <- col_ref$tenx

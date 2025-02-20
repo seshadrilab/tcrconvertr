@@ -182,3 +182,52 @@ test_that("chooses correct frm_cols", {
                "These columns are not in the input dataframe: x_gene")
 })
 
+
+test_that("choose_lookup verbose flag works", {
+  # Capture messages when verbose = TRUE
+  expect_message(choose_lookup("tenx", "adaptive"), fixed = TRUE,
+                 "Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.")
+  expect_message(choose_lookup("adaptive", "imgt"), fixed = TRUE,
+                 "Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.")
+  # Ensure no messages when verbose = FALSE
+  expect_silent(choose_lookup("tenx", "adaptive", verbose = FALSE))
+  expect_silent(choose_lookup("adaptive", "imgt", verbose = FALSE))
+})
+
+
+test_that("which_frm_cols verbose flag works", {
+  custom_df <- data.frame(myV = c("TRAV12-1*01", "TRBV15*01"),
+                          myD = c(NA, "TRBD1*01"),
+                          myJ = c("TRAJ16*0", "TRBJ2-5*01"),
+                          myC = c("TRAC*01", "TRBC2*01"),
+                          myCDR3 = c("CAVLIF", "CASSGF"))
+  # Custom columns
+  expect_message(
+    which_frm_cols(custom_df, "imgt", frm_cols = c("myV", "myJ")), 
+    "Using custom column names: myV, myJ")
+  # Custom columns with verbose = FALSE
+  expect_silent(
+    which_frm_cols(custom_df, "imgt", frm_cols = c("myV", "myJ"), verbose = FALSE))
+  # IMGT format without column names, still expect warnings with verbose = FALSE
+  expect_warning(
+    which_frm_cols(custom_df, "imgt", verbose = FALSE), 
+    "No column names provided for IMGT data. Using 10X column names: v_gene, d_gene, j_gene, c_gene")
+})
+
+
+test_that("convert_gene verbose flag works", {
+  # Note, the flag mostly affects downstream functions called by convert_gene.
+  tenx_df_bad <- data.frame(v_gene = c("TRAV12-1", "TRBV15"),
+                        d_gene = c(NA, "BAD_D_GENE"),
+                        j_gene = c("TRAJ16", "TRBJ2-5"),
+                        c_gene = c("TRAC", "TRBC2"),
+                        cdr3 = c("CAVLIF", "CASSGF"))
+  # Expect to still get warnings with verbose = FALSE
+  expect_warning(
+    convert_gene(tenx_df_bad, "tenx", "adaptive", verbose = FALSE), fixed = TRUE,
+    "Adaptive only captures VDJ genes, any C genes will become NA.")
+  expect_warning(
+    convert_gene(tenx_df_bad, "tenx", "adaptive", verbose = FALSE), fixed = TRUE,
+    "These genes are not in IMGT for this species and will be replaced with NA")
+  })
+
