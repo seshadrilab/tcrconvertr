@@ -16,9 +16,9 @@ parse_imgt_fasta <- function(infile) {
   lines <- readLines(infile)
   
   # Extract gene names from headers
-  imgt_list <- sapply(lines[grep("^>", lines)], function(line) {
+  imgt_list <- vapply(lines[grep("^>", lines)], function(line) {
     strsplit(line, "\\|")[[1]][2]
-  }, USE.NAMES = FALSE)
+  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
   
   return(imgt_list)
 }
@@ -147,8 +147,10 @@ build_lookup_from_fastas <- function(data_dir) {
     replacement <- adaptive_replacements[[pattern]]
     lookup[["adaptive"]] <- gsub(pattern, replacement, lookup[["adaptive"]])
   }
-  lookup[["adaptive"]] <- sapply(lookup[["adaptive"]], add_dash_one)
-  lookup[["adaptive"]] <- sapply(lookup[["adaptive"]], pad_single_digit)
+  lookup[["adaptive"]] <- vapply(lookup[["adaptive"]], add_dash_one,
+                                 FUN.VALUE = character(1), USE.NAMES = FALSE)
+  lookup[["adaptive"]] <- vapply(lookup[["adaptive"]], pad_single_digit,
+                                 FUN.VALUE = character(1), USE.NAMES = FALSE)
   lookup[["adaptivev2"]] <- lookup[["adaptive"]]
   
   # Set Adaptive columns to 'NoData' for constant genes (Adaptive only captures VDJ)
