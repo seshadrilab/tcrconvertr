@@ -121,7 +121,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   cols_from <- which_frm_cols(df, frm, frm_cols, verbose)
   
   # Add column of row numbers so we can keep order straight
-  df$id  <- 1:nrow(df)
+  df$id <- seq_len(nrow(df))
 
   # Loop over gene columns, doing a merge to get converted gene names
   new_genes <- list()
