@@ -4,7 +4,7 @@
 \alias{which_frm_cols}
 \title{Determine input columns to use for converting gene names.}
 \usage{
-which_frm_cols(df, frm, frm_cols = NULL, verbose)
+which_frm_cols(df, frm, frm_cols = NULL, verbose = TRUE)
 }
 \arguments{
 \item{df}{Dataframe containing TCR gene names.}
@@ -13,7 +13,7 @@ which_frm_cols(df, frm, frm_cols = NULL, verbose)
 
 \item{frm_cols}{A character vector, the custom column names to use.}
 
-\item{verbose}{A boolean, whether to show messages.}
+\item{verbose}{A boolean, whether to show messages. Optional; defaults to TRUE}
 }
 \value{
 A character vector, column names to use.

@@ -4,7 +4,7 @@
 \alias{choose_lookup}
 \title{Determine which lookup table to use and get filepath.}
 \usage{
-choose_lookup(frm, to, species = "human", verbose)
+choose_lookup(frm, to, species = "human", verbose = TRUE)
 }
 \arguments{
 \item{frm}{A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
@@ -13,7 +13,7 @@ choose_lookup(frm, to, species = "human", verbose)
 
 \item{species}{A string, the species folder name under \verb{tcrconvertr/inst/extdata/}. Optional; defaults to "human".}
 
-\item{verbose}{A boolean, whether to show messages.}
+\item{verbose}{A boolean, whether to show messages. Optional; defaults to TRUE}
 }
 \value{
 A string, the path to correct lookup table.
