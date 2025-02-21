@@ -43,7 +43,7 @@ pak::pak("seshadrilab/tcrconvertr")
 ``` r
 library(TCRconvertR)
 
-tcr_file <- '/home/emmabishop/workspace/tcrconvertr/inst/extdata/examples/tenx.csv'
+tcr_file <- "/home/emmabishop/workspace/tcrconvertr/inst/extdata/examples/tenx.csv"
 
 tcrs <- read.csv(tcr_file)
 tcrs
@@ -76,8 +76,9 @@ tcrs
 **Convert gene names from the 10X format to the Adaptive format**
 
 ``` r
-new_tcrs <- convert_gene(tcrs, frm='tenx', to='adaptive')
-#> Adaptive only captures VDJ genes, any C genes will become NA.
+new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
+#> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive only
+#> captures VDJ genes, any C genes will become NA.
 #> Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
 new_tcrs
 #>              barcode is_cell                   contig_id high_confidence length

@@ -14,12 +14,12 @@
 #' parse_imgt_fasta(fasta)
 parse_imgt_fasta <- function(infile) {
   lines <- readLines(infile)
-  
+
   # Extract gene names from headers
   imgt_list <- vapply(lines[grep("^>", lines)], function(line) {
     strsplit(line, "\\|")[[1]][2]
   }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-  
+
   return(imgt_list)
 }
 
@@ -40,20 +40,20 @@ parse_imgt_fasta <- function(infile) {
 #' # >SomeText|TRBV29/OR9-2*01|MoreText|
 #' # >SomeText|TRBVA/OR9-2*01|MoreText|
 #'
-#' fastadir <- get_example_path('fasta_dir/')
+#' fastadir <- get_example_path("fasta_dir/")
 #' extract_imgt_genes(fastadir)
 extract_imgt_genes <- function(data_dir) {
   # List all FASTA files
   fasta_files <- list.files(data_dir, pattern = "\\.(fa|fasta)$", full.names = TRUE)
-  
+
   # Extract gene names from each file
   imgt <- unlist(lapply(fasta_files, parse_imgt_fasta))
-  
+
   # Create and sort a data frame
   lookup <- data.frame(imgt = imgt, stringsAsFactors = FALSE)
   lookup_sorted <- lookup[order(lookup[["imgt"]]), , drop = FALSE]
   rownames(lookup_sorted) <- NULL
-  
+
   return(lookup_sorted)
 }
 
@@ -65,7 +65,7 @@ extract_imgt_genes <- function(data_dir) {
 #' @export
 #' @keywords internal
 #' @examples
-#' add_dash_one('TRBV2*01')
+#' add_dash_one("TRBV2*01")
 add_dash_one <- function(gene_str) {
   if (!length(gene_str) == 1) {
     stop("Attempting to add '-01' to more than one gene name at a time.")
@@ -105,8 +105,8 @@ pad_single_digit <- function(gene_str) {
 #' # For the example, create and use a temporary folder
 #' fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
 #' dir.create(fastadir)
-#' trav <- get_example_path('fasta_dir/test_trav.fa')
-#' trbv <- get_example_path('fasta_dir/test_trbv.fa')
+#' trav <- get_example_path("fasta_dir/test_trav.fa")
+#' trbv <- get_example_path("fasta_dir/test_trbv.fa")
 #' file.copy(c(trav, trbv), fastadir)
 #'
 #' # Build lookup tables
@@ -116,13 +116,15 @@ pad_single_digit <- function(gene_str) {
 #' unlink(fastadir, recursive = TRUE)
 build_lookup_from_fastas <- function(data_dir) {
   lookup <- extract_imgt_genes(data_dir)
-  
+
   # Create the 10X column by removing allele info (e.g. *01) and slash from "/DV".
   # Do this by substituting "DV" for "/DV" in what's left of the TCR gene name
   # after removing the last three characters
-  lookup[["tenx"]] <- sub("/DV", "DV", substr(lookup[["imgt"]], 1,
-                                              nchar(lookup[["imgt"]]) - 3))
-  
+  lookup[["tenx"]] <- sub("/DV", "DV", substr(
+    lookup[["imgt"]], 1,
+    nchar(lookup[["imgt"]]) - 3
+  ))
+
   # Create Adaptive columns by adding letters, 0's, removing /DV and renaming /OR
   adaptive_replacements <- c(
     "TRAV14/DV4" = "TRAV14-1",
@@ -148,26 +150,31 @@ build_lookup_from_fastas <- function(data_dir) {
     lookup[["adaptive"]] <- gsub(pattern, replacement, lookup[["adaptive"]])
   }
   lookup[["adaptive"]] <- vapply(lookup[["adaptive"]], add_dash_one,
-                                 FUN.VALUE = character(1), USE.NAMES = FALSE)
+    FUN.VALUE = character(1), USE.NAMES = FALSE
+  )
   lookup[["adaptive"]] <- vapply(lookup[["adaptive"]], pad_single_digit,
-                                 FUN.VALUE = character(1), USE.NAMES = FALSE)
+    FUN.VALUE = character(1), USE.NAMES = FALSE
+  )
   lookup[["adaptivev2"]] <- lookup[["adaptive"]]
-  
+
   # Set Adaptive columns to 'NoData' for constant genes (Adaptive only captures VDJ)
   # 'NoData' gets converted to NA by convert.convert_gene()
   lookup[grepl("C", lookup[["imgt"]]), c("adaptive", "adaptivev2")] <- "NoData"
-  
+
   # If converting from 10X will just need the first *01 allele
   from_tenx <- stats::aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
-  
+
   # Make table for Adaptive genes with or without allele
   lookup2 <- subset(lookup, !grepl("NoData", lookup$adaptivev2))
   from_adapt <- lookup2[c("adaptivev2", "imgt", "tenx")]
-  from_adapt["adaptive"] <-  substr(from_adapt[["adaptivev2"]], 1,
-                                    nchar(from_adapt[["adaptivev2"]]) - 3)
+  from_adapt["adaptive"] <- substr(
+    from_adapt[["adaptivev2"]], 1,
+    nchar(from_adapt[["adaptivev2"]]) - 3
+  )
   from_adapt <- stats::aggregate(. ~ adaptive,
-                                 data = subset(from_adapt, select = -adaptivev2),
-                                 FUN = function(x) x[1])
+    data = subset(from_adapt, select = -adaptivev2),
+    FUN = function(x) x[1]
+  )
   from_adapt["adaptivev2"] <- from_adapt["adaptive"]
   from_adaptive <- rbind(lookup2, from_adapt)
   from_adaptive <- from_adaptive[, c("adaptive", "adaptivev2", "imgt", "tenx")]

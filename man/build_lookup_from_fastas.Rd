@@ -24,8 +24,8 @@ Create lookup tables within in a given directory that contains FASTA files:
 # For the example, create and use a temporary folder
 fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
 dir.create(fastadir)
-trav <- get_example_path('fasta_dir/test_trav.fa')
-trbv <- get_example_path('fasta_dir/test_trbv.fa')
+trav <- get_example_path("fasta_dir/test_trav.fa")
+trbv <- get_example_path("fasta_dir/test_trbv.fa")
 file.copy(c(trav, trbv), fastadir)
 
 # Build lookup tables
