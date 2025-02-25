@@ -129,9 +129,16 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
     if (col %in% colnames(df)) {
       merged <- merge(df[, c(col, "id"), drop = FALSE], lookup, by.x = col, by.y = frm, all.x = TRUE)
       merged <- merged[order(merged$id), ]
-      new_genes[[col]] <- merged[, to]
+      good_genes <- merged[, to]
       # Note genes where the merge produced an NA on the 'to' format side
-      bad_genes_all <- c(bad_genes_all, merged[is.na(merged[, to]), col])
+      new_bad_genes <- merged[is.na(merged[, to]), col]
+      # We don't expect the entire column of genes to be empty.
+      if (length(new_bad_genes) < length(good_genes)) {
+        new_genes[[col]] <- good_genes
+        bad_genes_all <- c(bad_genes_all, new_bad_genes)
+      } else {
+        warning(paste("The input column", col, "doesn't contain any valid genes and was skipped."))
+      }
     }
   }
 
