@@ -33,6 +33,14 @@ test_that("can convert genes", {
   custom_df <- imgt_df
   colnames(custom_df) <- c("myV", "myD", "myJ", "myC", "myCDR3")
 
+  custom_vj_tenx_df <- data.frame(
+    myV = c("TRAV12-1", "TRBV15"),
+    myD = c(NA, "TRBD1*01"),
+    myJ = c("TRAJ16", "TRBJ2-5"),
+    myC = c("TRAC*01", "TRBC2*01"),
+    myCDR3 = c("CAVLIF", "CASSGF")
+  )
+
   tenx_to_adapt_df <- adapt_df
   colnames(tenx_to_adapt_df) <- c("v_gene", "d_gene", "j_gene", "cdr3")
   # Insert a 'c_gene' column before 'cdr3'
@@ -117,6 +125,10 @@ test_that("can convert genes", {
   ), custom_to_tenx_df)
   # Some Adaptive genes without allele
   expect_equal(convert_gene(adapt_no_allele_df, "adaptive", "imgt"), adapt_to_imgt_df)
+  # Confirm won't convert non-VDJC gene column to NAs
+  expect_equal(convert_gene(custom_df, "imgt", "tenx",
+    frm_cols = c("myV", "myJ", "myCDR3")
+  ), custom_vj_tenx_df)
 })
 
 
@@ -259,8 +271,8 @@ test_that("convert_gene verbose flag works", {
   # Note, the flag mostly affects downstream functions called by convert_gene.
   tenx_df_bad <- data.frame(
     v_gene = c("TRAV12-1", "TRBV15"),
-    d_gene = c(NA, "BAD_D_GENE"),
-    j_gene = c("TRAJ16", "TRBJ2-5"),
+    d_gene = c(NA, "TRBD1"),
+    j_gene = c("TRAJ16", "BAD_J_GENE"),
     c_gene = c("TRAC", "TRBC2"),
     cdr3 = c("CAVLIF", "CASSGF")
   )
