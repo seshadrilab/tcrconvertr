@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 # TCRconvertR
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 > **Warning**: This project is in **beta stage**. It is under active development and may be unstable.
@@ -46,7 +47,7 @@ pak::pak("seshadrilab/tcrconvertr")
 ```{r example}
 library(TCRconvertR)
 
-tcr_file <- '/home/emmabishop/workspace/tcrconvertr/inst/extdata/examples/tenx.csv'
+tcr_file <- "/home/emmabishop/workspace/tcrconvertr/inst/extdata/examples/tenx.csv"
 
 tcrs <- read.csv(tcr_file)
 tcrs
@@ -55,7 +56,7 @@ tcrs
 **Convert gene names from the 10X format to the Adaptive format**
 
 ```{r}
-new_tcrs <- convert_gene(tcrs, frm='tenx', to='adaptive')
+new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
 new_tcrs
 ```
 

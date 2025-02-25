@@ -2,6 +2,8 @@
 # TCRconvertR
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 > **Warning**: This project is in **beta stage**. It is under active
@@ -41,7 +43,7 @@ pak::pak("seshadrilab/tcrconvertr")
 ``` r
 library(TCRconvertR)
 
-tcr_file <- '/home/emmabishop/workspace/tcrconvertr/inst/extdata/examples/tenx.csv'
+tcr_file <- "/home/emmabishop/workspace/tcrconvertr/inst/extdata/examples/tenx.csv"
 
 tcrs <- read.csv(tcr_file)
 tcrs
@@ -74,9 +76,10 @@ tcrs
 **Convert gene names from the 10X format to the Adaptive format**
 
 ``` r
-new_tcrs <- convert_gene(tcrs, frm='tenx', to='adaptive')
-#> [WARNING] Adaptive only captures VDJ genes, any C genes will become NA.
-#> [WARNING] Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
+new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
+#> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive only
+#> captures VDJ genes, any C genes will become NA.
+#> Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
 new_tcrs
 #>              barcode is_cell                   contig_id high_confidence length
 #> 1 AAACCTGAGACCACGA-1    TRUE AAACCTGAGACCACGA-1_contig_1            TRUE    521
@@ -85,11 +88,11 @@ new_tcrs
 #> 4 AAACCTGAGGCTCTTA-1    TRUE AAACCTGAGGCTCTTA-1_contig_2            TRUE    518
 #> 5 AAACCTGAGTGAACGC-1    TRUE AAACCTGAGTGAACGC-1_contig_1            TRUE    674
 #>   chain        v_gene        d_gene        j_gene c_gene full_length productive
-#> 1   TRA TCRAV01-02*01 TCRBD01-01*01 TCRAJ12-01*01 NoData        TRUE       TRUE
-#> 2   TRB TCRAV01-02*01 TCRBD01-01*01 TCRAJ33-01*01 NoData        TRUE       TRUE
-#> 3   TRB TCRBV02-01*01 TCRBD01-01*01 TCRBJ01-02*01 NoData        TRUE       TRUE
-#> 4   TRA TCRBV06-01*01 TCRBD02-01*01 TCRBJ02-01*01 NoData        TRUE       TRUE
-#> 5   TRB TCRBV06-04*01 TCRBD02-01*01 TCRBJ02-03*01 NoData        TRUE       TRUE
+#> 1   TRA TCRAV01-02*01 TCRBD01-01*01 TCRAJ12-01*01   <NA>        TRUE       TRUE
+#> 2   TRB TCRBV06-01*01 TCRBD02-01*01 TCRBJ02-01*01   <NA>        TRUE       TRUE
+#> 3   TRB TCRBV06-04*01 TCRBD02-01*01 TCRBJ02-03*01   <NA>        TRUE       TRUE
+#> 4   TRA TCRAV01-02*01 TCRBD01-01*01 TCRAJ33-01*01   <NA>        TRUE       TRUE
+#> 5   TRB TCRBV02-01*01 TCRBD01-01*01 TCRBJ01-02*01   <NA>        TRUE       TRUE
 #>              cdr3                                       cdr3_nt reads umis
 #> 1    CAVMDSSYKLIF          TGTGCTGTGATGGATAGCAGCTATAAATTGATCTTC  1569    2
 #> 2 CASSGLAGGYNEQFF TGTGCCAGCAGTGGACTAGCGGGGGGCTACAATGAGCAGTTCTTC  5238    7

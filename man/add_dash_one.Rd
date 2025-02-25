@@ -15,3 +15,7 @@ A string, the updated gene name.
 \description{
 Add a \code{-01} to genes without IMGT gene-level designation.
 }
+\examples{
+add_dash_one("TRBV2*01")
+}
+\keyword{internal}
