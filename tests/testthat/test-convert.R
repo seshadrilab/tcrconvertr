@@ -130,7 +130,7 @@ test_that("can convert genes", {
     expect_equal(convert_gene(custom_df, "imgt", "tenx",
       frm_cols = c("myV", "myJ", "myCDR3")
     ), custom_vj_tenx_df)
-    })
+  })
 })
 
 
@@ -264,10 +264,10 @@ test_that("which_frm_cols verbose flag works", {
     which_frm_cols(custom_df, "imgt", frm_cols = c("myV", "myJ"), verbose = FALSE)
   )
   # IMGT format without column names, still expect warnings with verbose = FALSE
-  
+
   # Capture warnings without printing
   captured_warnings <- character()
-  
+
   result <- withCallingHandlers(
     which_frm_cols(custom_df, "imgt", verbose = FALSE),
     warning = function(w) {
@@ -277,7 +277,8 @@ test_that("which_frm_cols verbose flag works", {
       invokeRestart("muffleWarning")
     }
   )
-  expect_true(any(grepl("No column names provided for IMGT data. Using 10X column names: v_gene, d_gene, j_gene, c_gene", captured_warnings)))
+  msg <- "No column names provided for IMGT data. Using 10X column names: v_gene, d_gene, j_gene, c_gene"
+  expect_true(any(grepl(msg, captured_warnings)))
 })
 
 
@@ -290,9 +291,9 @@ test_that("convert_gene verbose flag works", {
     c_gene = c("TRAC", "TRBC2"),
     cdr3 = c("CAVLIF", "CASSGF")
   )
-  
+
   captured_warnings <- character()
-  
+
   # Capture warnings without printing
   result <- withCallingHandlers(
     convert_gene(tenx_df_bad, "tenx", "adaptive", verbose = FALSE),
@@ -303,9 +304,10 @@ test_that("convert_gene verbose flag works", {
       invokeRestart("muffleWarning")
     }
   )
-  
-  # Verify expected warnings
-  expect_true(any(grepl("Adaptive only captures VDJ genes, any C genes will become NA.", captured_warnings)))
-  expect_true(any(grepl("These genes are not in IMGT for this species and will be replaced with NA", captured_warnings)))
-})
 
+  # Verify expected warnings
+  expect_true(any(grepl("Adaptive only captures VDJ genes, any C genes will become NA.", 
+                        captured_warnings)))
+  expect_true(any(grepl("These genes are not in IMGT for this species and will be replaced with NA", 
+                        captured_warnings)))
+})
