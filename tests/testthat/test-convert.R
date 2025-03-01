@@ -264,22 +264,12 @@ test_that("which_frm_cols verbose flag works", {
     which_frm_cols(custom_df, "imgt", frm_cols = c("myV", "myJ"), verbose = FALSE)
   )
   # IMGT format without column names, still expect warnings with verbose = FALSE
-
-  # Capture warnings without printing
-  captured_warnings <- character()
-
-  result <- withCallingHandlers(
+  expect_warning(
     which_frm_cols(custom_df, "imgt", verbose = FALSE),
-    warning = function(w) {
-      # Add each one as it comes up to our vector above
-      captured_warnings <<- c(captured_warnings, conditionMessage(w))
-      # Prevent warnings from coming up and being shown
-      invokeRestart("muffleWarning")
-    }
+    "No column names provided for IMGT data. Using 10X column names: v_gene, d_gene, j_gene, c_gene"
   )
-  msg <- "No column names provided for IMGT data. Using 10X column names: v_gene, d_gene, j_gene, c_gene"
-  expect_true(any(grepl(msg, captured_warnings)))
 })
+
 
 
 test_that("convert_gene verbose flag works", {
