@@ -10,7 +10,7 @@ col_ref <- list(
 #'
 #' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
-#' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to "human".
+#' @param species A string, the species. Optional; defaults to "human".
 #' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
 #'
 #' @return A string, the path to correct lookup table.
@@ -19,8 +19,14 @@ col_ref <- list(
 #' @examples
 #' choose_lookup("imgt", "adaptive")
 choose_lookup <- function(frm, to, species = "human", verbose = TRUE) {
-  # Determine the lookup table path
-  data_path <- system.file("extdata", species, package = "TCRconvertR")
+  # Determine where to find lookup tables
+  if (species %in% c("human", "mouse", "rhesus")) {
+    lookup_dir <- system.file("extdata", package = "TCRconvertR")
+  } else {
+    lookup_dir <- rappdirs::user_data_dir("TCRconvertR", "Emmma Bishop")
+  }
+
+  data_path <- file.path(lookup_dir, species)
 
   if (frm == "tenx") {
     lookup_f <- file.path(data_path, "lookup_from_tenx.csv")
@@ -85,7 +91,7 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #' @param df Dataframe containing TCR gene names.
 #' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
 #' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
-#' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to "human".
+#' @param species A string, the species. Optional; defaults to "human".
 #' @param frm_cols A character vector of custom V/D/J/C gene column names. Optional; defaults to NULL.
 #' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
 #'
