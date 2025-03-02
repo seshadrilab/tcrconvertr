@@ -306,8 +306,12 @@ test_that("convert_gene verbose flag works", {
   )
 
   # Verify expected warnings
-  expect_true(any(grepl("Adaptive only captures VDJ genes, any C genes will become NA.", 
-                        captured_warnings)))
-  expect_true(any(grepl("These genes are not in IMGT for this species and will be replaced with NA", 
-                        captured_warnings)))
+  expect_true(any(grepl(
+    "Adaptive only captures VDJ genes, any C genes will become NA.",
+    captured_warnings
+  )))
+  expect_true(any(grepl(
+    "These genes are not in IMGT for this species and will be replaced with NA",
+    captured_warnings
+  )))
 })
