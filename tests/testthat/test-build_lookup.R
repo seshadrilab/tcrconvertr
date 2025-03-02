@@ -34,20 +34,26 @@ test_that("will pad single digits", {
 
 
 test_that("can build lookup tables from fastas", {
-  # Generate a temporary directory
-  fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
+  # Create mock folder in temporary directory to write to
+  mock_path <- file.path(tempdir(), "TCRconvertR_tmp")
+  dir.create(mock_path, showWarnings = FALSE, recursive = TRUE)
+
+  # Generate a temporary directory to put input files in
+  fastadir <- file.path(mock_path, "fastas")
   dir.create(fastadir)
   # Copy test files into it
   example_dir <- get_example_path("fasta_dir")
   example_fastas <- list.files(example_dir, pattern = "\\.fa$", full.names = TRUE)
   file.copy(example_fastas, fastadir)
 
+  # Stub `rappdirs::user_data_dir` within `build_lookup_from_fastas`
+  mockery::stub(build_lookup_from_fastas, "rappdirs::user_data_dir", function(...) mock_path)
+
   # Create lookup tables
-  lookup_dir <- build_lookup_from_fastas(fastadir)
-  expect_equal(lookup_dir, fastadir)
+  build_lookup_from_fastas(fastadir, species = "rabbit")
 
   # Check adaptive lookup table
-  adapt <- read.csv(get_example_path("fasta_dir/lookup_from_adaptive.csv"))
+  adapt <- read.csv(file.path(mock_path, "rabbit/lookup_from_adaptive.csv"))
   expected_adapt <- data.frame(
     adaptive = c(
       "TCRAV01-01*01",
@@ -105,7 +111,7 @@ test_that("can build lookup tables from fastas", {
   expect_equal(adapt, expected_adapt)
 
   # Check 10X lookup table
-  tenx <- read.csv(get_example_path("fasta_dir/lookup_from_tenx.csv"))
+  tenx <- read.csv(file.path(mock_path, "rabbit/lookup_from_tenx.csv"))
   expected_tenx <- data.frame(
     tenx = c(
       "TRAC",
@@ -143,7 +149,7 @@ test_that("can build lookup tables from fastas", {
   expect_equal(tenx, expected_tenx)
 
   # Check regular lookup table
-  lookup <- read.csv(get_example_path("fasta_dir/lookup.csv"))
+  lookup <- read.csv(file.path(mock_path, "rabbit/lookup.csv"))
   expected_lookup <- data.frame(
     imgt = c(
       "TRAC*01",
@@ -185,5 +191,5 @@ test_that("can build lookup tables from fastas", {
   expect_equal(lookup, expected_lookup)
 
   # Delete temp directory
-  unlink(fastadir, recursive = TRUE)
+  unlink(mock_path, recursive = TRUE)
 })
