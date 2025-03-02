@@ -2,7 +2,7 @@
 # TCRconvertR
 
 <!-- badges: start -->
-
+[![codecov](https://codecov.io/gh/seshadrilab/tcrconvertr/graph/badge.svg?token=JVURVQO10D)](https://codecov.io/gh/seshadrilab/tcrconvertr)
 [![R-CMD-check](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
