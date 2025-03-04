@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_lookup.R
 \name{build_lookup_from_fastas}
 \alias{build_lookup_from_fastas}
-\title{Create lookup tables from reference FASTAs}
+\title{Create lookup tables}
 \usage{
 build_lookup_from_fastas(data_dir)
 }
@@ -13,11 +13,29 @@ build_lookup_from_fastas(data_dir)
 Nothing.
 }
 \description{
-Create lookup tables within in a given directory that contains FASTA files:
+\code{build_lookup_from_fastas()} processes IMGT reference FASTA files in a given
+folder to generate lookup tables used for making gene name conversions. It
+extracts all gene names and transforms them into 10X and Adaptive formats
+following predefined conversion rules. The resulting lookup tables are saved
+in the provided directory:
 \itemize{
-\item lookup.csv
-\item lookup_from_tenx.csv
-\item lookup_from_adaptive.csv
+\item \code{lookup.csv}: IMGT gene names and their 10X and Adaptive equivalents.
+\item \code{lookup_from_tenx.csv}: Gene names aggregated by their 10X identifiers, with one representative allele (\verb{*01}) for each.
+\item \code{lookup_from_adaptive.csv}: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
+}
+}
+\details{
+Key transformations from IMGT:
+\itemize{
+\item \strong{10X:}
+\itemize{
+\item Remove allele information (e.g., \verb{*01}) and modify \verb{/DV} occurrences.
+}
+\item \strong{Adaptive:}
+\itemize{
+\item Apply renaming rules, such as adding gene-level designations and zero-padding single-digit numbers.
+\item Convert constant genes to \code{"NoData"} (Adaptive only captures VDJ) which become \code{NA} after the merge in \code{convert_gene()}.
+}
 }
 }
 \examples{

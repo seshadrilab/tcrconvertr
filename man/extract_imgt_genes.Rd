@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_lookup.R
 \name{extract_imgt_genes}
 \alias{extract_imgt_genes}
-\title{Extract gene names from all reference FASTA files in a folder.}
+\title{Extract all gene names from a folder of FASTAs}
 \usage{
 extract_imgt_genes(data_dir)
 }
@@ -13,7 +13,9 @@ extract_imgt_genes(data_dir)
 A dataframe of gene names.
 }
 \description{
-Extract gene names from all reference FASTA files in a folder.
+\code{extract_imgt_genes()} first runs \code{parse_imgt_fasta()} on all FASTA files in
+a given folder to pull out the gene names. Then it returns those names in an
+alphabetically sorted dataframe.
 }
 \examples{
 # Given a folder with FASTA files containing these headers:

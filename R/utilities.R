@@ -1,4 +1,7 @@
-#' Get full path to given example file or directory.
+#' Get full path to an example file or directory
+#'
+#' `get_example_path()` takes a file or folder name that is expected to be
+#' located under the package `examples` and gets the full path to that item.
 #'
 #' @param file_name A string, the name of the example file or directory.
 #'
