@@ -2,6 +2,7 @@
 # TCRconvertR
 
 <!-- badges: start -->
+
 [![codecov](https://codecov.io/gh/seshadrilab/tcrconvertr/graph/badge.svg?token=JVURVQO10D)](https://codecov.io/gh/seshadrilab/tcrconvertr)
 [![R-CMD-check](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
@@ -27,7 +28,7 @@ standard naming convention. It is fast, reliable, and prevents errors
 from manual conversions. Unlike other tools that require custom objects,
 TCRconvertR works directly with DataFrames and CSV/TSV files.
 
-# Installation
+## Installation
 
 You can install TCRconvertR from [GitHub](https://github.com/) with:
 
@@ -36,7 +37,7 @@ You can install TCRconvertR from [GitHub](https://github.com/) with:
 pak::pak("seshadrilab/tcrconvertr")
 ```
 
-# Usage
+## Usage
 
 **Load some 10X data**
 
@@ -107,22 +108,22 @@ new_tcrs
 #> 5      clonotype81 clonotype81_consensus_2
 ```
 
-# Contributing
+## Contributing
 
 I welcome feedback! If you would like to resolve an issue or add
 improvements please submit a pull request.
 
-# Issues
+## Issues
 
 If you run into problems or need help running TCRconvertR please file an
 issue on GitHub.
 
-# Contact
+## Contact
 
 For other questions please contact Emma Bishop: `emmab5` at `uw` dot
 `edu`
 
-# Acknowledgments
+## Acknowledgments
 
 This project was created with support from the Fred Hutchinson Cancer
 Center Translational Data Science Integrated Research Center (TDS IRC)
