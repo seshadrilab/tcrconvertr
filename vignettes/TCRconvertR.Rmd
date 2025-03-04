@@ -1,0 +1,151 @@
+---
+title: "Get started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Installation
+
+You can install TCRconvertR from [GitHub](https://github.com/seshadrilab/tcrconvertr) with:
+
+``` r
+# install.packages("pak")
+pak::pak("seshadrilab/tcrconvertr")
+```
+
+## Basic usage
+
+TCRconvert takes a dataframe with at least one column of gene names as input. It produces a dataframe with converted gene names as output.
+
+**Load some 10X data**
+
+```{r}
+library(TCRconvertR)
+tcr_file <- get_example_path("tenx.csv")
+
+tcrs <- read.csv(tcr_file)[c("barcode", "v_gene", "d_gene", "j_gene", "c_gene", "cdr3")]
+tcrs
+```
+
+**Convert gene names from 10X to Adaptive**
+
+```{r}
+new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
+new_tcrs
+```
+
+**...or to IMGT**
+
+```{r}
+new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "imgt")
+new_tcrs
+```
+
+> Tip: Suppress messages by setting `verbose = FALSE`.
+
+**Convert back to 10X to see that no data is lost**
+
+```{r}
+back_tcrs <- convert_gene(new_tcrs, frm = "imgt", to = "tenx")
+back_tcrs
+```
+
+```{r}
+all.equal(back_tcrs, tcrs) # Confirm TRUE
+```
+
+## Using custom columns
+
+TCRconvertR uses the gene column names below based on the `frm` parameter. Note that there are no standard IMGT column names and that Adaptive does not capture C genes.
+
+- `frm = 'imgt'` uses `c('v_gene', 'd_gene', 'j_gene', 'c_gene')`
+- `frm = 'tenx'` uses `c('v_gene', 'd_gene', 'j_gene', 'c_gene')`
+- `frm = 'adaptive'` uses `c('v_resolved', 'd_resolved', 'j_resolved')`
+- `frm = 'adaptivev2'` uses `c('vMaxResolved', 'dMaxResolved', 'jMaxResolved')`
+
+At least one of the assumed columns needs to be in the input data. You can use your own columns with the `frm_cols` parameter.
+
+If you're using AIRR-formatted files, use: `frm_cols = c('v_call', 'd_call', 'j_call', 'c_call')`
+
+> Tip: What if your Adaptive data doesn't have `x_resolved` or `xMaxResolved` columns? Create these columns yourself by combining the `gene` and `allele` text with `*` as a separator.
+
+**Load 10X data with custom column names**
+
+```{r}
+custom_file <- get_example_path("customcols.csv")
+
+custom <- read.csv(custom_file)
+custom
+```
+
+**Specify names using `frm_cols` and convert to IMGT**
+
+```{r}
+custom_new <- convert_gene(
+  custom,
+  frm = "tenx",
+  to = "imgt",
+  verbose = FALSE,
+  frm_cols = c("myVgene", "myDgene", "myJgene", "myCgene"),
+)
+custom_new
+```
+
+## Using rhesus or mouse data
+
+**Specify the species if not human**
+
+We can see that TRBV2 is not a rhesus gene.
+
+```{r}
+new_tcrs <- convert_gene(
+  tcrs,
+  frm = "tenx",
+  to = "imgt",
+  species = "rhesus", # or 'mouse'
+  verbose = FALSE
+)
+new_tcrs
+```
+
+## Using a custom reference
+
+You may want to create a reference for a species that isn't already included, such as rabbit. To do so, you'll need FASTA files that contain TCR gene names in the headers in this format:
+
+```
+>SomeText|TRBV10-1*02|MoreText|...
+```
+
+1. The easiest way is to download the reference FASTAs for every gene group from [IMGT](https://www.imgt.org/vquest/refseqh.html) into a folder.
+
+2. Build the lookup tables, specifying the species name you'll use when running TCRconvert:
+
+```
+build_lookup_from_fastas("path/to/fasta/dir/", "rabbit")
+```
+
+## Contributing
+
+I welcome feedback! If you would like to resolve an issue or add improvements please submit a pull request.
+
+## Issues
+
+If you run into problems or need help running TCRconvertR please file an issue on GitHub.
+
+## Contact
+
+For other questions please contact Emma Bishop: `emmab5` at `uw` dot `edu`
+
+## Acknowledgments
+
+This project was created with support from the Fred Hutchinson Cancer Center Translational Data Science Integrated Research Center (TDS IRC) through the 2024 Data Scientist Collaboration Grant.
