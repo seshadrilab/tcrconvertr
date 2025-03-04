@@ -89,32 +89,54 @@ pad_single_digit <- function(gene_str) {
   return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str))
 }
 
-#' Create lookup tables from reference FASTAs
+#' Create these lookup tables from a directory of FASTA files:
 #'
-#' Create lookup tables within in a given directory that contains FASTA files:
 #'    - lookup.csv
 #'    - lookup_from_tenx.csv
 #'    - lookup_from_adaptive.csv
 #'
+#' The lookup tables are stored in an application data folder via rappdirs. For example:
+#'
+#'    - MacOS: ``~/Library/Application Support/<AppName>``
+#'    - Windows: ``C:\Documents and Settings\<User>\Application Data\Local Settings\<AppAuthor>\<AppName>``
+#'    - Linux: ``~/.local/share/<AppName>``
+#'
 #' @param data_dir A string, the directory containing FASTA files.
+#' @param species A string, the name of species that will be used when running TCRconvert with these lookup tables.
 #'
 #' @return Nothing.
+#' @importFrom rappdirs user_data_dir
 #' @autoglobal
 #' @export
 #' @examples
 #' # For the example, create and use a temporary folder
-#' fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
+#' fastadir <- file.path(tempdir(), "TCRconvertR_tmp")
 #' dir.create(fastadir)
 #' trav <- get_example_path("fasta_dir/test_trav.fa")
 #' trbv <- get_example_path("fasta_dir/test_trbv.fa")
 #' file.copy(c(trav, trbv), fastadir)
 #'
 #' # Build lookup tables
-#' build_lookup_from_fastas(fastadir)
+#' build_lookup_from_fastas(fastadir, "rabbit")
 #'
 #' # Clean up temporary folder
 #' unlink(fastadir, recursive = TRUE)
-build_lookup_from_fastas <- function(data_dir) {
+build_lookup_from_fastas <- function(data_dir, species) {
+  # Check that species can be a valid folder name
+  forbidden_char <- "[/\\\\:*?\"<>|~`\n\t]"
+  if (grepl(forbidden_char, species)) {
+    sanitized <- gsub("[/\\\\:*?\"<>|~`\n\t]", "_", species)
+    stop(paste(
+      "Proposed folder name", species, "contains invalid characters.\n",
+      " Suggestion:", sanitized
+    ))
+  }
+
+  # Get the user data directory for saving lookup tables
+  user_dir <- rappdirs::user_data_dir("TCRconvertR", "Emmma Bishop")
+  save_dir <- file.path(user_dir, species)
+  dir.create(save_dir, showWarnings = FALSE, recursive = TRUE) # Ensure species subdirectory exists
+
   lookup <- extract_imgt_genes(data_dir)
 
   # Create the 10X column by removing allele info (e.g. *01) and slash from "/DV".
@@ -185,9 +207,8 @@ build_lookup_from_fastas <- function(data_dir) {
   from_adaptive <- from_adaptive[!duplicated(from_adaptive), ]
 
   # Save to files
-  utils::write.csv(lookup, file.path(data_dir, "lookup.csv"), row.names = FALSE)
-  utils::write.csv(from_tenx, file.path(data_dir, "lookup_from_tenx.csv"), row.names = FALSE)
-  utils::write.csv(from_adaptive, file.path(data_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
-
-  return(data_dir)
+  message("Writing lookup tables to: ", save_dir)
+  utils::write.csv(lookup, file.path(save_dir, "lookup.csv"), row.names = FALSE)
+  utils::write.csv(from_tenx, file.path(save_dir, "lookup_from_tenx.csv"), row.names = FALSE)
+  utils::write.csv(from_adaptive, file.path(save_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
 }

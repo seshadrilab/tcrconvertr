@@ -13,11 +13,13 @@ Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace", "rd",
 Encoding: UTF-8
 Imports:
     stats,
-    utils
+    utils,
+    rappdirs
 RoxygenNote: 7.3.2
 Suggests: 
     roxyglobals,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    mockery
 Config/testthat/edition: 3
 Config/roxyglobals/filename: globals.R
 Config/roxyglobals/unique: FALSE
