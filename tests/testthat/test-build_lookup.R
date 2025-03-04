@@ -197,3 +197,36 @@ test_that("can build lookup tables from fastas", {
   # Delete temp directory
   unlink(mock_path, recursive = TRUE)
 })
+
+test_that("will reject invalid species name", {
+  skip_if_not_installed("mockery")
+
+  # Create mock folder in temporary directory to write to
+  mock_path <- file.path(tempdir(), "TCRconvertR_tmp")
+  dir.create(mock_path, showWarnings = FALSE, recursive = TRUE)
+
+  # Generate a temporary directory to put input files in
+  fastadir <- file.path(mock_path, "fastas")
+  dir.create(fastadir)
+  # Copy test files into it
+  example_dir <- get_example_path("fasta_dir")
+  example_fastas <- list.files(example_dir, pattern = "\\.fa$", full.names = TRUE)
+  file.copy(example_fastas, fastadir)
+
+  # Stub `rappdirs::user_data_dir` within `build_lookup_from_fastas`
+  mockery::stub(build_lookup_from_fastas, "rappdirs::user_data_dir", function(...) mock_path)
+
+  # Attempt to create lookup tables with invalid species folder names
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit\\"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit/"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit:"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit*"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit?"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit<"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit>"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit|"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit~"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit`"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbit\n"))
+  expect_error(build_lookup_from_fastas(fastadir, species = "rabbi\t"))
+})

@@ -122,6 +122,16 @@ pad_single_digit <- function(gene_str) {
 #' # Clean up temporary folder
 #' unlink(fastadir, recursive = TRUE)
 build_lookup_from_fastas <- function(data_dir, species) {
+  # Check that species can be a valid folder name
+  forbidden_char <- "[/\\\\:*?\"<>|~`\n\t]"
+  if (grepl(forbidden_char, species)) {
+    sanitized <- gsub("[/\\\\:*?\"<>|~`\n\t]", "_", species)
+    stop(paste(
+      "Proposed folder name", species, "contains invalid characters.\n",
+      " Suggestion:", sanitized
+    ))
+  }
+
   # Get the user data directory for saving lookup tables
   user_dir <- rappdirs::user_data_dir("TCRconvertR", "Emmma Bishop")
   save_dir <- file.path(user_dir, species)
