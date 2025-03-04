@@ -34,6 +34,8 @@ test_that("will pad single digits", {
 
 
 test_that("can build lookup tables from fastas", {
+  skip_if_not_installed("mockery")
+
   # Create mock folder in temporary directory to write to
   mock_path <- file.path(tempdir(), "TCRconvertR_tmp")
   dir.create(mock_path, showWarnings = FALSE, recursive = TRUE)
@@ -50,7 +52,9 @@ test_that("can build lookup tables from fastas", {
   mockery::stub(build_lookup_from_fastas, "rappdirs::user_data_dir", function(...) mock_path)
 
   # Create lookup tables
-  build_lookup_from_fastas(fastadir, species = "rabbit")
+  suppressMessages(
+    build_lookup_from_fastas(fastadir, species = "rabbit")
+  )
 
   # Check adaptive lookup table
   adapt <- read.csv(file.path(mock_path, "rabbit/lookup_from_adaptive.csv"))
