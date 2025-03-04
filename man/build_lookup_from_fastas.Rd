@@ -4,10 +4,12 @@
 \alias{build_lookup_from_fastas}
 \title{Create lookup tables}
 \usage{
-build_lookup_from_fastas(data_dir)
+build_lookup_from_fastas(data_dir, species)
 }
 \arguments{
 \item{data_dir}{A string, the directory containing FASTA files.}
+
+\item{species}{A string, the name of species that will be used when running TCRconvert with these lookup tables.}
 }
 \value{
 Nothing.
@@ -33,21 +35,29 @@ Key transformations from IMGT:
 }
 \item \strong{Adaptive:}
 \itemize{
-\item Apply renaming rules, such as adding gene-level designations and zero-padding single-digit numbers.
-\item Convert constant genes to \code{"NoData"} (Adaptive only captures VDJ) which become \code{NA} after the merge in \code{convert_gene()}.
+\item lookup.csv
+\item lookup_from_tenx.csv
+\item lookup_from_adaptive.csv
 }
+}
+\details{
+The lookup tables are stored in an application data folder via rappdirs. For example:
+\itemize{
+\item MacOS: \verb{~/Library/Application Support/<AppName>}
+\item Windows: \verb{C:\\Documents and Settings\\<User>\\Application Data\\Local Settings\\<AppAuthor>\\<AppName>}
+\item Linux: \verb{~/.local/share/<AppName>}
 }
 }
 \examples{
 # For the example, create and use a temporary folder
-fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
+fastadir <- file.path(tempdir(), "TCRconvertR_tmp")
 dir.create(fastadir)
 trav <- get_example_path("fasta_dir/test_trav.fa")
 trbv <- get_example_path("fasta_dir/test_trbv.fa")
 file.copy(c(trav, trbv), fastadir)
 
 # Build lookup tables
-build_lookup_from_fastas(fastadir)
+build_lookup_from_fastas(fastadir, "rabbit")
 
 # Clean up temporary folder
 unlink(fastadir, recursive = TRUE)

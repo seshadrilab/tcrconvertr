@@ -123,24 +123,41 @@ pad_single_digit <- function(gene_str) {
 #'     - Convert constant genes to `"NoData"` (Adaptive only captures VDJ) which become `NA` after the merge in `convert_gene()`.
 #'
 #' @param data_dir A string, the directory containing FASTA files.
+#' @param species A string, the name of species that will be used when running TCRconvert with these lookup tables.
 #'
 #' @return Nothing.
+#' @importFrom rappdirs user_data_dir
 #' @autoglobal
 #' @export
 #' @examples
 #' # For the example, create and use a temporary folder
-#' fastadir <- file.path(tempdir(), "tcrconvertr_tmp")
+#' fastadir <- file.path(tempdir(), "TCRconvertR_tmp")
 #' dir.create(fastadir)
 #' trav <- get_example_path("fasta_dir/test_trav.fa")
 #' trbv <- get_example_path("fasta_dir/test_trbv.fa")
 #' file.copy(c(trav, trbv), fastadir)
 #'
 #' # Build lookup tables
-#' build_lookup_from_fastas(fastadir)
+#' build_lookup_from_fastas(fastadir, "rabbit")
 #'
 #' # Clean up temporary folder
 #' unlink(fastadir, recursive = TRUE)
-build_lookup_from_fastas <- function(data_dir) {
+build_lookup_from_fastas <- function(data_dir, species) {
+  # Check that species can be a valid folder name
+  forbidden_char <- "[/\\\\:*?\"<>|~`\n\t]"
+  if (grepl(forbidden_char, species)) {
+    sanitized <- gsub("[/\\\\:*?\"<>|~`\n\t]", "_", species)
+    stop(paste(
+      "Proposed folder name", species, "contains invalid characters.\n",
+      " Suggestion:", sanitized
+    ))
+  }
+
+  # Get the user data directory for saving lookup tables
+  user_dir <- rappdirs::user_data_dir("TCRconvertR", "Emmma Bishop")
+  save_dir <- file.path(user_dir, species)
+  dir.create(save_dir, showWarnings = FALSE, recursive = TRUE) # Ensure species subdirectory exists
+
   lookup <- extract_imgt_genes(data_dir)
 
   # Create the 10X column
@@ -205,10 +222,9 @@ build_lookup_from_fastas <- function(data_dir) {
   from_tenx <- from_tenx[!duplicated(from_tenx), ]
   from_adaptive <- from_adaptive[!duplicated(from_adaptive), ]
 
-  # Save
-  utils::write.csv(lookup, file.path(data_dir, "lookup.csv"), row.names = FALSE)
-  utils::write.csv(from_tenx, file.path(data_dir, "lookup_from_tenx.csv"), row.names = FALSE)
-  utils::write.csv(from_adaptive, file.path(data_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
-
-  return(data_dir)
+  # Save to files
+  message("Writing lookup tables to: ", save_dir)
+  utils::write.csv(lookup, file.path(save_dir, "lookup.csv"), row.names = FALSE)
+  utils::write.csv(from_tenx, file.path(save_dir, "lookup_from_tenx.csv"), row.names = FALSE)
+  utils::write.csv(from_adaptive, file.path(save_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
 }

@@ -13,7 +13,7 @@ convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
 
 \item{to}{A string, the output format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
 
-\item{species}{A string, the species folder name under \verb{tcrconvertr/inst/extdata/}. Optional; defaults to \code{"human"}.}
+\item{species}{A string, the species. Optional; defaults to "human".}
 
 \item{frm_cols}{A character vector of customgene column names. Optional; defaults to \code{NULL} (auto-detect).}
 
