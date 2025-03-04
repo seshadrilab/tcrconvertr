@@ -105,6 +105,7 @@ pad_single_digit <- function(gene_str) {
 #' @param species A string, the name of species that will be used when running TCRconvert with these lookup tables.
 #'
 #' @return Nothing.
+#' @importFrom rappdirs user_data_dir
 #' @autoglobal
 #' @export
 #' @examples

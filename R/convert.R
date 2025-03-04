@@ -14,6 +14,7 @@ col_ref <- list(
 #' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
 #'
 #' @return A string, the path to correct lookup table.
+#' @importFrom rappdirs user_data_dir
 #' @export
 #' @keywords internal
 #' @examples
