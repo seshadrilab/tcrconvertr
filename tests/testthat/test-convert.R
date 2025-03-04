@@ -77,7 +77,7 @@ test_that("can convert genes", {
     cdr3_amino_acid = c("CAVLIF", "CASSGF")
   )
   # 10X <-> Adaptive
-  suppressWarnings({
+  suppressMessages(suppressWarnings({
     expect_equal(convert_gene(tenx_df, "tenx", "adaptive"), tenx_to_adapt_df)
     expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2"), tenx_to_adapt_df)
     expect_equal(convert_gene(adapt_df, "adaptive", "tenx"), adapt_to_tenx_df)
@@ -130,7 +130,7 @@ test_that("can convert genes", {
     expect_equal(convert_gene(custom_df, "imgt", "tenx",
       frm_cols = c("myV", "myJ", "myCDR3")
     ), custom_vj_tenx_df)
-  })
+  }))
 })
 
 
