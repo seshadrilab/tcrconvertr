@@ -33,6 +33,14 @@ test_that("can convert genes", {
   custom_df <- imgt_df
   colnames(custom_df) <- c("myV", "myD", "myJ", "myC", "myCDR3")
 
+  custom_vj_tenx_df <- data.frame(
+    myV = c("TRAV12-1", "TRBV15"),
+    myD = c(NA, "TRBD1*01"),
+    myJ = c("TRAJ16", "TRBJ2-5"),
+    myC = c("TRAC*01", "TRBC2*01"),
+    myCDR3 = c("CAVLIF", "CASSGF")
+  )
+
   tenx_to_adapt_df <- adapt_df
   colnames(tenx_to_adapt_df) <- c("v_gene", "d_gene", "j_gene", "cdr3")
   # Insert a 'c_gene' column before 'cdr3'
@@ -69,54 +77,60 @@ test_that("can convert genes", {
     cdr3_amino_acid = c("CAVLIF", "CASSGF")
   )
   # 10X <-> Adaptive
-  expect_equal(convert_gene(tenx_df, "tenx", "adaptive"), tenx_to_adapt_df)
-  expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2"), tenx_to_adapt_df)
-  expect_equal(convert_gene(adapt_df, "adaptive", "tenx"), adapt_to_tenx_df)
-  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx"), adaptv2_to_tenx_df)
-  # 10X <-> IMGT
-  expect_equal(convert_gene(tenx_df, "tenx", "imgt"), imgt_df)
-  expect_equal(convert_gene(imgt_df, "imgt", "tenx"), tenx_df)
-  # IMGT <-> Adaptive
-  expect_equal(convert_gene(imgt_df, "imgt", "adaptive"), tenx_to_adapt_df)
-  expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2"), tenx_to_adapt_df)
-  expect_equal(convert_gene(adapt_df, "adaptive", "imgt"), adapt_to_imgt_df)
-  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt"), adaptv2_to_imgt_df)
-  # Custom column names
-  expect_equal(convert_gene(custom_df, "imgt", "tenx",
-    frm_cols = c("myV", "myD", "myJ", "myC")
-  ), custom_to_tenx_df)
-  # MOUSE
-  expect_equal(convert_gene(tenx_df, "tenx", "adaptive", species = "mouse"), tenx_to_adapt_df)
-  expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2", species = "mouse"), tenx_to_adapt_df)
-  expect_equal(convert_gene(adapt_df, "adaptive", "tenx", species = "mouse"), adapt_to_tenx_df)
-  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx", species = "mouse"), adaptv2_to_tenx_df)
-  expect_equal(convert_gene(tenx_df, "tenx", "imgt", species = "mouse"), imgt_df)
-  expect_equal(convert_gene(imgt_df, "imgt", "tenx", species = "mouse"), tenx_df)
-  expect_equal(convert_gene(imgt_df, "imgt", "adaptive", species = "mouse"), tenx_to_adapt_df)
-  expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2", species = "mouse"), tenx_to_adapt_df)
-  expect_equal(convert_gene(adapt_df, "adaptive", "imgt", species = "mouse"), adapt_to_imgt_df)
-  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt", species = "mouse"), adaptv2_to_imgt_df)
-  expect_equal(convert_gene(custom_df, "imgt", "tenx",
-    species = "mouse",
-    frm_cols = c("myV", "myD", "myJ", "myC")
-  ), custom_to_tenx_df)
-  # RHESUS MACAQUE
-  expect_equal(convert_gene(tenx_df, "tenx", "adaptive", species = "rhesus"), tenx_to_adapt_df)
-  expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2", species = "rhesus"), tenx_to_adapt_df)
-  expect_equal(convert_gene(adapt_df, "adaptive", "tenx", species = "rhesus"), adapt_to_tenx_df)
-  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx", species = "rhesus"), adaptv2_to_tenx_df)
-  expect_equal(convert_gene(tenx_df, "tenx", "imgt", species = "rhesus"), imgt_df)
-  expect_equal(convert_gene(imgt_df, "imgt", "tenx", species = "rhesus"), tenx_df)
-  expect_equal(convert_gene(imgt_df, "imgt", "adaptive", species = "rhesus"), tenx_to_adapt_df)
-  expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2", species = "rhesus"), tenx_to_adapt_df)
-  expect_equal(convert_gene(adapt_df, "adaptive", "imgt", species = "rhesus"), adapt_to_imgt_df)
-  expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt", species = "rhesus"), adaptv2_to_imgt_df)
-  expect_equal(convert_gene(custom_df, "imgt", "tenx",
-    species = "rhesus",
-    frm_cols = c("myV", "myD", "myJ", "myC")
-  ), custom_to_tenx_df)
-  # Some Adaptive genes without allele
-  expect_equal(convert_gene(adapt_no_allele_df, "adaptive", "imgt"), adapt_to_imgt_df)
+  suppressMessages(suppressWarnings({
+    expect_equal(convert_gene(tenx_df, "tenx", "adaptive"), tenx_to_adapt_df)
+    expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2"), tenx_to_adapt_df)
+    expect_equal(convert_gene(adapt_df, "adaptive", "tenx"), adapt_to_tenx_df)
+    expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx"), adaptv2_to_tenx_df)
+    # 10X <-> IMGT
+    expect_equal(convert_gene(tenx_df, "tenx", "imgt"), imgt_df)
+    expect_equal(convert_gene(imgt_df, "imgt", "tenx"), tenx_df)
+    # IMGT <-> Adaptive
+    expect_equal(convert_gene(imgt_df, "imgt", "adaptive"), tenx_to_adapt_df)
+    expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2"), tenx_to_adapt_df)
+    expect_equal(convert_gene(adapt_df, "adaptive", "imgt"), adapt_to_imgt_df)
+    expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt"), adaptv2_to_imgt_df)
+    # Custom column names
+    expect_equal(convert_gene(custom_df, "imgt", "tenx",
+      frm_cols = c("myV", "myD", "myJ", "myC")
+    ), custom_to_tenx_df)
+    # MOUSE
+    expect_equal(convert_gene(tenx_df, "tenx", "adaptive", species = "mouse"), tenx_to_adapt_df)
+    expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2", species = "mouse"), tenx_to_adapt_df)
+    expect_equal(convert_gene(adapt_df, "adaptive", "tenx", species = "mouse"), adapt_to_tenx_df)
+    expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx", species = "mouse"), adaptv2_to_tenx_df)
+    expect_equal(convert_gene(tenx_df, "tenx", "imgt", species = "mouse"), imgt_df)
+    expect_equal(convert_gene(imgt_df, "imgt", "tenx", species = "mouse"), tenx_df)
+    expect_equal(convert_gene(imgt_df, "imgt", "adaptive", species = "mouse"), tenx_to_adapt_df)
+    expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2", species = "mouse"), tenx_to_adapt_df)
+    expect_equal(convert_gene(adapt_df, "adaptive", "imgt", species = "mouse"), adapt_to_imgt_df)
+    expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt", species = "mouse"), adaptv2_to_imgt_df)
+    expect_equal(convert_gene(custom_df, "imgt", "tenx",
+      species = "mouse",
+      frm_cols = c("myV", "myD", "myJ", "myC")
+    ), custom_to_tenx_df)
+    # RHESUS MACAQUE
+    expect_equal(convert_gene(tenx_df, "tenx", "adaptive", species = "rhesus"), tenx_to_adapt_df)
+    expect_equal(convert_gene(tenx_df, "tenx", "adaptivev2", species = "rhesus"), tenx_to_adapt_df)
+    expect_equal(convert_gene(adapt_df, "adaptive", "tenx", species = "rhesus"), adapt_to_tenx_df)
+    expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "tenx", species = "rhesus"), adaptv2_to_tenx_df)
+    expect_equal(convert_gene(tenx_df, "tenx", "imgt", species = "rhesus"), imgt_df)
+    expect_equal(convert_gene(imgt_df, "imgt", "tenx", species = "rhesus"), tenx_df)
+    expect_equal(convert_gene(imgt_df, "imgt", "adaptive", species = "rhesus"), tenx_to_adapt_df)
+    expect_equal(convert_gene(imgt_df, "imgt", "adaptivev2", species = "rhesus"), tenx_to_adapt_df)
+    expect_equal(convert_gene(adapt_df, "adaptive", "imgt", species = "rhesus"), adapt_to_imgt_df)
+    expect_equal(convert_gene(adapt_v2_df, "adaptivev2", "imgt", species = "rhesus"), adaptv2_to_imgt_df)
+    expect_equal(convert_gene(custom_df, "imgt", "tenx",
+      species = "rhesus",
+      frm_cols = c("myV", "myD", "myJ", "myC")
+    ), custom_to_tenx_df)
+    # Some Adaptive genes without allele
+    expect_equal(convert_gene(adapt_no_allele_df, "adaptive", "imgt"), adapt_to_imgt_df)
+    # Confirm won't convert non-VDJC gene column to NAs
+    expect_equal(convert_gene(custom_df, "imgt", "tenx",
+      frm_cols = c("myV", "myJ", "myCDR3")
+    ), custom_vj_tenx_df)
+  }))
 })
 
 
@@ -199,18 +213,20 @@ test_that("chooses correct frm_cols", {
     myCDR3 = c("CAVLIF", "CASSGF")
   )
 
-  expect_equal(which_frm_cols(adapt_df, "adaptive", verbose = FALSE), col_ref$adaptive)
-  expect_equal(which_frm_cols(adapt_v2_df, "adaptivev2", verbose = FALSE), col_ref$adaptivev2)
-  expect_equal(which_frm_cols(imgt_df, "imgt", verbose = FALSE), col_ref$imgt)
-  expect_equal(which_frm_cols(tenx_df, "tenx", verbose = FALSE), col_ref$tenx)
-  # Custom columns
-  custom_col <- c("myV", "myD", "myJ", "myC")
-  expect_equal(which_frm_cols(custom_df, "tenx", frm_cols = custom_col, verbose = FALSE), custom_col)
-  # Non-existent column
-  expect_error(
-    which_frm_cols(tenx_df, "tenx", frm_cols = c("v_gene", "j_gene", "x_gene"), verbose = FALSE),
-    "These columns are not in the input dataframe: x_gene"
-  )
+  suppressWarnings({
+    expect_equal(which_frm_cols(adapt_df, "adaptive", verbose = FALSE), col_ref$adaptive)
+    expect_equal(which_frm_cols(adapt_v2_df, "adaptivev2", verbose = FALSE), col_ref$adaptivev2)
+    expect_equal(which_frm_cols(imgt_df, "imgt", verbose = FALSE), col_ref$imgt)
+    expect_equal(which_frm_cols(tenx_df, "tenx", verbose = FALSE), col_ref$tenx)
+    # Custom columns
+    custom_col <- c("myV", "myD", "myJ", "myC")
+    expect_equal(which_frm_cols(custom_df, "tenx", frm_cols = custom_col, verbose = FALSE), custom_col)
+    # Non-existent column
+    expect_error(
+      which_frm_cols(tenx_df, "tenx", frm_cols = c("v_gene", "j_gene", "x_gene"), verbose = FALSE),
+      "These columns are not in the input dataframe: x_gene"
+    )
+  })
 })
 
 
@@ -255,24 +271,37 @@ test_that("which_frm_cols verbose flag works", {
 })
 
 
+
 test_that("convert_gene verbose flag works", {
   # Note, the flag mostly affects downstream functions called by convert_gene.
   tenx_df_bad <- data.frame(
     v_gene = c("TRAV12-1", "TRBV15"),
-    d_gene = c(NA, "BAD_D_GENE"),
-    j_gene = c("TRAJ16", "TRBJ2-5"),
+    d_gene = c(NA, "TRBD1"),
+    j_gene = c("TRAJ16", "BAD_J_GENE"),
     c_gene = c("TRAC", "TRBC2"),
     cdr3 = c("CAVLIF", "CASSGF")
   )
-  # Expect to still get warnings with verbose = FALSE
-  expect_warning(
+
+  captured_warnings <- character()
+
+  # Capture warnings without printing
+  result <- withCallingHandlers(
     convert_gene(tenx_df_bad, "tenx", "adaptive", verbose = FALSE),
-    fixed = TRUE,
-    "Adaptive only captures VDJ genes, any C genes will become NA."
+    warning = function(w) {
+      # Add each one as it comes up to our vector above
+      captured_warnings <<- c(captured_warnings, conditionMessage(w))
+      # Prevent warnings from coming up and being shown
+      invokeRestart("muffleWarning")
+    }
   )
-  expect_warning(
-    convert_gene(tenx_df_bad, "tenx", "adaptive", verbose = FALSE),
-    fixed = TRUE,
-    "These genes are not in IMGT for this species and will be replaced with NA"
-  )
+
+  # Verify expected warnings
+  expect_true(any(grepl(
+    "Adaptive only captures VDJ genes, any C genes will become NA.",
+    captured_warnings
+  )))
+  expect_true(any(grepl(
+    "These genes are not in IMGT for this species and will be replaced with NA",
+    captured_warnings
+  )))
 })
