@@ -31,8 +31,8 @@ TCRconvert takes a dataframe with at least one column of gene names as input. It
 
 ```{r}
 library(TCRconvertR)
-tcr_file <- get_example_path("tenx.csv")
 
+tcr_file <- get_example_path("tenx.csv")
 tcrs <- read.csv(tcr_file)[c("barcode", "v_gene", "d_gene", "j_gene", "c_gene", "cdr3")]
 tcrs
 ```
