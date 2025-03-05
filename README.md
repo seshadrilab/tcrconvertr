@@ -1,36 +1,34 @@
 
-# TCRconvertR
-
 <!-- badges: start -->
 
 [![codecov](https://codecov.io/gh/seshadrilab/tcrconvertr/graph/badge.svg?token=JVURVQO10D)](https://codecov.io/gh/seshadrilab/tcrconvertr)
 [![R-CMD-check](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-> **Warning**: This project is in **beta stage**. It is under active
-> development and may be unstable.
+## Convert T cell receptor (TCR) gene names
 
-**Rename T-cell receptor genes between 10X, Adaptive, and IMGT formats**
+`TCRconvertR` converts V, D, J, and/or C gene names between the 10X
+Genomics, Adaptive Biotechnologies, and IMGT nomenclatures. It supports
+alpha-beta and gamma-delta TCRs for human, mouse, and rhesus macaque.
+Users can also define custom species (see docs). A Python version with
+command-line support is also available.
 
-TCRconvertR takes T-cell receptor (TCR) data containing V, D, J, and/or
-C genes from 10X, Adaptive, or other sequencing platforms and renames
-them from any of these formats to any other one:
+## Background
 
-- **10X**: TRAV1-2
-- **Adaptive**: TCRAV01-02\*01
-- **IMGT**: TRAV1-2\*01
+TCR annotation tools use different gene naming conventions, making
+cross-dataset searches difficult (e.g., identifying 10X-annotated TCRs
+in Adaptive data). Manual conversion is complex and error-prone due to
+inconsistencies in naming rules.
 
-TCRconvertR works with human, mouse, and rhesus macaque data
-out-of-the-box, but users can also add their own species.
-
-TCRconvertR helps researchers unify TCR datasets by converting them to a
-standard naming convention. It is fast, reliable, and prevents errors
-from manual conversions. Unlike other tools that require custom objects,
-TCRconvertR works directly with DataFrames and CSV/TSV files.
+`TCRconvert` automates this process efficiently and accurately. Our
+approach is based on analyzing multiple 10X and Adaptive data sets to
+capture their naming variations. Additionally, we provide a guide (see
+docs) for generating the necessary gene name columns in Adaptive data
+when missing.
 
 ## Installation
 
-You can install TCRconvertR from [GitHub](https://github.com/) with:
+Install from [GitHub](https://github.com/):
 
 ``` r
 # install.packages("pak")
@@ -39,42 +37,29 @@ pak::pak("seshadrilab/tcrconvertr")
 
 ## Usage
 
-**Load some 10X data**
+**1. Load your TCRs into a data frame**
+
+Example input files:
+
+- **10X**: `filtered_contig_annotations.csv`
+- **Adaptive**: `Sample_TCRB.tsv`
+- **IMGT**: Output from `MiXCR` or other tools
 
 ``` r
 library(TCRconvertR)
 
-tcr_file <- "/home/emmabishop/workspace/tcrconvertr/inst/extdata/examples/tenx.csv"
-
-tcrs <- read.csv(tcr_file)
+tcr_file <- get_example_path("tenx.csv")
+tcrs <- read.csv(tcr_file)[c("barcode", "v_gene", "d_gene", "j_gene", "c_gene", "cdr3")]
 tcrs
-#>              barcode is_cell                   contig_id high_confidence length
-#> 1 AAACCTGAGACCACGA-1    TRUE AAACCTGAGACCACGA-1_contig_1            TRUE    521
-#> 2 AAACCTGAGACCACGA-1    TRUE AAACCTGAGACCACGA-1_contig_3            TRUE    584
-#> 3 AAACCTGAGGCTCTTA-1    TRUE AAACCTGAGGCTCTTA-1_contig_1            TRUE    551
-#> 4 AAACCTGAGGCTCTTA-1    TRUE AAACCTGAGGCTCTTA-1_contig_2            TRUE    518
-#> 5 AAACCTGAGTGAACGC-1    TRUE AAACCTGAGTGAACGC-1_contig_1            TRUE    674
-#>   chain  v_gene d_gene  j_gene c_gene full_length productive            cdr3
-#> 1   TRA TRAV1-2  TRBD1  TRAJ12   TRAC        TRUE       TRUE    CAVMDSSYKLIF
-#> 2   TRB TRBV6-1  TRBD2 TRBJ2-1  TRBC2        TRUE       TRUE CASSGLAGGYNEQFF
-#> 3   TRB TRBV6-4  TRBD2 TRBJ2-3  TRBC2        TRUE       TRUE CASSGVAGGTDTQYF
-#> 4   TRA TRAV1-2  TRBD1  TRAJ33   TRAC        TRUE       TRUE    CAVKDSNYQLIW
-#> 5   TRB   TRBV2  TRBD1 TRBJ1-2  TRBC1        TRUE       TRUE   CASNQGLNYGYTF
-#>                                         cdr3_nt reads umis raw_clonotype_id
-#> 1          TGTGCTGTGATGGATAGCAGCTATAAATTGATCTTC  1569    2      clonotype16
-#> 2 TGTGCCAGCAGTGGACTAGCGGGGGGCTACAATGAGCAGTTCTTC  5238    7      clonotype16
-#> 3 TGTGCCAGCAGTGGGGTAGCGGGAGGCACAGATACGCAGTATTTT  3846    4      clonotype26
-#> 4          TGTGCTGTGAAGGATAGCAACTATCAGTTAATCTGG  2019    2      clonotype26
-#> 5       TGTGCCAGCAATCAGGGCCTTAACTATGGCTACACCTTC  3002    6      clonotype81
-#>          raw_consensus_id
-#> 1 clonotype16_consensus_1
-#> 2 clonotype16_consensus_2
-#> 3 clonotype26_consensus_2
-#> 4 clonotype26_consensus_1
-#> 5 clonotype81_consensus_2
+#>              barcode  v_gene d_gene  j_gene c_gene            cdr3
+#> 1 AAACCTGAGACCACGA-1 TRAV1-2  TRBD1  TRAJ12   TRAC    CAVMDSSYKLIF
+#> 2 AAACCTGAGACCACGA-1 TRBV6-1  TRBD2 TRBJ2-1  TRBC2 CASSGLAGGYNEQFF
+#> 3 AAACCTGAGGCTCTTA-1 TRBV6-4  TRBD2 TRBJ2-3  TRBC2 CASSGVAGGTDTQYF
+#> 4 AAACCTGAGGCTCTTA-1 TRAV1-2  TRBD1  TRAJ33   TRAC    CAVKDSNYQLIW
+#> 5 AAACCTGAGTGAACGC-1   TRBV2  TRBD1 TRBJ1-2  TRBC1   CASNQGLNYGYTF
 ```
 
-**Convert gene names from the 10X format to the Adaptive format**
+**2. Convert**
 
 ``` r
 new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
@@ -82,49 +67,36 @@ new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
 #> captures VDJ genes, any C genes will become NA.
 #> Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
 new_tcrs
-#>              barcode is_cell                   contig_id high_confidence length
-#> 1 AAACCTGAGACCACGA-1    TRUE AAACCTGAGACCACGA-1_contig_1            TRUE    521
-#> 2 AAACCTGAGACCACGA-1    TRUE AAACCTGAGACCACGA-1_contig_3            TRUE    584
-#> 3 AAACCTGAGGCTCTTA-1    TRUE AAACCTGAGGCTCTTA-1_contig_1            TRUE    551
-#> 4 AAACCTGAGGCTCTTA-1    TRUE AAACCTGAGGCTCTTA-1_contig_2            TRUE    518
-#> 5 AAACCTGAGTGAACGC-1    TRUE AAACCTGAGTGAACGC-1_contig_1            TRUE    674
-#>   chain        v_gene        d_gene        j_gene c_gene full_length productive
-#> 1   TRA TCRAV01-02*01 TCRBD01-01*01 TCRAJ12-01*01   <NA>        TRUE       TRUE
-#> 2   TRB TCRBV06-01*01 TCRBD02-01*01 TCRBJ02-01*01   <NA>        TRUE       TRUE
-#> 3   TRB TCRBV06-04*01 TCRBD02-01*01 TCRBJ02-03*01   <NA>        TRUE       TRUE
-#> 4   TRA TCRAV01-02*01 TCRBD01-01*01 TCRAJ33-01*01   <NA>        TRUE       TRUE
-#> 5   TRB TCRBV02-01*01 TCRBD01-01*01 TCRBJ01-02*01   <NA>        TRUE       TRUE
-#>              cdr3                                       cdr3_nt reads umis
-#> 1    CAVMDSSYKLIF          TGTGCTGTGATGGATAGCAGCTATAAATTGATCTTC  1569    2
-#> 2 CASSGLAGGYNEQFF TGTGCCAGCAGTGGACTAGCGGGGGGCTACAATGAGCAGTTCTTC  5238    7
-#> 3 CASSGVAGGTDTQYF TGTGCCAGCAGTGGGGTAGCGGGAGGCACAGATACGCAGTATTTT  3846    4
-#> 4    CAVKDSNYQLIW          TGTGCTGTGAAGGATAGCAACTATCAGTTAATCTGG  2019    2
-#> 5   CASNQGLNYGYTF       TGTGCCAGCAATCAGGGCCTTAACTATGGCTACACCTTC  3002    6
-#>   raw_clonotype_id        raw_consensus_id
-#> 1      clonotype16 clonotype16_consensus_1
-#> 2      clonotype16 clonotype16_consensus_2
-#> 3      clonotype26 clonotype26_consensus_2
-#> 4      clonotype26 clonotype26_consensus_1
-#> 5      clonotype81 clonotype81_consensus_2
+#>              barcode        v_gene        d_gene        j_gene c_gene
+#> 1 AAACCTGAGACCACGA-1 TCRAV01-02*01 TCRBD01-01*01 TCRAJ12-01*01   <NA>
+#> 2 AAACCTGAGACCACGA-1 TCRBV06-01*01 TCRBD02-01*01 TCRBJ02-01*01   <NA>
+#> 3 AAACCTGAGGCTCTTA-1 TCRBV06-04*01 TCRBD02-01*01 TCRBJ02-03*01   <NA>
+#> 4 AAACCTGAGGCTCTTA-1 TCRAV01-02*01 TCRBD01-01*01 TCRAJ33-01*01   <NA>
+#> 5 AAACCTGAGTGAACGC-1 TCRBV02-01*01 TCRBD01-01*01 TCRBJ01-02*01   <NA>
+#>              cdr3
+#> 1    CAVMDSSYKLIF
+#> 2 CASSGLAGGYNEQFF
+#> 3 CASSGVAGGTDTQYF
+#> 4    CAVKDSNYQLIW
+#> 5   CASNQGLNYGYTF
 ```
 
 ## Contributing
 
-I welcome feedback! If you would like to resolve an issue or add
-improvements please submit a pull request.
+Feedback is welcome! To contribute, submit a pull request.
 
 ## Issues
 
-If you run into problems or need help running TCRconvertR please file an
-issue on GitHub.
+For problems or questions, file an issue on GitHub.
 
 ## Contact
 
-For other questions please contact Emma Bishop: `emmab5` at `uw` dot
-`edu`
+For other inquiries, contact Emma Bishop: emmab5 at uw dot edu.
 
 ## Acknowledgments
 
-This project was created with support from the Fred Hutchinson Cancer
-Center Translational Data Science Integrated Research Center (TDS IRC)
-through the 2024 Data Scientist Collaboration Grant.
+This project was supported by the Fred Hutchinson Cancer Center
+Translational Data Science Integrated Research Center (TDS IRC) through
+the 2024 Data Scientist Collaboration Grant. Special thanks to Scott
+Chamberlain for development support and Shashidhar Ravishankar for gene
+name curation.
