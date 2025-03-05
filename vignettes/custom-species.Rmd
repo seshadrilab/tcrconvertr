@@ -1,0 +1,56 @@
+---
+title: "Using a custom species"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using a custom species}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+By default, `TCRconvertR` supports alpha-beta and gamma-delta V, D, J, and C genes for human, mouse, and rhesus macaque from the IMGT F+ORF+in-frame P references. For other species, follow these steps:
+
+## 1. Create a folder of IMGT FASTA files
+
+The simplest way is to download from [IMGT](https://www.imgt.org/vquest/refseqh.html).
+
+**Details:**
+
+`TCRconvertR` expects a folder containing files ending in `.fasta` or `.fa` with headers in the IMGT format:
+
+```
+>SomeText|TRBV10-1*02|MoreText|...
+```
+
+The sequences are not used, so a text file containing headers and ending in `.fa` would also work.
+
+## 2. Run `build_lookup_from_fastas()`
+
+The `species` parameter should be the species name you'll use when calling `convert_gene()`. 
+
+```{r}
+library(TCRconvertR)
+
+# For this example, create a temporary input folder
+fastadir <- file.path(tempdir(), "TCRconvertR_tmp")
+dir.create(fastadir, showWarnings = FALSE)
+file.copy(get_example_path("fasta_dir/test_trav.fa"), fastadir)
+
+# Build lookup tables
+new_lookup_dir <- build_lookup_from_fastas(fastadir, species = "rabbit")
+
+# Confirm they exist now
+list.files(new_lookup_dir)
+```
+
+**Details:**
+
+`species` will also be the name of the folder storing lookup tables, so these characters are not allowed:
+
+`` / \ : * ? " < > | ~ ` \n \t``
