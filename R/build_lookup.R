@@ -130,7 +130,7 @@ pad_single_digit <- function(gene_str) {
 #' @param data_dir A string, the directory containing FASTA files.
 #' @param species A string, the name of species that will be used when running TCRconvert with these lookup tables.
 #'
-#' @return Nothing.
+#' @return A string, path to new lookup directory
 #' @importFrom rappdirs user_data_dir
 #' @autoglobal
 #' @export
@@ -232,4 +232,6 @@ build_lookup_from_fastas <- function(data_dir, species) {
   utils::write.csv(lookup, file.path(save_dir, "lookup.csv"), row.names = FALSE)
   utils::write.csv(from_tenx, file.path(save_dir, "lookup_from_tenx.csv"), row.names = FALSE)
   utils::write.csv(from_adaptive, file.path(save_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
+
+  return(save_dir)
 }
