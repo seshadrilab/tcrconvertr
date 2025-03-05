@@ -107,12 +107,17 @@ pad_single_digit <- function(gene_str) {
 #' `build_lookup_from_fastas()` processes IMGT reference FASTA files in a given
 #' folder to generate lookup tables used for making gene name conversions. It
 #' extracts all gene names and transforms them into 10X and Adaptive formats
-#' following predefined conversion rules. The resulting lookup tables are saved
-#' in the provided directory:
+#' following predefined conversion rules. The resulting files are created:
 #'
 #' - `lookup.csv`: IMGT gene names and their 10X and Adaptive equivalents.
 #' - `lookup_from_tenx.csv`: Gene names aggregated by their 10X identifiers, with one representative allele (`*01`) for each.
 #' - `lookup_from_adaptive.csv`: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
+#'
+#' The files are stored in a given subfolder (`species`) within the appropriate
+#' application folder via `rappdirs`. For example:
+#'    - MacOS: ``~/Library/Application Support/<AppName>``
+#'    - Windows: ``C:\Documents and Settings\<User>\Application Data\Local Settings\<AppAuthor>\<AppName>``
+#'     - Linux: ``~/.local/share/<AppName>``
 #'
 #' @details
 #' Key transformations from IMGT:

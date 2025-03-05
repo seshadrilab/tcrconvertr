@@ -18,12 +18,19 @@ Nothing.
 \code{build_lookup_from_fastas()} processes IMGT reference FASTA files in a given
 folder to generate lookup tables used for making gene name conversions. It
 extracts all gene names and transforms them into 10X and Adaptive formats
-following predefined conversion rules. The resulting lookup tables are saved
-in the provided directory:
+following predefined conversion rules. The resulting files are created:
 \itemize{
 \item \code{lookup.csv}: IMGT gene names and their 10X and Adaptive equivalents.
 \item \code{lookup_from_tenx.csv}: Gene names aggregated by their 10X identifiers, with one representative allele (\verb{*01}) for each.
 \item \code{lookup_from_adaptive.csv}: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
+}
+
+The files are stored in a given subfolder (\code{species}) within the appropriate
+application folder via \code{rappdirs}. For example:
+\itemize{
+\item MacOS: \verb{~/Library/Application Support/<AppName>}
+\item Windows: \verb{C:\\Documents and Settings\\<User>\\Application Data\\Local Settings\\<AppAuthor>\\<AppName>}
+- Linux: \verb{~/.local/share/<AppName>}
 }
 }
 \details{
@@ -35,17 +42,9 @@ Key transformations from IMGT:
 }
 \item \strong{Adaptive:}
 \itemize{
-\item lookup.csv
-\item lookup_from_tenx.csv
-\item lookup_from_adaptive.csv
+\item Apply renaming rules, such as adding gene-level designations and zero-padding single-digit numbers.
+\item Convert constant genes to \code{"NoData"} (Adaptive only captures VDJ) which become \code{NA} after the merge in \code{convert_gene()}.
 }
-}
-\details{
-The lookup tables are stored in an application data folder via rappdirs. For example:
-\itemize{
-\item MacOS: \verb{~/Library/Application Support/<AppName>}
-\item Windows: \verb{C:\\Documents and Settings\\<User>\\Application Data\\Local Settings\\<AppAuthor>\\<AppName>}
-\item Linux: \verb{~/.local/share/<AppName>}
 }
 }
 \examples{

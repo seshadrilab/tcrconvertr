@@ -7,17 +7,17 @@
 convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
 }
 \arguments{
-\item{df}{A dataframe containing TCR gene names.}
+\item{df}{Dataframe containing TCR gene names.}
 
-\item{frm}{A string, the input format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
+\item{frm}{A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
 
-\item{to}{A string, the output format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
+\item{to}{A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
 
 \item{species}{A string, the species. Optional; defaults to "human".}
 
-\item{frm_cols}{A character vector of customgene column names. Optional; defaults to \code{NULL} (auto-detect).}
+\item{frm_cols}{A character vector of custom V/D/J/C gene column names. Optional; defaults to NULL.}
 
-\item{verbose}{A boolean, whether to display messages. Optional; defaults to \code{TRUE}.}
+\item{verbose}{A boolean, whether to show messages. Optional; defaults to TRUE}
 }
 \value{
 A dataframe with converted TCR gene names.

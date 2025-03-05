@@ -169,7 +169,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   # Add column of row numbers so we can keep order straight
   df$id <- seq_len(nrow(df))
 
-# Loop over gene columns, doing a merge to get converted gene names
+  # Loop over gene columns, doing a merge to get converted gene names
   new_genes <- list()
   bad_genes_all <- c()
 
