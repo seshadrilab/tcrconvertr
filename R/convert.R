@@ -97,9 +97,9 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #'
 #' @description
 #' `convert_gene()` converts T-cell receptor (TCR) gene names between the IMGT,
-#' 10X, and Adaptive formats. It determines the gene name columns based
+#' 10X, and Adaptive formats. It determines the columns to convert based
 #' on the input format (`frm`) unless specified by the user (`frm_cols`). It
-#' returns a modified version of the input dataframe with converted gene names
+#' returns a modified version of the input data frame with converted gene names
 #' while preserving row order.
 #'
 #' @details
@@ -133,19 +133,13 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to `"human"`.
 #' @param frm_cols A character vector of customgene column names. Optional; defaults to `NULL` (auto-detect).
 #' @param verbose A boolean, whether to display messages. Optional; defaults to `TRUE`.
-#' @param df Dataframe containing TCR gene names.
-#' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
-#' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
-#' @param species A string, the species. Optional; defaults to "human".
-#' @param frm_cols A character vector of custom V/D/J/C gene column names. Optional; defaults to NULL.
-#' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
 #'
 #' @return A dataframe with converted TCR gene names.
 #' @autoglobal
 #' @export
 #' @examples
 #' tcr_file <- get_example_path("tenx.csv")
-#' df <- read.csv(tcr_file)
+#' df <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
 #' convert_gene(df, "tenx", "adaptive", verbose = FALSE)
 convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE) {
   if (frm == to) {

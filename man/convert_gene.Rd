@@ -7,26 +7,26 @@
 convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
 }
 \arguments{
-\item{df}{Dataframe containing TCR gene names.}
+\item{df}{A dataframe containing TCR gene names.}
 
-\item{frm}{A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
+\item{frm}{A string, the input format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
 
-\item{to}{A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
+\item{to}{A string, the output format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
 
-\item{species}{A string, the species. Optional; defaults to "human".}
+\item{species}{A string, the species folder name under \verb{tcrconvertr/inst/extdata/}. Optional; defaults to \code{"human"}.}
 
-\item{frm_cols}{A character vector of custom V/D/J/C gene column names. Optional; defaults to NULL.}
+\item{frm_cols}{A character vector of customgene column names. Optional; defaults to \code{NULL} (auto-detect).}
 
-\item{verbose}{A boolean, whether to show messages. Optional; defaults to TRUE}
+\item{verbose}{A boolean, whether to display messages. Optional; defaults to \code{TRUE}.}
 }
 \value{
 A dataframe with converted TCR gene names.
 }
 \description{
 \code{convert_gene()} converts T-cell receptor (TCR) gene names between the IMGT,
-10X, and Adaptive formats. It determines the gene name columns based
+10X, and Adaptive formats. It determines the columns to convert based
 on the input format (\code{frm}) unless specified by the user (\code{frm_cols}). It
-returns a modified version of the input dataframe with converted gene names
+returns a modified version of the input data frame with converted gene names
 while preserving row order.
 }
 \details{
@@ -60,6 +60,6 @@ If \code{frm_cols} is not provided, these column names will be used if present:
 }
 \examples{
 tcr_file <- get_example_path("tenx.csv")
-df <- read.csv(tcr_file)
+df <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
 convert_gene(df, "tenx", "adaptive", verbose = FALSE)
 }
