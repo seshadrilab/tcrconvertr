@@ -35,12 +35,12 @@ choose_lookup <- function(frm, to, species = "human", verbose = TRUE) {
   if (frm == "tenx") {
     lookup_f <- file.path(data_path, "lookup_from_tenx.csv")
     if (verbose) {
-      message("Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.")
+      message("Converting from 10X. Using *01 as allele for all genes.")
     }
   } else if (frm %in% c("adaptive", "adaptivev2")) {
     lookup_f <- file.path(data_path, "lookup_from_adaptive.csv")
     if (to == "imgt" && verbose) {
-      message("Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.")
+      message("Converting from Adaptive to IMGT. Using *01 for genes lacking alleles.")
     }
   } else {
     lookup_f <- file.path(data_path, "lookup.csv")
@@ -75,7 +75,7 @@ choose_lookup <- function(frm, to, species = "human", verbose = TRUE) {
 which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
   if (frm == "imgt" && is.null(frm_cols)) {
     cols_from <- col_ref$tenx
-    warning(paste("No column names provided for IMGT data. Using 10X column names:", paste(cols_from, collapse = ", ")))
+    warning(paste("No column names for IMGT data. Using 10X columns:", paste(cols_from, collapse = ", ")))
   } else if (!is.null(frm_cols)) {
     missing_cols <- setdiff(frm_cols, colnames(df))
     if (length(missing_cols) > 0) {
@@ -152,7 +152,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
     stop("Input data is empty.")
   }
   if (to %in% c("adaptive", "adaptivev2")) {
-    warning("Adaptive only captures VDJ genes, any C genes will become NA.")
+    warning("Adaptive captures only VDJ genes; C genes will be NA.")
   }
 
   # Load lookup table and determine input columns
@@ -179,7 +179,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
         new_genes[[col]] <- good_genes
         bad_genes_all <- c(bad_genes_all, new_bad_genes)
       } else {
-        warning(paste("The input column", col, "doesn't contain any valid genes and was skipped."))
+        warning(paste("Column", col, "has no valid genes and was skipped."))
       }
     }
   }
