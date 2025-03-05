@@ -3,3 +3,8 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^vignettes/articles$
+^cran-comments\.md$

@@ -234,11 +234,11 @@ test_that("choose_lookup verbose flag works", {
   # Capture messages when verbose = TRUE
   expect_message(choose_lookup("tenx", "adaptive"),
     fixed = TRUE,
-    "Converting from 10X which lacks allele info. Choosing *01 as allele for all genes."
+    "Converting from 10X. Using *01 as allele for all genes."
   )
   expect_message(choose_lookup("adaptive", "imgt"),
     fixed = TRUE,
-    "Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele."
+    "Converting from Adaptive to IMGT. Using *01 for genes lacking alleles."
   )
   # Ensure no messages when verbose = FALSE
   expect_silent(choose_lookup("tenx", "adaptive", verbose = FALSE))
@@ -266,7 +266,7 @@ test_that("which_frm_cols verbose flag works", {
   # IMGT format without column names, still expect warnings with verbose = FALSE
   expect_warning(
     which_frm_cols(custom_df, "imgt", verbose = FALSE),
-    "No column names provided for IMGT data. Using 10X column names: v_gene, d_gene, j_gene, c_gene"
+    "No column names for IMGT data. Using 10X columns: v_gene, d_gene, j_gene, c_gene"
   )
 })
 
@@ -297,7 +297,7 @@ test_that("convert_gene verbose flag works", {
 
   # Verify expected warnings
   expect_true(any(grepl(
-    "Adaptive only captures VDJ genes, any C genes will become NA.",
+    "Adaptive captures only VDJ genes; C genes will be NA.",
     captured_warnings
   )))
   expect_true(any(grepl(

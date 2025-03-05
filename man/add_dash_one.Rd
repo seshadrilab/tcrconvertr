@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_lookup.R
 \name{add_dash_one}
 \alias{add_dash_one}
-\title{Add a \code{-01} to genes without IMGT gene-level designation.}
+\title{Add \code{-01} to gene names lacking gene-level info}
 \usage{
 add_dash_one(gene_str)
 }
@@ -13,7 +13,10 @@ add_dash_one(gene_str)
 A string, the updated gene name.
 }
 \description{
-Add a \code{-01} to genes without IMGT gene-level designation.
+Some genes just have the IMGT subgroup (e.g. TRBV2) and allele (e.g. *01)
+designation. The Adaptive format always includes an IMGT gene (e.g. -01)
+designation, with "-01" as the apparent default. \code{add_dash_one()} adds a
+default gene-level designation if it's missing.
 }
 \examples{
 add_dash_one("TRBV2*01")

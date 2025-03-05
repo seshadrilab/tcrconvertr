@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_lookup.R
 \name{pad_single_digit}
 \alias{pad_single_digit}
-\title{Add a zero to single-digit gene-level designation in gene names.}
+\title{Add a \code{0} to single-digit gene-level designation}
 \usage{
 pad_single_digit(gene_str)
 }
@@ -13,7 +13,9 @@ pad_single_digit(gene_str)
 A string, the updated gene name.
 }
 \description{
-Add a zero to single-digit gene-level designation in gene names.
+\code{pad_single_digit()} takes a gene name and ensures that any single-digit
+number following a sequence of letters is padded with a leading zero.
+This is to match the Adaptive format.
 }
 \examples{
 pad_single_digit("TCRBV1-2")

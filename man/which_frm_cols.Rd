@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert.R
 \name{which_frm_cols}
 \alias{which_frm_cols}
-\title{Determine input columns to use for converting gene names.}
+\title{Determine input columns to use}
 \usage{
 which_frm_cols(df, frm, frm_cols = NULL, verbose = TRUE)
 }
@@ -19,7 +19,9 @@ which_frm_cols(df, frm, frm_cols = NULL, verbose = TRUE)
 A character vector, column names to use.
 }
 \description{
-Determine input columns to use for converting gene names.
+\code{which_frm_cols()} determines the columns that are expected to hold gene
+name information in the input file based on the input format (\code{frm}). It
+returns a vector of those column names.
 }
 \examples{
 tcr_file <- get_example_path("tenx.csv")

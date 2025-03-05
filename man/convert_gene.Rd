@@ -2,31 +2,64 @@
 % Please edit documentation in R/convert.R
 \name{convert_gene}
 \alias{convert_gene}
-\title{Convert T-cell receptor V, D, J, and/or C gene names from one naming convention to another.}
+\title{Convert gene names}
 \usage{
 convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
 }
 \arguments{
-\item{df}{Dataframe containing TCR gene names.}
+\item{df}{A dataframe containing TCR gene names.}
 
-\item{frm}{A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
+\item{frm}{A string, the input format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
 
-\item{to}{A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
+\item{to}{A string, the output format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
 
-\item{species}{A string, the species. Optional; defaults to "human".}
+\item{species}{A string, the species folder name under \verb{tcrconvertr/inst/extdata/}. Optional; defaults to \code{"human"}.}
 
-\item{frm_cols}{A character vector of custom V/D/J/C gene column names. Optional; defaults to NULL.}
+\item{frm_cols}{A character vector of customgene column names. Optional; defaults to \code{NULL} (auto-detect).}
 
-\item{verbose}{A boolean, whether to show messages. Optional; defaults to TRUE}
+\item{verbose}{A boolean, whether to display messages. Optional; defaults to \code{TRUE}.}
 }
 \value{
-A dataframe of converted TCR data.
+A dataframe with converted TCR gene names.
 }
 \description{
-Convert T-cell receptor V, D, J, and/or C gene names from one naming convention to another.
+\code{convert_gene()} converts T-cell receptor (TCR) gene names between the IMGT,
+10X, and Adaptive formats. It determines the columns to convert based
+on the input format (\code{frm}) unless specified by the user (\code{frm_cols}). It
+returns a modified version of the input data frame with converted gene names
+while preserving row order.
+}
+\details{
+Gene names are converted by performing a \code{merge} between the relevant
+input columns and a species-specific lookup table containing IMGT reference
+genes in all three formats.
+
+\strong{Behavioral Notes}
+\itemize{
+\item If a gene name cannot be mapped, it is replaced with \code{NA} and a warning is
+raised.
+\item If the input format is IMGT and \code{frm_cols} is not provided, 10X column
+names are assumed.
+\item Constant (C) genes are set to \code{NA} when converting to Adaptive formats,
+as Adaptive does not capture constant regions.
+\item The input does not need to include all gene types. Partial inputs
+(e.g., only V genes) are supported.
+\item If no values in a custom column can be mapped (e.g. a CDR3 column) it is
+skipped and a warning is raised.
+}
+
+\strong{Standard Column Names}
+
+If \code{frm_cols} is not provided, these column names will be used if present:
+\itemize{
+\item \strong{IMGT}: \code{"v_gene"}, \code{"d_gene"}, \code{"j_gene"}, \code{"c_gene"}
+\item \strong{10X}: \code{"v_gene"}, \code{"d_gene"}, \code{"j_gene"}, \code{"c_gene"}
+\item \strong{Adaptive}: \code{"v_resolved"}, \code{"d_resolved"}, \code{"j_resolved"}
+\item \strong{Adaptive v2}: \code{"vMaxResolved"}, \code{"dMaxResolved"}, \code{"jMaxResolved"}
+}
 }
 \examples{
 tcr_file <- get_example_path("tenx.csv")
-df <- read.csv(tcr_file)
+df <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
 convert_gene(df, "tenx", "adaptive", verbose = FALSE)
 }

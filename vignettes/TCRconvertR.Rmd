@@ -1,0 +1,113 @@
+---
+title: "Get started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Installation
+
+Install from GitHub:
+
+``` r
+# install.packages("pak")
+pak::pak("seshadrilab/tcrconvertr")
+```
+
+## Basic usage
+
+#### 1. Load TCRs into a data frame
+
+Examples of files you may want to load:
+
+- **10X**: `filtered_contig_annotations.csv`
+- **Adaptive**: `Sample_TCRB.tsv`
+- **IMGT**: Output from `MiXCR` or other tools
+
+```{r}
+library(TCRconvertR)
+
+tcr_file <- get_example_path("tenx.csv") # Using built-in example file
+tcrs <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
+tcrs
+```
+
+####  2. Convert
+
+```{r}
+new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
+new_tcrs
+```
+
+> Tip: Suppress messages by setting `verbose = FALSE`.
+
+> Tip: If your Adaptive data lacks `x_resolved`/`xMaxResolved` columns, create them yourself by combining `x_gene`/`xGeneName` and `x_allele`/`xGeneAllele` data using `*` as a seperator.
+
+
+## AIRR data
+
+Supply the standard AIRR gene column names to `frm_cols`:
+
+```r
+new_airr <- convert_gene(airr, frm = "imgt", to = "adaptive", 
+                         frm_cols = c('v_call', 'd_call', 'j_call', 'c_call'))
+```
+
+## Custom column names
+
+By default, `TCRconvertR` assumes these column names based on the input nomenclature (`frm`):
+
+- `frm = 'imgt'` : `c('v_gene', 'd_gene', 'j_gene', 'c_gene')`
+- `frm = 'tenx'` : `c('v_gene', 'd_gene', 'j_gene', 'c_gene')`
+- `frm = 'adaptive'` : `c('v_resolved', 'd_resolved', 'j_resolved')`
+- `frm = 'adaptivev2'` : `c('vMaxResolved', 'dMaxResolved', 'jMaxResolved')`
+
+You can override these columns using `frm_cols`:
+
+**1. Load 10X data with custom column names**
+
+```{r}
+custom_file <- get_example_path("customcols.csv")
+
+custom <- read.csv(custom_file)
+custom
+```
+
+**2. Specify names using `frm_cols` and convert to IMGT**
+
+```{r}
+custom_new <- convert_gene(
+  custom,
+  frm = "tenx",
+  to = "imgt",
+  verbose = FALSE,
+  frm_cols = c("myVgene", "myDgene", "myJgene", "myCgene"),
+)
+custom_new
+```
+
+## Rhesus or mouse data
+
+Use `species = "rhesus"` or `species = "mouse"`
+
+```{r}
+new_tcrs <- convert_gene(
+  tcrs,
+  frm = "tenx",
+  to = "imgt",
+  species = "rhesus", # or 'mouse'
+  verbose = FALSE
+)
+new_tcrs
+```
+
+

@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert.R
 \name{choose_lookup}
 \alias{choose_lookup}
-\title{Determine which lookup table to use and get filepath.}
+\title{Choose lookup table}
 \usage{
 choose_lookup(frm, to, species = "human", verbose = TRUE)
 }
@@ -19,7 +19,8 @@ choose_lookup(frm, to, species = "human", verbose = TRUE)
 A string, the path to correct lookup table.
 }
 \description{
-Determine which lookup table to use and get filepath.
+\code{choose_lookup()} determines which CSV lookup table to use based on the the
+input format (\code{frm}) and returns the path to that file.
 }
 \examples{
 choose_lookup("imgt", "adaptive")

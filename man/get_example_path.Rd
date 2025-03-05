@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{get_example_path}
 \alias{get_example_path}
-\title{Get full path to given example file or directory.}
+\title{Get full path to an example file or directory}
 \usage{
 get_example_path(file_name)
 }
@@ -13,7 +13,9 @@ get_example_path(file_name)
 A string, the path to example file or directory.
 }
 \description{
-Get full path to given example file or directory.
+\code{get_example_path()} takes a file or folder name that is expected to be
+located under the \code{TCRconvertR} \code{examples} directory and gets the full path
+to that item.
 }
 \examples{
 get_example_path("tenx.csv")
