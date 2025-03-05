@@ -14,7 +14,8 @@ A string, the path to example file or directory.
 }
 \description{
 \code{get_example_path()} takes a file or folder name that is expected to be
-located under the package \code{examples} and gets the full path to that item.
+located under the \code{TCRconvertR} \code{examples} directory and gets the full path
+to that item.
 }
 \examples{
 get_example_path("tenx.csv")

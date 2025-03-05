@@ -117,7 +117,9 @@ pad_single_digit <- function(gene_str) {
 #' application folder via `rappdirs`. For example:
 #'    - MacOS: ``~/Library/Application Support/<AppName>``
 #'    - Windows: ``C:\Documents and Settings\<User>\Application Data\Local Settings\<AppAuthor>\<AppName>``
-#'     - Linux: ``~/.local/share/<AppName>``
+#'    - Linux: ``~/.local/share/<AppName>``
+#'
+#' If a folder named `species` already exists in that location, it will be replaced.
 #'
 #' @details
 #' Key transformations from IMGT:

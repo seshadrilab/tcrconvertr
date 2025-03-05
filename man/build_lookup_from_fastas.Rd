@@ -12,7 +12,7 @@ build_lookup_from_fastas(data_dir, species)
 \item{species}{A string, the name of species that will be used when running TCRconvert with these lookup tables.}
 }
 \value{
-Nothing.
+A string, path to new lookup directory
 }
 \description{
 \code{build_lookup_from_fastas()} processes IMGT reference FASTA files in a given
@@ -30,8 +30,10 @@ application folder via \code{rappdirs}. For example:
 \itemize{
 \item MacOS: \verb{~/Library/Application Support/<AppName>}
 \item Windows: \verb{C:\\Documents and Settings\\<User>\\Application Data\\Local Settings\\<AppAuthor>\\<AppName>}
-- Linux: \verb{~/.local/share/<AppName>}
+\item Linux: \verb{~/.local/share/<AppName>}
 }
+
+If a folder named \code{species} already exists in that location, it will be replaced.
 }
 \details{
 Key transformations from IMGT:
