@@ -1,3 +1,23 @@
+# Special cases in gene nomenclature
+adaptive_replacements <- c(
+  "TRAV14/DV4" = "TRAV14-1",
+  "TRAV23/DV6" = "TRAV23-1",
+  "TRAV29/DV5" = "TRAV29-1",
+  "TRAV36/DV7" = "TRAV36-1",
+  "TRAV38-2/DV8" = "TRAV38-2",
+  "TRAV4-4/DV10" = "TRAV4-4/",
+  "TRAV6-7/DV9" = "TRAV6-7",
+  "TRAV13-4/DV7" = "TRAV13-4",
+  "TRAV14D-3/DV8" = "TRAV14D-3",
+  "TRAV15D-1/DV6D-1" = "TRAV15D-1",
+  "TRAV15-1/DV6-1" = "TRAV15-1",
+  "TRAV16D/DV11" = "TRAV16D-1",
+  "TRAV21/DV12" = "TRAV21-1",
+  "TRAV15-2/DV6-2" = "TRAV15-2",
+  "TRAV15D-2/DV6D-2" = "TRAV15D-2",
+  "TR" = "TCR", "-" = "-0", "/OR9-02" = "-or09_02"
+)
+
 #' Extract gene names from a reference FASTA
 #'
 #' `parse_imgt_fasta()` extracts the second element from a "|"-delimited FASTA
@@ -174,24 +194,6 @@ build_lookup_from_fastas <- function(data_dir, species) {
   ))
 
   # Create Adaptive columns
-  adaptive_replacements <- c(
-    "TRAV14/DV4" = "TRAV14-1",
-    "TRAV23/DV6" = "TRAV23-1",
-    "TRAV29/DV5" = "TRAV29-1",
-    "TRAV36/DV7" = "TRAV36-1",
-    "TRAV38-2/DV8" = "TRAV38-2",
-    "TRAV4-4/DV10" = "TRAV4-4/",
-    "TRAV6-7/DV9" = "TRAV6-7",
-    "TRAV13-4/DV7" = "TRAV13-4",
-    "TRAV14D-3/DV8" = "TRAV14D-3",
-    "TRAV15D-1/DV6D-1" = "TRAV15D-1",
-    "TRAV15-1/DV6-1" = "TRAV15-1",
-    "TRAV16D/DV11" = "TRAV16D-1",
-    "TRAV21/DV12" = "TRAV21-1",
-    "TRAV15-2/DV6-2" = "TRAV15-2",
-    "TRAV15D-2/DV6D-2" = "TRAV15D-2",
-    "TR" = "TCR", "-" = "-0", "/OR9-02" = "-or09_02"
-  )
   lookup[["adaptive"]] <- lookup[["imgt"]]
   for (pattern in names(adaptive_replacements)) {
     replacement <- adaptive_replacements[[pattern]]
