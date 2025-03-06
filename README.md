@@ -62,9 +62,9 @@ tcrs
 
 ``` r
 new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
-#> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive only
-#> captures VDJ genes, any C genes will become NA.
-#> Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
+#> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive captures
+#> only VDJ genes; C genes will be NA.
+#> Converting from 10X. Using *01 as allele for all genes.
 new_tcrs
 #>              barcode             v_gene        j_gene            cdr3
 #> 1 AAACCTGAGACCACGA-1      TCRAV29-01*01 TCRAJ12-01*01    CAVMDSSYKLIF
@@ -79,7 +79,8 @@ Feedback is welcome! To contribute, submit a pull request.
 
 ## Issues
 
-For problems or questions, file an issue on GitHub.
+For problems or questions, [file an
+issue](https://github.com/seshadrilab/tcrconvertr/issues/new) on GitHub.
 
 ## Contact
 
