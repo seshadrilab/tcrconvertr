@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_lookup.R
 \name{build_lookup_from_fastas}
 \alias{build_lookup_from_fastas}
-\title{Create these lookup tables from a directory of FASTA files:}
+\title{Create lookup tables}
 \usage{
 build_lookup_from_fastas(data_dir, species)
 }
@@ -12,27 +12,47 @@ build_lookup_from_fastas(data_dir, species)
 \item{species}{A string, the name of species that will be used when running TCRconvert with these lookup tables.}
 }
 \value{
-Nothing.
+A string, path to new lookup directory
 }
 \description{
+\code{build_lookup_from_fastas()} processes IMGT reference FASTA files in a given
+folder to generate lookup tables used for making gene name conversions. It
+extracts all gene names and transforms them into 10X and Adaptive formats
+following predefined conversion rules. The resulting files are created:
 \itemize{
-\item lookup.csv
-\item lookup_from_tenx.csv
-\item lookup_from_adaptive.csv
+\item \code{lookup.csv}: IMGT gene names and their 10X and Adaptive equivalents.
+\item \code{lookup_from_tenx.csv}: Gene names aggregated by their 10X identifiers, with one representative allele (\verb{*01}) for each.
+\item \code{lookup_from_adaptive.csv}: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
 }
-}
-\details{
-The lookup tables are stored in an application data folder via rappdirs. For example:
+
+The files are stored in a given subfolder (\code{species}) within the appropriate
+application folder via \code{rappdirs}. For example:
 \itemize{
 \item MacOS: \verb{~/Library/Application Support/<AppName>}
 \item Windows: \verb{C:\\Documents and Settings\\<User>\\Application Data\\Local Settings\\<AppAuthor>\\<AppName>}
 \item Linux: \verb{~/.local/share/<AppName>}
 }
+
+If a folder named \code{species} already exists in that location, it will be replaced.
+}
+\details{
+Key transformations from IMGT:
+\itemize{
+\item \strong{10X:}
+\itemize{
+\item Remove allele information (e.g., \verb{*01}) and modify \verb{/DV} occurrences.
+}
+\item \strong{Adaptive:}
+\itemize{
+\item Apply renaming rules, such as adding gene-level designations and zero-padding single-digit numbers.
+\item Convert constant genes to \code{"NoData"} (Adaptive only captures VDJ) which become \code{NA} after the merge in \code{convert_gene()}.
+}
+}
 }
 \examples{
 # For the example, create and use a temporary folder
 fastadir <- file.path(tempdir(), "TCRconvertR_tmp")
-dir.create(fastadir)
+dir.create(fastadir, showWarnings = FALSE, recursive = TRUE)
 trav <- get_example_path("fasta_dir/test_trav.fa")
 trbv <- get_example_path("fasta_dir/test_trbv.fa")
 file.copy(c(trav, trbv), fastadir)

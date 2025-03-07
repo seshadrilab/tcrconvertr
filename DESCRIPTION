@@ -1,12 +1,14 @@
 Package: TCRconvertR
 Type: Package
-Title: Decompose and Recompose Functions
-Description: Convert TCRs between 10X, Adaptive, and IMGT formats.
+Title: Convert TCR Gene Names
+Description: Convert V, D, J, and/or C gene names between the 10X Genomics, 
+  Adaptive Biotechnologies, and IMGT nomenclatures. This allows for 
+  T Cell Receptor (TCR) datasets from different sequencing platforms to be combined.
 Version: 0.1
-Authors@R: c(person("Emma", "Bishop", role = c("aut", "cre"),
+Authors@R: c(person("Emma", "Bishop", role = c("aut", "cre", "cph"),
     email = "emmab5@uw.edu", comment = c(ORCID = "0000-0003-4484-3336")))
 License: MIT + file LICENSE
-URL: https://github.com/seshadrilab/tcrconvertr
+URL: https://github.com/seshadrilab/tcrconvertr, https://seshadrilab.github.io/tcrconvertr/
 BugReports: https://github.com/seshadrilab/tcrconvertr/issues
 Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace", "rd",
     "roxyglobals::global_roclet"))
@@ -17,9 +19,12 @@ Imports:
     rappdirs
 RoxygenNote: 7.3.2
 Suggests: 
+    knitr,
+    rmarkdown,
     roxyglobals,
     testthat (>= 3.0.0),
     mockery
 Config/testthat/edition: 3
 Config/roxyglobals/filename: globals.R
 Config/roxyglobals/unique: FALSE
+VignetteBuilder: knitr

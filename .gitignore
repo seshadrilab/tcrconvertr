@@ -3,3 +3,7 @@
 .RData
 .Ruserdata
 .Rproj
+docs
+.DS_Store
+.vscode/
+inst/doc

@@ -11,68 +11,68 @@ knitr::opts_chunk$set(
 )
 ```
 
-# TCRconvertR
-
 <!-- badges: start -->
-[![codecov](https://codecov.io/gh/seshadrilab/tcrconvertr/graph/badge.svg?token=JVURVQO10D)](https://codecov.io/gh/seshadrilab/tcrconvertr)
+[![codecov](https://codecov.io/gh/seshadrilab/tcrconvertr/graph/badge.svg?token=JVURVQO10D)](https://app.codecov.io/gh/seshadrilab/tcrconvertr)
 [![R-CMD-check](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seshadrilab/tcrconvertr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-> **Warning**: This project is in **beta stage**. It is under active development and may be unstable.
+# Convert TCR gene names
 
-**Rename T-cell receptor genes between 10X, Adaptive, and IMGT formats**
+`TCRconvertR` converts V, D, J, and/or C gene names between the 10X Genomics, Adaptive Biotechnologies, and IMGT nomenclatures. It supports alpha-beta and gamma-delta T cell receptors (TCRs) for human, mouse, and rhesus macaque. Users can also define custom species, see: `vignette("custom-species")`. A [Python version](https://github.com/seshadrilab/tcrconvert) with command-line support is also available.
 
-TCRconvertR takes T-cell receptor (TCR) data containing V, D, J, and/or C genes from 10X, Adaptive, or other sequencing platforms and renames them from any of these formats to any other one:
+## Background
 
-* **10X**: TRAV1-2
-* **Adaptive**: TCRAV01-02*01
-* **IMGT**: TRAV1-2*01
+TCR annotation tools use different gene naming conventions, making cross-dataset searches difficult (e.g., identifying 10X-annotated TCRs in Adaptive data). Manual conversion is complex and error-prone due to inconsistencies in naming rules.
 
-TCRconvertR works with human, mouse, and rhesus macaque data out-of-the-box, but users can also add their own species.
+`TCRconvertR` automates this process efficiently and accurately. Our approach is based on analyzing multiple 10X and Adaptive data sets to capture their naming variations.
 
-TCRconvertR helps researchers unify TCR datasets by converting them to a standard naming convention. It is fast, reliable, and prevents errors from manual conversions. Unlike other tools that require custom objects, TCRconvertR works directly with DataFrames and CSV/TSV files.
+## Installation
 
-# Installation
+Install from GitHub:
 
-You can install TCRconvertR from [GitHub](https://github.com/) with:
-
-``` r
+```r
 # install.packages("pak")
 pak::pak("seshadrilab/tcrconvertr")
 ```
 
-# Usage
+## Usage
 
-**Load some 10X data**
+#### 1. Load TCRs into a data frame
 
-```{r example}
+Examples of files you may want to load:
+
+- **10X**: `filtered_contig_annotations.csv`
+- **Adaptive**: `Sample_TCRB.tsv`
+- **IMGT**: Output from `MiXCR` or other tools
+
+```{r}
 library(TCRconvertR)
 
-tcr_file <- "/home/emmabishop/workspace/tcrconvertr/inst/extdata/examples/tenx.csv"
-
-tcrs <- read.csv(tcr_file)
+tcr_file <- get_example_path("tenx.csv") # Using built-in example file
+tcrs <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
 tcrs
 ```
 
-**Convert gene names from the 10X format to the Adaptive format**
+####  2. Convert
 
 ```{r}
 new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
 new_tcrs
 ```
 
-# Contributing
+## Contributing
 
-I welcome feedback! If you would like to resolve an issue or add improvements please submit a pull request.
+Contributions are welcome! To contribute, submit a pull request. See the documentation for details.
 
-# Issues
+## Issues
 
-If you run into problems or need help running TCRconvertR please file an issue on GitHub.
+To report a bug or request a feature please open an 
+[issue](https://github.com/seshadrilab/tcrconvertr/issues).
 
-# Contact
+## Contact
 
-For other questions please contact Emma Bishop: `emmab5` at `uw` dot `edu`
+For other inquiries, contact Emma Bishop: emmab5 at uw dot edu.
 
-# Acknowledgments
+## Acknowledgments
 
-This project was created with support from the Fred Hutchinson Cancer Center Translational Data Science Integrated Research Center (TDS IRC) through the 2024 Data Scientist Collaboration Grant.
+This project was supported by the Fred Hutchinson Cancer Center Translational Data Science Integrated Research Center (TDS IRC) through the 2024 Data Scientist Collaboration Grant. Special thanks to Scott Chamberlain for development support and Shashidhar Ravishankar for gene name curation.

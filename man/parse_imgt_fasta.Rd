@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_lookup.R
 \name{parse_imgt_fasta}
 \alias{parse_imgt_fasta}
-\title{Extract gene names from a reference FASTA.}
+\title{Extract gene names from a reference FASTA}
 \usage{
 parse_imgt_fasta(infile)
 }
@@ -13,7 +13,8 @@ parse_imgt_fasta(infile)
 A character vector of gene names.
 }
 \description{
-Extract gene names from a reference FASTA.
+\code{parse_imgt_fasta()} extracts the second element from a "|"-delimited FASTA
+header, which will be the gene name for IMGT reference FASTAs.
 }
 \examples{
 # Given a FASTA file containing this header:

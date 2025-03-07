@@ -1,4 +1,27 @@
-#' Extract gene names from a reference FASTA.
+# Special cases in gene nomenclature
+adaptive_replacements <- c(
+  "TRAV14/DV4" = "TRAV14-1",
+  "TRAV23/DV6" = "TRAV23-1",
+  "TRAV29/DV5" = "TRAV29-1",
+  "TRAV36/DV7" = "TRAV36-1",
+  "TRAV38-2/DV8" = "TRAV38-2",
+  "TRAV4-4/DV10" = "TRAV4-4/",
+  "TRAV6-7/DV9" = "TRAV6-7",
+  "TRAV13-4/DV7" = "TRAV13-4",
+  "TRAV14D-3/DV8" = "TRAV14D-3",
+  "TRAV15D-1/DV6D-1" = "TRAV15D-1",
+  "TRAV15-1/DV6-1" = "TRAV15-1",
+  "TRAV16D/DV11" = "TRAV16D-1",
+  "TRAV21/DV12" = "TRAV21-1",
+  "TRAV15-2/DV6-2" = "TRAV15-2",
+  "TRAV15D-2/DV6D-2" = "TRAV15D-2",
+  "TR" = "TCR", "-" = "-0", "/OR9-02" = "-or09_02"
+)
+
+#' Extract gene names from a reference FASTA
+#'
+#' `parse_imgt_fasta()` extracts the second element from a "|"-delimited FASTA
+#' header, which will be the gene name for IMGT reference FASTAs.
 #'
 #' @param infile A string, the path to FASTA file.
 #'
@@ -15,15 +38,18 @@
 parse_imgt_fasta <- function(infile) {
   lines <- readLines(infile)
 
-  # Extract gene names from headers
   imgt_list <- vapply(lines[grep("^>", lines)], function(line) {
     strsplit(line, "\\|")[[1]][2]
   }, FUN.VALUE = character(1), USE.NAMES = FALSE)
 
-  return(imgt_list)
+  imgt_list
 }
 
-#' Extract gene names from all reference FASTA files in a folder.
+#' Extract all gene names from a folder of FASTAs
+#'
+#' `extract_imgt_genes()` first runs `parse_imgt_fasta()` on all FASTA files in
+#' a given folder to pull out the gene names. Then it returns those names in an
+#' alphabetically sorted dataframe.
 #'
 #' @param data_dir A string, the path to directory containing FASTA files.
 #'
@@ -43,21 +69,23 @@ parse_imgt_fasta <- function(infile) {
 #' fastadir <- get_example_path("fasta_dir/")
 #' extract_imgt_genes(fastadir)
 extract_imgt_genes <- function(data_dir) {
-  # List all FASTA files
   fasta_files <- list.files(data_dir, pattern = "\\.(fa|fasta)$", full.names = TRUE)
-
-  # Extract gene names from each file
   imgt <- unlist(lapply(fasta_files, parse_imgt_fasta))
 
-  # Create and sort a data frame
+  # Create and sort output data frame
   lookup <- data.frame(imgt = imgt, stringsAsFactors = FALSE)
   lookup_sorted <- lookup[order(lookup[["imgt"]]), , drop = FALSE]
   rownames(lookup_sorted) <- NULL
 
-  return(lookup_sorted)
+  lookup_sorted
 }
 
-#' Add a `-01` to genes without IMGT gene-level designation.
+#' Add `-01` to gene names lacking gene-level info
+#'
+#' Some genes just have the IMGT subgroup (e.g. TRBV2) and allele (e.g. *01)
+#' designation. The Adaptive format always includes an IMGT gene (e.g. -01)
+#' designation, with "-01" as the apparent default. `add_dash_one()` adds a
+#' default gene-level designation if it's missing.
 #'
 #' @param gene_str A string, the gene name.
 #'
@@ -73,10 +101,15 @@ add_dash_one <- function(gene_str) {
   if (!grepl("-", gene_str)) {
     return(sub("\\*", "-01*", gene_str))
   }
-  return(gene_str)
+
+  gene_str
 }
 
-#' Add a zero to single-digit gene-level designation in gene names.
+#' Add a `0` to single-digit gene-level designation
+#'
+#' `pad_single_digit()` takes a gene name and ensures that any single-digit
+#' number following a sequence of letters is padded with a leading zero.
+#' This is to match the Adaptive format.
 #'
 #' @param gene_str A string, the gene name.
 #'
@@ -86,32 +119,83 @@ add_dash_one <- function(gene_str) {
 #' @examples
 #' pad_single_digit("TCRBV1-2")
 pad_single_digit <- function(gene_str) {
-  return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str))
+  gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str)
 }
 
-#' Create these lookup tables from a directory of FASTA files:
+#' Save a lookup table to a CSV file
 #'
-#'    - lookup.csv
-#'    - lookup_from_tenx.csv
-#'    - lookup_from_adaptive.csv
+#' `save_lookup()` saves a data frame as a CSV file (without row names) in the
+#' specified directory.
 #'
-#' The lookup tables are stored in an application data folder via rappdirs. For example:
+#' @param df A data frame containing the lookup table data.
+#' @param savedir A string, the path to the save directory.
+#' @param name A string, the file name (should end in `.csv`).
 #'
+#' @return Nothing
+#' @export
+#' @keywords internal
+#' @examples
+#' # Create a temp save directory and load an example
+#' save_dir <- file.path(tempdir(), "TCRconvertR_tmp")
+#' dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
+#' dat <- read.csv(get_example_path("fasta_dir/lookup.csv"))
+#'
+#' save_lookup(dat, save_dir, "newlookup.csv")
+#'
+#' # Clean up temporary folder
+#' unlink(save_dir, recursive = TRUE)
+save_lookup <- function(df, savedir, name) {
+  # Ensure valid inputs
+  if (!dir.exists(savedir)) {
+    dir.create(savedir, showWarnings = FALSE, recursive = TRUE)
+  }
+  if (!is.data.frame(df)) {
+    stop("'df' must be a data frame")
+  }
+
+  file_path <- file.path(savedir, name)
+  utils::write.csv(df, file_path, row.names = FALSE)
+}
+
+#' Create lookup tables
+#'
+#' @description
+#' `build_lookup_from_fastas()` processes IMGT reference FASTA files in a given
+#' folder to generate lookup tables used for making gene name conversions. It
+#' extracts all gene names and transforms them into 10X and Adaptive formats
+#' following predefined conversion rules. The resulting files are created:
+#'
+#' - `lookup.csv`: IMGT gene names and their 10X and Adaptive equivalents.
+#' - `lookup_from_tenx.csv`: Gene names aggregated by their 10X identifiers, with one representative allele (`*01`) for each.
+#' - `lookup_from_adaptive.csv`: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
+#'
+#' The files are stored in a given subfolder (`species`) within the appropriate
+#' application folder via `rappdirs`. For example:
 #'    - MacOS: ``~/Library/Application Support/<AppName>``
 #'    - Windows: ``C:\Documents and Settings\<User>\Application Data\Local Settings\<AppAuthor>\<AppName>``
 #'    - Linux: ``~/.local/share/<AppName>``
 #'
+#' If a folder named `species` already exists in that location, it will be replaced.
+#'
+#' @details
+#' Key transformations from IMGT:
+#' - **10X:**
+#'     - Remove allele information (e.g., `*01`) and modify `/DV` occurrences.
+#' - **Adaptive:**
+#'     - Apply renaming rules, such as adding gene-level designations and zero-padding single-digit numbers.
+#'     - Convert constant genes to `"NoData"` (Adaptive only captures VDJ) which become `NA` after the merge in `convert_gene()`.
+#'
 #' @param data_dir A string, the directory containing FASTA files.
 #' @param species A string, the name of species that will be used when running TCRconvert with these lookup tables.
 #'
-#' @return Nothing.
+#' @return A string, path to new lookup directory
 #' @importFrom rappdirs user_data_dir
 #' @autoglobal
 #' @export
 #' @examples
 #' # For the example, create and use a temporary folder
 #' fastadir <- file.path(tempdir(), "TCRconvertR_tmp")
-#' dir.create(fastadir)
+#' dir.create(fastadir, showWarnings = FALSE, recursive = TRUE)
 #' trav <- get_example_path("fasta_dir/test_trav.fa")
 #' trbv <- get_example_path("fasta_dir/test_trbv.fa")
 #' file.copy(c(trav, trbv), fastadir)
@@ -139,33 +223,13 @@ build_lookup_from_fastas <- function(data_dir, species) {
 
   lookup <- extract_imgt_genes(data_dir)
 
-  # Create the 10X column by removing allele info (e.g. *01) and slash from "/DV".
-  # Do this by substituting "DV" for "/DV" in what's left of the TCR gene name
-  # after removing the last three characters
+  # Create the 10X column
   lookup[["tenx"]] <- sub("/DV", "DV", substr(
     lookup[["imgt"]], 1,
     nchar(lookup[["imgt"]]) - 3
   ))
 
-  # Create Adaptive columns by adding letters, 0's, removing /DV and renaming /OR
-  adaptive_replacements <- c(
-    "TRAV14/DV4" = "TRAV14-1",
-    "TRAV23/DV6" = "TRAV23-1",
-    "TRAV29/DV5" = "TRAV29-1",
-    "TRAV36/DV7" = "TRAV36-1",
-    "TRAV38-2/DV8" = "TRAV38-2",
-    "TRAV4-4/DV10" = "TRAV4-4/",
-    "TRAV6-7/DV9" = "TRAV6-7",
-    "TRAV13-4/DV7" = "TRAV13-4",
-    "TRAV14D-3/DV8" = "TRAV14D-3",
-    "TRAV15D-1/DV6D-1" = "TRAV15D-1",
-    "TRAV15-1/DV6-1" = "TRAV15-1",
-    "TRAV16D/DV11" = "TRAV16D-1",
-    "TRAV21/DV12" = "TRAV21-1",
-    "TRAV15-2/DV6-2" = "TRAV15-2",
-    "TRAV15D-2/DV6D-2" = "TRAV15D-2",
-    "TR" = "TCR", "-" = "-0", "/OR9-02" = "-or09_02"
-  )
+  # Create Adaptive columns
   lookup[["adaptive"]] <- lookup[["imgt"]]
   for (pattern in names(adaptive_replacements)) {
     replacement <- adaptive_replacements[[pattern]]
@@ -178,15 +242,12 @@ build_lookup_from_fastas <- function(data_dir, species) {
     FUN.VALUE = character(1), USE.NAMES = FALSE
   )
   lookup[["adaptivev2"]] <- lookup[["adaptive"]]
-
-  # Set Adaptive columns to 'NoData' for constant genes (Adaptive only captures VDJ)
-  # 'NoData' gets converted to NA by convert.convert_gene()
   lookup[grepl("C", lookup[["imgt"]]), c("adaptive", "adaptivev2")] <- "NoData"
 
-  # If converting from 10X will just need the first *01 allele
+  # If converting from 10X just need the *01 allele
   from_tenx <- stats::aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
 
-  # Make table for Adaptive genes with or without allele
+  # Make table for Adaptive genes with and without allele
   lookup2 <- subset(lookup, !grepl("NoData", lookup$adaptivev2))
   from_adapt <- lookup2[c("adaptivev2", "imgt", "tenx")]
   from_adapt["adaptive"] <- substr(
@@ -201,14 +262,16 @@ build_lookup_from_fastas <- function(data_dir, species) {
   from_adaptive <- rbind(lookup2, from_adapt)
   from_adaptive <- from_adaptive[, c("adaptive", "adaptivev2", "imgt", "tenx")]
 
-  # Remove any duplicate rows and save
+  # Remove duplicate rows
   lookup <- lookup[!duplicated(lookup), ]
   from_tenx <- from_tenx[!duplicated(from_tenx), ]
   from_adaptive <- from_adaptive[!duplicated(from_adaptive), ]
 
   # Save to files
   message("Writing lookup tables to: ", save_dir)
-  utils::write.csv(lookup, file.path(save_dir, "lookup.csv"), row.names = FALSE)
-  utils::write.csv(from_tenx, file.path(save_dir, "lookup_from_tenx.csv"), row.names = FALSE)
-  utils::write.csv(from_adaptive, file.path(save_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
+  save_lookup(lookup, save_dir, "lookup.csv")
+  save_lookup(from_tenx, save_dir, "lookup_from_tenx.csv")
+  save_lookup(from_adaptive, save_dir, "lookup_from_adaptive.csv")
+
+  save_dir
 }
