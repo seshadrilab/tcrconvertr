@@ -90,7 +90,7 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
     cols_from <- col_ref[[frm]]
   }
 
-  return(cols_from)
+  cols_from
 }
 
 #' Convert gene names
@@ -201,5 +201,5 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   df_out <- subset(df_out, select = -c(id)) # Remove row number column
   df_out[df_out == "NoData"] <- NA_character_
 
-  return(df_out)
+  df_out
 }

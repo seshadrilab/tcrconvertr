@@ -42,7 +42,7 @@ parse_imgt_fasta <- function(infile) {
     strsplit(line, "\\|")[[1]][2]
   }, FUN.VALUE = character(1), USE.NAMES = FALSE)
 
-  return(imgt_list)
+  imgt_list
 }
 
 #' Extract all gene names from a folder of FASTAs
@@ -77,7 +77,7 @@ extract_imgt_genes <- function(data_dir) {
   lookup_sorted <- lookup[order(lookup[["imgt"]]), , drop = FALSE]
   rownames(lookup_sorted) <- NULL
 
-  return(lookup_sorted)
+  lookup_sorted
 }
 
 #' Add `-01` to gene names lacking gene-level info
@@ -101,7 +101,8 @@ add_dash_one <- function(gene_str) {
   if (!grepl("-", gene_str)) {
     return(sub("\\*", "-01*", gene_str))
   }
-  return(gene_str)
+
+  gene_str
 }
 
 #' Add a `0` to single-digit gene-level designation
@@ -118,7 +119,7 @@ add_dash_one <- function(gene_str) {
 #' @examples
 #' pad_single_digit("TCRBV1-2")
 pad_single_digit <- function(gene_str) {
-  return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str))
+  gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str)
 }
 
 #' Save a lookup table to a CSV file
@@ -272,5 +273,5 @@ build_lookup_from_fastas <- function(data_dir, species) {
   save_lookup(from_tenx, save_dir, "lookup_from_tenx.csv")
   save_lookup(from_adaptive, save_dir, "lookup_from_adaptive.csv")
 
-  return(save_dir)
+  save_dir
 }
