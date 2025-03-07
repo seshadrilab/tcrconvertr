@@ -195,7 +195,7 @@ save_lookup <- function(df, savedir, name) {
 #' @examples
 #' # For the example, create and use a temporary folder
 #' fastadir <- file.path(tempdir(), "TCRconvertR_tmp")
-#' dir.create(fastadir)
+#' dir.create(fastadir, showWarnings = FALSE, recursive = TRUE)
 #' trav <- get_example_path("fasta_dir/test_trav.fa")
 #' trbv <- get_example_path("fasta_dir/test_trbv.fa")
 #' file.copy(c(trav, trbv), fastadir)

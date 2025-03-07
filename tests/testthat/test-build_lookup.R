@@ -42,7 +42,7 @@ test_that("can build lookup tables from fastas", {
 
   # Generate a temporary directory to put input files in
   fastadir <- file.path(mock_path, "fastas")
-  dir.create(fastadir)
+  dir.create(fastadir, showWarnings = FALSE, recursive = TRUE)
   # Copy test files into it
   example_dir <- get_example_path("fasta_dir")
   example_fastas <- list.files(example_dir, pattern = "\\.fa$", full.names = TRUE)
@@ -194,8 +194,9 @@ test_that("can build lookup tables from fastas", {
   )
   expect_equal(lookup, expected_lookup)
 
-  # Delete temp directory
+  # Delete temp directories
   unlink(mock_path, recursive = TRUE)
+  unlink(fastadir, recursive = TRUE)
 })
 
 test_that("will reject invalid species name", {
@@ -207,7 +208,7 @@ test_that("will reject invalid species name", {
 
   # Generate a temporary directory to put input files in
   fastadir <- file.path(mock_path, "fastas")
-  dir.create(fastadir)
+  dir.create(fastadir, showWarnings = FALSE, recursive = TRUE)
   # Copy test files into it
   example_dir <- get_example_path("fasta_dir")
   example_fastas <- list.files(example_dir, pattern = "\\.fa$", full.names = TRUE)
