@@ -121,6 +121,41 @@ pad_single_digit <- function(gene_str) {
   return(gsub("([A-Za-z]+)(\\d)([-\\*])", "\\10\\2\\3", gene_str))
 }
 
+#' Save a lookup table to a CSV file
+#'
+#' `save_lookup()` saves a data frame as a CSV file (without row names) in the
+#' specified directory.
+#'
+#' @param df A data frame containing the lookup table data.
+#' @param savedir A string, the path to the save directory.
+#' @param name A string, the file name (should end in `.csv`).
+#'
+#' @return Nothing
+#' @export
+#' @keywords internal
+#' @examples
+#' # Create a temp save directory and load an example
+#' save_dir <- file.path(tempdir(), "TCRconvertR_tmp")
+#' dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
+#' dat <- read.csv(get_example_path("fasta_dir/lookup.csv"))
+#'
+#' save_lookup(dat, save_dir, "newlookup.csv")
+#'
+#' # Clean up temporary folder
+#' unlink(save_dir, recursive = TRUE)
+save_lookup <- function(df, savedir, name) {
+  # Ensure valid inputs
+  if (!dir.exists(savedir)) {
+    dir.create(savedir, showWarnings = FALSE, recursive = TRUE)
+  }
+  if (!is.data.frame(df)) {
+    stop("'df' must be a data frame")
+  }
+
+  file_path <- file.path(savedir, name)
+  utils::write.csv(df, file_path, row.names = FALSE)
+}
+
 #' Create lookup tables
 #'
 #' @description
@@ -233,9 +268,9 @@ build_lookup_from_fastas <- function(data_dir, species) {
 
   # Save to files
   message("Writing lookup tables to: ", save_dir)
-  utils::write.csv(lookup, file.path(save_dir, "lookup.csv"), row.names = FALSE)
-  utils::write.csv(from_tenx, file.path(save_dir, "lookup_from_tenx.csv"), row.names = FALSE)
-  utils::write.csv(from_adaptive, file.path(save_dir, "lookup_from_adaptive.csv"), row.names = FALSE)
+  save_lookup(lookup, save_dir, "lookup.csv")
+  save_lookup(from_tenx, save_dir, "lookup_from_tenx.csv")
+  save_lookup(from_adaptive, save_dir, "lookup_from_adaptive.csv")
 
   return(save_dir)
 }
