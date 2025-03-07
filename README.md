@@ -75,12 +75,13 @@ new_tcrs
 
 ## Contributing
 
-Feedback is welcome! To contribute, submit a pull request.
+Contributions are welcome! To contribute, submit a pull request. See the
+documentation for details.
 
 ## Issues
 
-For problems or questions, [file an
-issue](https://github.com/seshadrilab/tcrconvertr/issues/new) on GitHub.
+To report a bug or request a feature please open an
+[issue](https://github.com/seshadrilab/tcrconvertr/issues).
 
 ## Contact
 
