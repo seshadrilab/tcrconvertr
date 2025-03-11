@@ -166,6 +166,13 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   lookup <- utils::read.csv(lookup_f, stringsAsFactors = FALSE)
   cols_from <- which_frm_cols(df, frm, frm_cols, verbose)
 
+  if (sum(cols_from %in% colnames(df)) == 0) {
+    stop(
+      "None of the expected columns are in the dataframe:\n",
+      paste(cols_from, collapse = ", ")
+    )
+  }
+
   # Add column of row numbers so we can keep order straight
   df$id <- seq_len(nrow(df))
 
