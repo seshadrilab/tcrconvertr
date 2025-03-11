@@ -79,3 +79,42 @@ Mouse and rhesus macaque are supported out-of-the-box. For other species, see
 
 The rhesus and mouse lookup tables were built from IMGT reference FASTAs and 
 gene tables. Mouse genes cover both "Mouse" and "Mouse C57BL/6J" as listed in IMGT.
+
+
+## What if my Adaptive data lacks `x_resolved`/`xMaxResolved` columns?
+
+Create them by combining `x_gene`/`xGeneName` and `x_allele`/`xGeneAllele` with `*` as a separator. Example code:
+
+```r
+library(dplyr)
+
+# Adaptive
+new_df <- adaptive_df %>%
+  mutate(v_resolved = case_when(
+    !is.na(v_allele) ~ paste0(v_gene, "*", v_allele),
+    .default = v_gene
+    ),
+    d_resolved = case_when(
+      !is.na(d_allele) ~ paste0(d_gene, "*", d_allele),
+      .default = d_gene
+    ),
+    j_resolved = case_when(
+      !is.na(j_allele) ~ paste0(j_gene, "*", j_allele),
+      .default = j_gene
+    ))
+
+# Adaptive v2
+new_df <- adaptive_df %>%
+  mutate(vMaxResolved = case_when(
+    !is.na(vGeneAllele) ~ paste0(vGeneName, "*", vGeneAllele),
+    .default = vGeneName
+    ),
+    dMaxResolved = case_when(
+      !is.na(dGeneAllele) ~ paste0(dGeneName, "*", dGeneAllele),
+      .default = dGeneName
+    ),
+    jMaxResolved = case_when(
+      !is.na(jGeneAllele) ~ paste0(jGeneName, "*", jGeneAllele),
+      .default = jGeneName
+    ))
+```

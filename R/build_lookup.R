@@ -15,7 +15,9 @@ adaptive_replacements <- c(
   "TRAV21/DV12" = "TRAV21-1",
   "TRAV15-2/DV6-2" = "TRAV15-2",
   "TRAV15D-2/DV6D-2" = "TRAV15D-2",
-  "TR" = "TCR", "-" = "-0", "/OR9-02" = "-or09_02"
+  "TR" = "TCR",
+  "-" = "-0",
+  "/OR9-02" = "-or09_02"
 )
 
 #' Extract gene names from a reference FASTA
@@ -38,6 +40,7 @@ adaptive_replacements <- c(
 parse_imgt_fasta <- function(infile) {
   lines <- readLines(infile)
 
+  # Extract the second element from lines starting with ">"
   imgt_list <- vapply(lines[grep("^>", lines)], function(line) {
     strsplit(line, "\\|")[[1]][2]
   }, FUN.VALUE = character(1), USE.NAMES = FALSE)
@@ -267,7 +270,7 @@ build_lookup_from_fastas <- function(data_dir, species) {
   from_tenx <- from_tenx[!duplicated(from_tenx), ]
   from_adaptive <- from_adaptive[!duplicated(from_adaptive), ]
 
-  # Save to files
+  # Save
   message("Writing lookup tables to: ", save_dir)
   save_lookup(lookup, save_dir, "lookup.csv")
   save_lookup(from_tenx, save_dir, "lookup_from_tenx.csv")

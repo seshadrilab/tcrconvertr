@@ -48,9 +48,9 @@ new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
 new_tcrs
 ```
 
-> Tip: Suppress messages by setting `verbose = FALSE`.
+> Tip: Suppress messages by setting `verbose = FALSE`. Warnings and errors will still appear.
 
-> Tip: If your Adaptive data lacks `x_resolved`/`xMaxResolved` columns, create them yourself by combining `x_gene`/`xGeneName` and `x_allele`/`xGeneAllele` data using `*` as a seperator.
+> Tip: If your Adaptive data lacks `x_resolved`/`xMaxResolved` columns, create them yourself by combining the `x_gene`/`xGeneName` and `x_allele`/`xGeneAllele` columns. See the FAQs.
 
 
 ## AIRR data

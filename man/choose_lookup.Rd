@@ -7,13 +7,15 @@
 choose_lookup(frm, to, species = "human", verbose = TRUE)
 }
 \arguments{
-\item{frm}{A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
+\item{frm}{A string, the input format of TCR data. Must be one of
+\code{"tenx"}, \code{"adaptive"}, \code{"adaptivev2"}, or \code{"imgt"}.}
 
-\item{to}{A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
+\item{to}{A string, the output format of TCR data. Must be one of
+\code{"tenx"}, \code{"adaptive"}, \code{"adaptivev2"}, or \code{"imgt"}.}
 
-\item{species}{A string, the species. Optional; defaults to "human".}
+\item{species}{A string, the species. Optional; defaults to \code{"human"}.}
 
-\item{verbose}{A boolean, whether to show messages. Optional; defaults to TRUE}
+\item{verbose}{A boolean, whether to show messages. Optional; defaults to \code{TRUE}}
 }
 \value{
 A string, the path to correct lookup table.

@@ -9,13 +9,16 @@ convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
 \arguments{
 \item{df}{A dataframe containing TCR gene names.}
 
-\item{frm}{A string, the input format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
+\item{frm}{A string, the input format of TCR data. Must be one of
+\code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
 
-\item{to}{A string, the output format of TCR data. Must be one of \code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
+\item{to}{A string, the output format of TCR data. Must be one of
+\code{"imgt"}, \code{"tenx"}, \code{"adaptive"}, or \code{"adaptivev2"}.}
 
-\item{species}{A string, the species folder name under \verb{tcrconvertr/inst/extdata/}. Optional; defaults to \code{"human"}.}
+\item{species}{A string,the species. Optional; defaults to \code{"human"}.}
 
-\item{frm_cols}{A character vector of customgene column names. Optional; defaults to \code{NULL} (auto-detect).}
+\item{frm_cols}{A character vector of custom gene column names.
+Optional; defaults to \code{NULL}.}
 
 \item{verbose}{A boolean, whether to display messages. Optional; defaults to \code{TRUE}.}
 }
@@ -38,11 +41,11 @@ genes in all three formats.
 \itemize{
 \item If a gene name cannot be mapped, it is replaced with \code{NA} and a warning is
 raised.
-\item If the input format is IMGT and \code{frm_cols} is not provided, 10X column
+\item If \code{frm} is \code{'imgt'} and \code{frm_cols} is not provided, 10X column
 names are assumed.
 \item Constant (C) genes are set to \code{NA} when converting to Adaptive formats,
 as Adaptive does not capture constant regions.
-\item The input does not need to include all gene types. Partial inputs
+\item The input does not need to include all gene types; partial inputs
 (e.g., only V genes) are supported.
 \item If no values in a custom column can be mapped (e.g. a CDR3 column) it is
 skipped and a warning is raised.
@@ -61,5 +64,6 @@ If \code{frm_cols} is not provided, these column names will be used if present:
 \examples{
 tcr_file <- get_example_path("tenx.csv")
 df <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
+df
 convert_gene(df, "tenx", "adaptive", verbose = FALSE)
 }

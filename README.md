@@ -62,8 +62,8 @@ tcrs
 
 ``` r
 new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
-#> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive captures
-#> only VDJ genes; C genes will be NA.
+#> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive only
+#> captures VDJ genes; C genes will be NA.
 #> Converting from 10X. Using *01 as allele for all genes.
 new_tcrs
 #>              barcode             v_gene        j_gene            cdr3

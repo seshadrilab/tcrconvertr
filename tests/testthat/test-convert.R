@@ -145,7 +145,7 @@ test_that("bad input raises error", {
 
   # Same input and output format
   expect_error(convert_gene(tenx_df, "tenx", "tenx"), '"frm" and "to" formats should be different.')
-  # Empty input
+  # Empty input dataframe
   expect_error(convert_gene(data.frame(), "tenx", "imgt"), "Input data is empty.")
 })
 
@@ -158,9 +158,9 @@ test_that("chooses correct lookup", {
   # Species we don't have lookups for
   expect_error(
     choose_lookup("tenx", "imgt", "non-existent-species", verbose = FALSE),
-    "Lookup table not found, please ensure reference files are available."
+    "Lookup table not found, please run build_lookup_from_fastas()."
   )
-  # From different 'frm' formats
+  # Different 'frm' formats
   expect_equal(choose_lookup("tenx", "imgt", verbose = FALSE), lookup_tenx)
   expect_equal(choose_lookup("adaptivev2", "imgt", verbose = FALSE), lookup_adapt)
   expect_equal(choose_lookup("imgt", "tenx", verbose = FALSE), lookup_imgt)
@@ -271,7 +271,6 @@ test_that("which_frm_cols verbose flag works", {
 })
 
 
-
 test_that("convert_gene verbose flag works", {
   # Note, the flag mostly affects downstream functions called by convert_gene.
   tenx_df_bad <- data.frame(
@@ -297,7 +296,7 @@ test_that("convert_gene verbose flag works", {
 
   # Verify expected warnings
   expect_true(any(grepl(
-    "Adaptive captures only VDJ genes; C genes will be NA.",
+    "Adaptive only captures VDJ genes; C genes will be NA.",
     captured_warnings
   )))
   expect_true(any(grepl(

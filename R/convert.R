@@ -11,10 +11,12 @@ col_ref <- list(
 #' `choose_lookup()` determines which CSV lookup table to use based on the the
 #' input format (`frm`) and returns the path to that file.
 #'
-#' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
-#' @param to A string, the output format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
-#' @param species A string, the species. Optional; defaults to "human".
-#' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
+#' @param frm A string, the input format of TCR data. Must be one of
+#'  `"tenx"`, `"adaptive"`, `"adaptivev2"`, or `"imgt"`.
+#' @param to A string, the output format of TCR data. Must be one of
+#' `"tenx"`, `"adaptive"`, `"adaptivev2"`, or `"imgt"`.
+#' @param species A string, the species. Optional; defaults to `"human"`.
+#' @param verbose A boolean, whether to show messages. Optional; defaults to `TRUE`
 #'
 #' @return A string, the path to correct lookup table.
 #' @importFrom rappdirs user_data_dir
@@ -46,11 +48,10 @@ choose_lookup <- function(frm, to, species = "human", verbose = TRUE) {
     lookup_f <- file.path(data_path, "lookup.csv")
   }
 
-  # Check if file exists
   if (file.exists(lookup_f)) {
     return(lookup_f)
   } else {
-    stop("Lookup table not found, please ensure reference files are available.")
+    stop("Lookup table not found, please run build_lookup_from_fastas().")
   }
 }
 
@@ -61,9 +62,10 @@ choose_lookup <- function(frm, to, species = "human", verbose = TRUE) {
 #' returns a vector of those column names.
 #'
 #' @param df Dataframe containing TCR gene names.
-#' @param frm A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".
+#' @param frm A string, the input format of TCR data. Must be one of
+#' `"tenx"`, `"adaptive"`, `"adaptivev2"`, or `"imgt"`.
 #' @param frm_cols A character vector, the custom column names to use.
-#' @param verbose A boolean, whether to show messages. Optional; defaults to TRUE
+#' @param verbose A boolean, whether to show messages. Optional; defaults to `TRUE`
 #'
 #' @return A character vector, column names to use.
 #' @export
@@ -110,11 +112,11 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #' **Behavioral Notes**
 #' - If a gene name cannot be mapped, it is replaced with `NA` and a warning is
 #' raised.
-#' - If the input format is IMGT and `frm_cols` is not provided, 10X column
+#' - If `frm` is `'imgt'` and `frm_cols` is not provided, 10X column
 #' names are assumed.
 #' - Constant (C) genes are set to `NA` when converting to Adaptive formats,
 #' as Adaptive does not capture constant regions.
-#' - The input does not need to include all gene types. Partial inputs
+#' - The input does not need to include all gene types; partial inputs
 #' (e.g., only V genes) are supported.
 #' - If no values in a custom column can be mapped (e.g. a CDR3 column) it is
 #' skipped and a warning is raised.
@@ -128,10 +130,13 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #' - **Adaptive v2**: `"vMaxResolved"`, `"dMaxResolved"`, `"jMaxResolved"`
 #'
 #' @param df A dataframe containing TCR gene names.
-#' @param frm A string, the input format of TCR data. Must be one of `"imgt"`, `"tenx"`, `"adaptive"`, or `"adaptivev2"`.
-#' @param to A string, the output format of TCR data. Must be one of `"imgt"`, `"tenx"`, `"adaptive"`, or `"adaptivev2"`.
-#' @param species A string, the species folder name under `tcrconvertr/inst/extdata/`. Optional; defaults to `"human"`.
-#' @param frm_cols A character vector of customgene column names. Optional; defaults to `NULL` (auto-detect).
+#' @param frm A string, the input format of TCR data. Must be one of
+#' `"imgt"`, `"tenx"`, `"adaptive"`, or `"adaptivev2"`.
+#' @param to A string, the output format of TCR data. Must be one of
+#' `"imgt"`, `"tenx"`, `"adaptive"`, or `"adaptivev2"`.
+#' @param species A string,the species. Optional; defaults to `"human"`.
+#' @param frm_cols A character vector of custom gene column names.
+#' Optional; defaults to `NULL`.
 #' @param verbose A boolean, whether to display messages. Optional; defaults to `TRUE`.
 #'
 #' @return A dataframe with converted TCR gene names.
@@ -140,6 +145,7 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #' @examples
 #' tcr_file <- get_example_path("tenx.csv")
 #' df <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
+#' df
 #' convert_gene(df, "tenx", "adaptive", verbose = FALSE)
 convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE) {
   if (frm == to) {
@@ -152,7 +158,7 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
     stop("Input data is empty.")
   }
   if (to %in% c("adaptive", "adaptivev2")) {
-    warning("Adaptive captures only VDJ genes; C genes will be NA.")
+    warning("Adaptive only captures VDJ genes; C genes will be NA.")
   }
 
   # Load lookup table and determine input columns

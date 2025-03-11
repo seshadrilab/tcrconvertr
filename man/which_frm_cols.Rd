@@ -9,11 +9,12 @@ which_frm_cols(df, frm, frm_cols = NULL, verbose = TRUE)
 \arguments{
 \item{df}{Dataframe containing TCR gene names.}
 
-\item{frm}{A string, the input format of TCR data. Must be one of "tenx", "adaptive", "adaptivev2", or "imgt".}
+\item{frm}{A string, the input format of TCR data. Must be one of
+\code{"tenx"}, \code{"adaptive"}, \code{"adaptivev2"}, or \code{"imgt"}.}
 
 \item{frm_cols}{A character vector, the custom column names to use.}
 
-\item{verbose}{A boolean, whether to show messages. Optional; defaults to TRUE}
+\item{verbose}{A boolean, whether to show messages. Optional; defaults to \code{TRUE}}
 }
 \value{
 A character vector, column names to use.
