@@ -210,9 +210,9 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   df_out <- df
   for (col in names(new_genes)) {
     df_out[, col] <- new_genes[[col]]
+    df_out[[col]][df_out[[col]] == "NoData"] <- NA_character_
   }
   df_out <- subset(df_out, select = -c(id)) # Remove row number column
-  df_out[df_out == "NoData"] <- NA_character_
 
   df_out
 }
