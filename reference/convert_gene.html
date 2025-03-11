@@ -70,19 +70,22 @@ while preserving row order.</p>
 
 
 <dt id="arg-frm">frm<a class="anchor" aria-label="anchor" href="#arg-frm"></a></dt>
-<dd><p>A string, the input format of TCR data. Must be one of <code>"imgt"</code>, <code>"tenx"</code>, <code>"adaptive"</code>, or <code>"adaptivev2"</code>.</p></dd>
+<dd><p>A string, the input format of TCR data. Must be one of
+<code>"imgt"</code>, <code>"tenx"</code>, <code>"adaptive"</code>, or <code>"adaptivev2"</code>.</p></dd>
 
 
 <dt id="arg-to">to<a class="anchor" aria-label="anchor" href="#arg-to"></a></dt>
-<dd><p>A string, the output format of TCR data. Must be one of <code>"imgt"</code>, <code>"tenx"</code>, <code>"adaptive"</code>, or <code>"adaptivev2"</code>.</p></dd>
+<dd><p>A string, the output format of TCR data. Must be one of
+<code>"imgt"</code>, <code>"tenx"</code>, <code>"adaptive"</code>, or <code>"adaptivev2"</code>.</p></dd>
 
 
 <dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
-<dd><p>A string, the species folder name under <code>tcrconvertr/inst/extdata/</code>. Optional; defaults to <code>"human"</code>.</p></dd>
+<dd><p>A string,the species. Optional; defaults to <code>"human"</code>.</p></dd>
 
 
 <dt id="arg-frm-cols">frm_cols<a class="anchor" aria-label="anchor" href="#arg-frm-cols"></a></dt>
-<dd><p>A character vector of customgene column names. Optional; defaults to <code>NULL</code> (auto-detect).</p></dd>
+<dd><p>A character vector of custom gene column names.
+Optional; defaults to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -100,11 +103,11 @@ input columns and a species-specific lookup table containing IMGT reference
 genes in all three formats.</p>
 <p><strong>Behavioral Notes</strong></p><ul><li><p>If a gene name cannot be mapped, it is replaced with <code>NA</code> and a warning is
 raised.</p></li>
-<li><p>If the input format is IMGT and <code>frm_cols</code> is not provided, 10X column
+<li><p>If <code>frm</code> is <code>'imgt'</code> and <code>frm_cols</code> is not provided, 10X column
 names are assumed.</p></li>
 <li><p>Constant (C) genes are set to <code>NA</code> when converting to Adaptive formats,
 as Adaptive does not capture constant regions.</p></li>
-<li><p>The input does not need to include all gene types. Partial inputs
+<li><p>The input does not need to include all gene types; partial inputs
 (e.g., only V genes) are supported.</p></li>
 <li><p>If no values in a custom column can be mapped (e.g. a CDR3 column) it is
 skipped and a warning is raised.</p></li>
@@ -119,8 +122,14 @@ skipped and a warning is raised.</p></li>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tcr_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_example_path.html">get_example_path</a></span><span class="op">(</span><span class="st">"tenx.csv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">tcr_file</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"barcode"</span>, <span class="st">"v_gene"</span>, <span class="st">"j_gene"</span>, <span class="st">"cdr3"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">df</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              barcode       v_gene  j_gene            cdr3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 AAACCTGAGACCACGA-1    TRAV29DV5  TRAJ12    CAVMDSSYKLIF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 AAACCTGAGACCACGA-1 TRBV20/OR9-2 TRBJ2-1 CASSGLAGGYNEQFF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 AAACCTGAGGCTCTTA-1        TRDV2   TRDJ3 CASSGVAGGTDTQYF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 AAACCTGAGGCTCTTA-1        TRGV9   TRGJ1    CAVKDSNYQLIW</span>
 <span class="r-in"><span><span class="fu">convert_gene</span><span class="op">(</span><span class="va">df</span>, <span class="st">"tenx"</span>, <span class="st">"adaptive"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptive captures only VDJ genes; C genes will be NA.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptive only captures VDJ genes; C genes will be NA.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              barcode             v_gene        j_gene            cdr3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 AAACCTGAGACCACGA-1      TCRAV29-01*01 TCRAJ12-01*01    CAVMDSSYKLIF</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 AAACCTGAGACCACGA-1 TCRBV20-or09_02*01 TCRBJ02-01*01 CASSGLAGGYNEQFF</span>

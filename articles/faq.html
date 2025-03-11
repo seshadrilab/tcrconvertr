@@ -153,6 +153,46 @@ species, see “Using a custom reference” in the usage pages.</p>
 FASTAs and gene tables. Mouse genes cover both “Mouse” and “Mouse
 C57BL/6J” as listed in IMGT.</p>
 </div>
+<div class="section level2">
+<h2 id="what-if-my-adaptive-data-lacks-x_resolvedxmaxresolved-columns">What if my Adaptive data lacks
+<code>x_resolved</code>/<code>xMaxResolved</code> columns?<a class="anchor" aria-label="anchor" href="#what-if-my-adaptive-data-lacks-x_resolvedxmaxresolved-columns"></a>
+</h2>
+<p>Create them by combining <code>x_gene</code>/<code>xGeneName</code>
+and <code>x_allele</code>/<code>xGeneAllele</code> with <code>*</code>
+as a separator. Example code:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Adaptive</span></span>
+<span><span class="va">new_df</span> <span class="op">&lt;-</span> <span class="va">adaptive_df</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>v_resolved <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">v_allele</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">v_gene</span>, <span class="st">"*"</span>, <span class="va">v_allele</span><span class="op">)</span>,</span>
+<span>    .default <span class="op">=</span> <span class="va">v_gene</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    d_resolved <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">d_allele</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">d_gene</span>, <span class="st">"*"</span>, <span class="va">d_allele</span><span class="op">)</span>,</span>
+<span>      .default <span class="op">=</span> <span class="va">d_gene</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    j_resolved <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">j_allele</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">j_gene</span>, <span class="st">"*"</span>, <span class="va">j_allele</span><span class="op">)</span>,</span>
+<span>      .default <span class="op">=</span> <span class="va">j_gene</span></span>
+<span>    <span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Adaptive v2</span></span>
+<span><span class="va">new_df</span> <span class="op">&lt;-</span> <span class="va">adaptive_df</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>vMaxResolved <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">vGeneAllele</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">vGeneName</span>, <span class="st">"*"</span>, <span class="va">vGeneAllele</span><span class="op">)</span>,</span>
+<span>    .default <span class="op">=</span> <span class="va">vGeneName</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    dMaxResolved <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">dGeneAllele</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">dGeneName</span>, <span class="st">"*"</span>, <span class="va">dGeneAllele</span><span class="op">)</span>,</span>
+<span>      .default <span class="op">=</span> <span class="va">dGeneName</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    jMaxResolved <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">jGeneAllele</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">jGeneName</span>, <span class="st">"*"</span>, <span class="va">jGeneAllele</span><span class="op">)</span>,</span>
+<span>      .default <span class="op">=</span> <span class="va">jGeneName</span></span>
+<span>    <span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
