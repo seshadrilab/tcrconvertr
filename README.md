@@ -28,11 +28,10 @@ capture their naming variations.
 
 ## Installation
 
-Install from GitHub:
+Install from CRAN:
 
 ``` r
-# install.packages("pak")
-pak::pak("seshadrilab/tcrconvertr")
+install.packages("TCRconvertR")
 ```
 
 ## Usage

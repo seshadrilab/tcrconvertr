@@ -16,11 +16,10 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-Install from GitHub:
+Install from CRAN:
 
-``` r
-# install.packages("pak")
-pak::pak("seshadrilab/tcrconvertr")
+```r
+install.packages("TCRconvertR")
 ```
 
 ## Basic usage
