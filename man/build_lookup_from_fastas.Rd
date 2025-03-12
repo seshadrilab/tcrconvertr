@@ -22,7 +22,7 @@ following predefined conversion rules. The resulting files are created:
 \itemize{
 \item \code{lookup.csv}: IMGT gene names and their 10X and Adaptive equivalents.
 \item \code{lookup_from_tenx.csv}: Gene names aggregated by their 10X identifiers, with one representative allele (\verb{*01}) for each.
-\item \code{lookup_from_adaptive.csv}: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
+\item \code{lookup_from_adaptive.csv}: Adaptive gene names, with or without alleles and gene designations, and their IMGT and 10X equivalents.
 }
 
 The files are stored in a given subfolder (\code{species}) within the appropriate
