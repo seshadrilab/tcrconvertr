@@ -18,5 +18,6 @@ located under the \code{TCRconvertR} \code{examples} directory and gets the full
 to that item.
 }
 \examples{
+# Will probably be in a temp folder for the function example
 get_example_path("tenx.csv")
 }

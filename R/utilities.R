@@ -9,6 +9,7 @@
 #' @return A string, the path to example file or directory.
 #' @export
 #' @examples
+#' # Will probably be in a temp folder for the function example
 #' get_example_path("tenx.csv")
 get_example_path <- function(file_name) {
   # Use system.file to locate the directory
