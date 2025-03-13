@@ -18,8 +18,9 @@ header, which will be the gene name for IMGT reference FASTAs.
 }
 \examples{
 # Given a FASTA file containing this header:
+#   >SomeText|TRBV29-1*01|MoreText|
+#   >SomeText|TRBV29-1*02|MoreText|
 #   >SomeText|TRBV29/OR9-2*01|MoreText|
-#   >SomeText|TRBVA/OR9-2*01|MoreText|
 
 fasta <- get_example_path("fasta_dir/test_trbv.fa")
 parse_imgt_fasta(fasta)

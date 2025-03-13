@@ -28,11 +28,10 @@ TCR annotation tools use different gene naming conventions, making cross-dataset
 
 ## Installation
 
-Install from GitHub:
+Install from CRAN:
 
 ```r
-# install.packages("pak")
-pak::pak("seshadrilab/tcrconvertr")
+install.packages("TCRconvertR")
 ```
 
 ## Usage
