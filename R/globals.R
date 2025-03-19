@@ -2,6 +2,7 @@
 
 utils::globalVariables(c(
   "adaptivev2", # <build_lookup_from_fastas>
+  "tenx", # <build_lookup_from_fastas>
   "id", # <convert_gene>
   NULL
 ))

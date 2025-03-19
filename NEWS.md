@@ -1,3 +1,3 @@
-# TCRconvertR 0.1
+# TCRconvertR 1.0
 
 * Initial CRAN submission.

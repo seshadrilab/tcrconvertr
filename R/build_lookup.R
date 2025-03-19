@@ -32,8 +32,9 @@ adaptive_replacements <- c(
 #' @keywords internal
 #' @examples
 #' # Given a FASTA file containing this header:
+#' #   >SomeText|TRBV29-1*01|MoreText|
+#' #   >SomeText|TRBV29-1*02|MoreText|
 #' #   >SomeText|TRBV29/OR9-2*01|MoreText|
-#' #   >SomeText|TRBVA/OR9-2*01|MoreText|
 #'
 #' fasta <- get_example_path("fasta_dir/test_trbv.fa")
 #' parse_imgt_fasta(fasta)
@@ -61,13 +62,16 @@ parse_imgt_fasta <- function(infile) {
 #' @keywords internal
 #' @examples
 #' # Given a folder with FASTA files containing these headers:
-#' # >SomeText|TRAC*01|MoreText|
-#' # >SomeText|TRAV1-1*01|MoreText|
-#' # >SomeText|TRAV1-1*02|MoreText|
-#' # >SomeText|TRAV14/DV4*01|MoreText|
-#' # >SomeText|TRAV38-2/DV8*01|MoreText|
-#' # >SomeText|TRBV29/OR9-2*01|MoreText|
-#' # >SomeText|TRBVA/OR9-2*01|MoreText|
+#' #   >SomeText|TRAC*01|MoreText|
+#' #   >SomeText|TRAV1-1*01|MoreText|
+#' #   >SomeText|TRAV1-1*02|MoreText|
+#' #   >SomeText|TRAV1-2*01|MoreText|
+#' #   >SomeText|TRAV14/DV4*01|MoreText|
+#' #   >SomeText|TRAV38-1*01|MoreText|
+#' #   >SomeText|TRAV38-2/DV8*01|MoreText|
+#' #   >SomeText|TRBV29-1*01|MoreText|
+#' #   >SomeText|TRBV29-1*02|MoreText|
+#' #   >SomeText|TRBV29/OR9-2*01|MoreText|
 #'
 #' fastadir <- get_example_path("fasta_dir/")
 #' extract_imgt_genes(fastadir)
@@ -170,7 +174,7 @@ save_lookup <- function(df, savedir, name) {
 #'
 #' - `lookup.csv`: IMGT gene names and their 10X and Adaptive equivalents.
 #' - `lookup_from_tenx.csv`: Gene names aggregated by their 10X identifiers, with one representative allele (`*01`) for each.
-#' - `lookup_from_adaptive.csv`: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
+#' - `lookup_from_adaptive.csv`: Adaptive gene names, with or without alleles and gene designations, and their IMGT and 10X equivalents.
 #'
 #' The files are stored in a given subfolder (`species`) within the appropriate
 #' application folder via `rappdirs`. For example:
@@ -250,20 +254,53 @@ build_lookup_from_fastas <- function(data_dir, species) {
   # If converting from 10X just need the *01 allele
   from_tenx <- stats::aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
 
-  # Make table for Adaptive genes with and without allele
-  lookup2 <- subset(lookup, !grepl("NoData", lookup$adaptivev2))
-  from_adapt <- lookup2[c("adaptivev2", "imgt", "tenx")]
-  from_adapt["adaptive"] <- substr(
-    from_adapt[["adaptivev2"]], 1,
-    nchar(from_adapt[["adaptivev2"]]) - 3
+  # Start Adaptive tables
+  lookup2 <- subset(lookup, !grepl("NoData", lookup$adaptive))
+
+  # Adaptive: Gene-level info but not allele-level (e.g., TCRAJ03-01)
+  adapt_no_allele <- lookup2[c("adaptivev2", "imgt", "tenx")]
+  adapt_no_allele["adaptive"] <- substr(
+    adapt_no_allele[["adaptivev2"]], 1,
+    nchar(adapt_no_allele[["adaptivev2"]]) - 3
   )
-  from_adapt <- stats::aggregate(. ~ adaptive,
-    data = subset(from_adapt, select = -adaptivev2),
+  adapt_no_allele <- stats::aggregate(. ~ adaptive,
+    data = subset(adapt_no_allele, select = -adaptivev2),
     FUN = function(x) x[1]
   )
-  from_adapt["adaptivev2"] <- from_adapt["adaptive"]
-  from_adaptive <- rbind(lookup2, from_adapt)
+
+  # Start Adaptive: No gene-level info where unneeded, with and without allele-level (e.g., TCRAV14*01 and TCRAV14)
+  subgroup_only <- lookup2[c("adaptivev2", "imgt", "tenx")]
+  subgroup_only["tenx_prefix"] <- vapply(strsplit(subgroup_only[["tenx"]], "-"), "[", character(1), 1)
+
+  # Group by "tenx_prefix", keeping groups with only one unique "tenx" value
+  agg_data <- stats::aggregate(tenx ~ tenx_prefix, data = subgroup_only, FUN = function(x) length(unique(x)))
+  agg_data <- subset(agg_data, tenx == 1)
+
+  # Make a DataFrame with subgroup-level Adaptive gene names
+  merged_data <- merge(subgroup_only, agg_data, by = "tenx_prefix")
+
+  subgroup_only_rows <- data.frame(
+    adaptive = gsub("-\\d+.*", "", merged_data[["adaptivev2"]]),
+    imgt = merged_data[["imgt"]],
+    tenx = merged_data[["tenx.x"]]
+  )
+  subgroup_only_rows <- subgroup_only_rows[order(subgroup_only_rows$imgt), ]
+  subgroup_only_rows <- stats::aggregate(. ~ adaptive, data = subgroup_only_rows, FUN = function(x) x[1])
+
+  subgroup_only_with_allele_rows <- data.frame(
+    adaptive = gsub("-0[0-9]", "", merged_data[["adaptivev2"]]),
+    imgt = merged_data[["imgt"]],
+    tenx = merged_data[["tenx.x"]]
+  )
+
+  # Combine the new rows with the original data
+  from_adaptive_updated <- rbind(adapt_no_allele, subgroup_only_rows, subgroup_only_with_allele_rows)
+
+  # Final polishing
+  from_adaptive_updated["adaptivev2"] <- from_adaptive_updated["adaptive"]
+  from_adaptive <- rbind(lookup2, from_adaptive_updated)
   from_adaptive <- from_adaptive[, c("adaptive", "adaptivev2", "imgt", "tenx")]
+  from_adaptive <- from_adaptive[order(from_adaptive$adaptive), ]
 
   # Remove duplicate rows
   lookup <- lookup[!duplicated(lookup), ]

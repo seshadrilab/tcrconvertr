@@ -28,7 +28,13 @@ capture their naming variations.
 
 ## Installation
 
-Install from GitHub:
+Install the latest stable version from CRAN:
+
+``` r
+install.packages("TCRconvertR")
+```
+
+You can also install the development version from GitHub:
 
 ``` r
 # install.packages("pak")
