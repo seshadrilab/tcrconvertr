@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">TCRconvertR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,8 +69,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Install from GitHub:</p>
+<p>Install the latest stable version from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"TCRconvertR"</span><span class="op">)</span></span></code></pre></div>
+<p>You can also install the development version from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"seshadrilab/tcrconvertr"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -91,7 +94,7 @@
 <li>
 <strong>IMGT</strong>: Output from <code>MiXCR</code> or other tools</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/seshadrilab/tcrconvertr" class="external-link">TCRconvertR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tcr_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_example_path.html">get_example_path</a></span><span class="op">(</span><span class="st">"tenx.csv"</span><span class="op">)</span> <span class="co"># Using built-in example file</span></span>
@@ -106,7 +109,7 @@
 <div class="section level4">
 <h4 id="id_2-convert">2. Convert<a class="anchor" aria-label="anchor" href="#id_2-convert"></a>
 </h4>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_tcrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/convert_gene.html">convert_gene</a></span><span class="op">(</span><span class="va">tcrs</span>, frm <span class="op">=</span> <span class="st">"tenx"</span>, to <span class="op">=</span> <span class="st">"adaptive"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive only</span></span>
 <span><span class="co">#&gt; captures VDJ genes; C genes will be NA.</span></span>

@@ -5,7 +5,7 @@ extracts all gene names and transforms them into 10X and Adaptive formats
 following predefined conversion rules. The resulting files are created:
 lookup.csv: IMGT gene names and their 10X and Adaptive equivalents.
 lookup_from_tenx.csv: Gene names aggregated by their 10X identifiers, with one representative allele (*01) for each.
-lookup_from_adaptive.csv: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
+lookup_from_adaptive.csv: Adaptive gene names, with or without alleles and gene designations, and their IMGT and 10X equivalents.
 
 
 The files are stored in a given subfolder (species) within the appropriate
@@ -21,7 +21,7 @@ extracts all gene names and transforms them into 10X and Adaptive formats
 following predefined conversion rules. The resulting files are created:
 lookup.csv: IMGT gene names and their 10X and Adaptive equivalents.
 lookup_from_tenx.csv: Gene names aggregated by their 10X identifiers, with one representative allele (*01) for each.
-lookup_from_adaptive.csv: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
+lookup_from_adaptive.csv: Adaptive gene names, with or without alleles and gene designations, and their IMGT and 10X equivalents.
 
 
 The files are stored in a given subfolder (species) within the appropriate
@@ -39,7 +39,7 @@ If a folder named species already exists in that location, it will be replaced."
 
     <a class="navbar-brand me-2" href="../index.html">TCRconvertR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@ folder to generate lookup tables used for making gene name conversions. It
 extracts all gene names and transforms them into 10X and Adaptive formats
 following predefined conversion rules. The resulting files are created:</p><ul><li><p><code>lookup.csv</code>: IMGT gene names and their 10X and Adaptive equivalents.</p></li>
 <li><p><code>lookup_from_tenx.csv</code>: Gene names aggregated by their 10X identifiers, with one representative allele (<code>*01</code>) for each.</p></li>
-<li><p><code>lookup_from_adaptive.csv</code>: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.</p></li>
+<li><p><code>lookup_from_adaptive.csv</code>: Adaptive gene names, with or without alleles and gene designations, and their IMGT and 10X equivalents.</p></li>
 </ul><p>The files are stored in a given subfolder (<code>species</code>) within the appropriate
 application folder via <code>rappdirs</code>. For example:</p><ul><li><p>MacOS: <code>~/Library/Application Support/&lt;AppName&gt;</code></p></li>
 <li><p>Windows: <code>C:\Documents and Settings\&lt;User&gt;\Application Data\Local Settings\&lt;AppAuthor&gt;\&lt;AppName&gt;</code></p></li>
