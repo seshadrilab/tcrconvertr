@@ -254,42 +254,47 @@ build_lookup_from_fastas <- function(data_dir, species) {
   # If converting from 10X just need the *01 allele
   from_tenx <- stats::aggregate(. ~ tenx, data = lookup, FUN = function(x) x[1])
 
-  # Make table for Adaptive genes with and without allele and gene-level info
+  # Start Adaptive tables
+  lookup2 <- subset(lookup, !grepl("NoData", lookup$adaptive))
 
-  # Lacking allele-level
-  lookup2 <- subset(lookup, !grepl("NoData", lookup$adaptivev2))
-  from_adapt <- lookup2[c("adaptivev2", "imgt", "tenx")]
-  from_adapt["adaptive"] <- substr(
-    from_adapt[["adaptivev2"]], 1,
-    nchar(from_adapt[["adaptivev2"]]) - 3
+  # Adaptive: Gene-level info but not allele-level (e.g., TCRAJ03-01)
+  adapt_no_allele <- lookup2[c("adaptivev2", "imgt", "tenx")]
+  adapt_no_allele["adaptive"] <- substr(
+    adapt_no_allele[["adaptivev2"]], 1,
+    nchar(adapt_no_allele[["adaptivev2"]]) - 3
   )
-  from_adapt <- stats::aggregate(. ~ adaptive,
-    data = subset(from_adapt, select = -adaptivev2),
+  adapt_no_allele <- stats::aggregate(. ~ adaptive,
+    data = subset(adapt_no_allele, select = -adaptivev2),
     FUN = function(x) x[1]
   )
 
-  # Lacking gene-level
-  from_adapt$tenx_prefix <- sub("-.*", "", from_adapt$tenx)
+  # Start Adaptive: No gene-level info where unneeded, with and without allele-level (e.g., TCRAV14*01 and TCRAV14)
+  subgroup_only <- lookup2[c("adaptivev2", "imgt", "tenx")]
+  subgroup_only["tenx_prefix"] <- vapply(strsplit(subgroup_only[["tenx"]], "-"), "[", character(1), 1)
 
-  # Group by tenx_prefix, keeping groups with only one unique tenx value
-  agg_data <- stats::aggregate(cbind(tenx) ~ tenx_prefix,
-    data = from_adapt,
-    FUN = function(x) length(unique(x)) == 1
-  )
-  agg_filtered <- agg_data[agg_data$tenx, ] # Keep only the TRUE rows
+  # Group by "tenx_prefix", keeping groups with only one unique "tenx" value
+  agg_data <- stats::aggregate(tenx ~ tenx_prefix, data = subgroup_only, FUN = function(x) length(unique(x)))
+  agg_data <- subset(agg_data, tenx == 1)
 
-  # Make a dataframe with subgroup-level Adaptive gene names
-  merged_data <- merge(from_adapt, agg_filtered, by = "tenx_prefix")
+  # Make a DataFrame with subgroup-level Adaptive gene names
+  merged_data <- merge(subgroup_only, agg_data, by = "tenx_prefix")
+
   subgroup_only_rows <- data.frame(
-    adaptive = sub("-\\d+.*", "", merged_data$adaptive),
-    imgt = merged_data$imgt,
-    tenx = merged_data$tenx.x,
-    tenx_prefix = merged_data$tenx_prefix
+    adaptive = gsub("-\\d+.*", "", merged_data[["adaptivev2"]]),
+    imgt = merged_data[["imgt"]],
+    tenx = merged_data[["tenx.x"]]
+  )
+  subgroup_only_rows <- subgroup_only_rows[order(subgroup_only_rows$imgt), ]
+  subgroup_only_rows <- stats::aggregate(. ~ adaptive, data = subgroup_only_rows, FUN = function(x) x[1])
+
+  subgroup_only_with_allele_rows <- data.frame(
+    adaptive = gsub("-0[0-9]", "", merged_data[["adaptivev2"]]),
+    imgt = merged_data[["imgt"]],
+    tenx = merged_data[["tenx.x"]]
   )
 
   # Combine the new rows with the original data
-  from_adaptive_updated <- rbind(from_adapt, subgroup_only_rows)
-  from_adaptive_updated <- subset(from_adaptive_updated, select = -c(tenx_prefix))
+  from_adaptive_updated <- rbind(adapt_no_allele, subgroup_only_rows, subgroup_only_with_allele_rows)
 
   # Final polishing
   from_adaptive_updated["adaptivev2"] <- from_adaptive_updated["adaptive"]
