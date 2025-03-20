@@ -58,7 +58,7 @@ tcr_file <- get_example_path("tenx.csv") # Using built-in example file
 tcrs <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
 tcrs
 #>              barcode       v_gene  j_gene            cdr3
-#> 1 AAACCTGAGACCACGA-1    TRAV29DV5  TRAJ12    CAVMDSSYKLIF
+#> 1 AAACCTGAGACCACGA-1   TRAV29/DV5  TRAJ12    CAVMDSSYKLIF
 #> 2 AAACCTGAGACCACGA-1 TRBV20/OR9-2 TRBJ2-1 CASSGLAGGYNEQFF
 #> 3 AAACCTGAGGCTCTTA-1        TRDV2   TRDJ3 CASSGVAGGTDTQYF
 #> 4 AAACCTGAGGCTCTTA-1        TRGV9   TRGJ1    CAVKDSNYQLIW

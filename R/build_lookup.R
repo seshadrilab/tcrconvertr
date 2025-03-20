@@ -20,6 +20,19 @@ adaptive_replacements <- c(
   "/OR9-02" = "-or09_02"
 )
 
+tenx_replacements <- c(
+  "TRAV13-4/DV7" = "TRAV13-4-DV7",
+  "TRAV14D-3/DV8" = "TRAV14D-3-DV8",
+  "TRAV15-1/DV6-1" = "TRAV15-1-DV6-1",
+  "TRAV15-2/DV6-2" = "TRAV15-2-DV6-2",
+  "TRAV15D-1/DV6D-1" = "TRAV15D-1-DV6D-1",
+  "TRAV15D-2/DV6D-2" = "TRAV15D-2-DV6D-2",
+  "TRAV16D/DV11" = "TRAV16D-DV11",
+  "TRAV21/DV12" = "TRAV21-DV12",
+  "TRAV4-4/DV10" = "TRAV4-4-DV10",
+  "TRAV6-7/DV9" = "TRAV6-7-DV9"
+)
+
 #' Extract gene names from a reference FASTA
 #'
 #' `parse_imgt_fasta()` extracts the second element from a "|"-delimited FASTA
@@ -231,10 +244,14 @@ build_lookup_from_fastas <- function(data_dir, species) {
   lookup <- extract_imgt_genes(data_dir)
 
   # Create the 10X column
-  lookup[["tenx"]] <- sub("/DV", "DV", substr(
+  lookup[["tenx"]] <- substr(
     lookup[["imgt"]], 1,
     nchar(lookup[["imgt"]]) - 3
-  ))
+  )
+  for (pattern in names(tenx_replacements)) {
+    replacement <- tenx_replacements[[pattern]]
+    lookup[["tenx"]] <- gsub(pattern, replacement, lookup[["tenx"]])
+  }
 
   # Create Adaptive columns
   lookup[["adaptive"]] <- lookup[["imgt"]]

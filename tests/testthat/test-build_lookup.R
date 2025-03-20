@@ -78,8 +78,8 @@ test_that("can build lookup tables from fastas", {
       "TRBV29-1*01", "TRBV29-1*02", "TRBV29/OR9-2*01", "TRBV29/OR9-2*01"
     ), tenx = c(
       "TRAV1-1", "TRAV1-1", "TRAV1-1", "TRAV1-2", "TRAV1-2",
-      "TRAV14DV4", "TRAV14DV4", "TRAV14DV4", "TRAV14DV4", "TRAV38-1", "TRAV38-1",
-      "TRAV38-2DV8", "TRAV38-2DV8", "TRBV29-1", "TRBV29-1", "TRBV29-1", "TRBV29-1", "TRBV29-1",
+      "TRAV14/DV4", "TRAV14/DV4", "TRAV14/DV4", "TRAV14/DV4", "TRAV38-1", "TRAV38-1",
+      "TRAV38-2/DV8", "TRAV38-2/DV8", "TRBV29-1", "TRBV29-1", "TRBV29-1", "TRBV29-1", "TRBV29-1",
       "TRBV29-1", "TRBV29/OR9-2", "TRBV29/OR9-2"
     )
   )
@@ -89,8 +89,8 @@ test_that("can build lookup tables from fastas", {
   # Check 10X lookup table
   tenx <- read.csv(file.path(mock_path, "rabbit/lookup_from_tenx.csv"))
   expected_tenx <- data.frame(tenx = c(
-    "TRAC", "TRAV1-1", "TRAV1-2", "TRAV14DV4",
-    "TRAV38-1", "TRAV38-2DV8", "TRBV29-1", "TRBV29/OR9-2"
+    "TRAC", "TRAV1-1", "TRAV1-2", "TRAV14/DV4",
+    "TRAV38-1", "TRAV38-2/DV8", "TRBV29-1", "TRBV29/OR9-2"
   ), imgt = c(
     "TRAC*01",
     "TRAV1-1*01", "TRAV1-2*01", "TRAV14/DV4*01", "TRAV38-1*01", "TRAV38-2/DV8*01",
@@ -114,7 +114,7 @@ test_that("can build lookup tables from fastas", {
     "TRBV29-1*01", "TRBV29-1*02", "TRBV29/OR9-2*01"
   ), tenx = c(
     "TRAC",
-    "TRAV1-1", "TRAV1-1", "TRAV1-2", "TRAV14DV4", "TRAV38-1", "TRAV38-2DV8",
+    "TRAV1-1", "TRAV1-1", "TRAV1-2", "TRAV14/DV4", "TRAV38-1", "TRAV38-2/DV8",
     "TRBV29-1", "TRBV29-1", "TRBV29/OR9-2"
   ), adaptive = c(
     "NoData",
