@@ -1,9 +1,7 @@
 Package: TCRconvertR
 Type: Package
 Title: Convert TCR Gene Names
-Description: Convert V, D, J, and/or C gene names between the 10X Genomics, 
-  Adaptive Biotechnologies, and IMGT nomenclatures. This allows for 
-  T Cell Receptor (TCR) datasets from different sequencing platforms to be combined.
+Description: Convert T Cell Receptor (TCR) gene names between the 10X Genomics, Adaptive Biotechnologies, and ImMunoGeneTics (IMGT) nomenclatures.
 Version: 1.0
 Authors@R: c(person("Emma", "Bishop", role = c("aut", "cre", "cph"),
     email = "emmab5@uw.edu", comment = c(ORCID = "0000-0003-4484-3336")))
