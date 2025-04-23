@@ -28,7 +28,8 @@ capture their naming variations.
 
 ## Installation
 
-Install the latest stable version from CRAN:
+Install the latest stable version from
+[CRAN](https://cran.r-project.org/web/packages/TCRconvertR/index.html):
 
 ``` r
 install.packages("TCRconvertR")
