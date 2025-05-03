@@ -8,9 +8,10 @@
 # Convert TCR gene names
 
 `TCRconvertR` converts V, D, J, and/or C gene names between the 10X
-Genomics, Adaptive Biotechnologies, and IMGT nomenclatures. It supports
-alpha-beta and gamma-delta T cell receptors (TCRs) for human, mouse, and
-rhesus macaque. Users can also define custom species, see:
+Genomics, Adaptive Biotechnologies, and IMGT nomenclatures. IMGT is the
+AIRR Community–recommended standard. It supports alpha-beta and
+gamma-delta T cell receptors (TCRs) for human, mouse, and rhesus
+macaque. Users can also define custom species, see:
 `vignette("custom-species")`. A [Python
 version](https://github.com/seshadrilab/tcrconvert) with command-line
 support is also available.

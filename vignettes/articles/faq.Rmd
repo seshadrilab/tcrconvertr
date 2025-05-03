@@ -63,7 +63,7 @@ specify them as a character vector with `frm_cols`.
 ## Can I input AIRR files?
 
 Yes, just specify the AIRR column names c(`v_call`, `d_call`, `j_call`, `c_call`) using `frm_cols`. 
-You must still specify the input naming convention with `frm`.
+You must still specify the input naming convention with `frm` (usually `'imgt'`).
 
 
 ## What if I have custom column names?
