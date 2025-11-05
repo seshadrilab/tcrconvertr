@@ -62,19 +62,18 @@ parse_imgt_fasta <- function(infile) {
   imgt_list
 }
 
-#' Extact gene names from a reference CSV for a given species
-#' 
+#' Extract gene names from a reference CSV for a given species
+#'
 #' `parse_mixcr_csv()` generates mixcr gene name data for a given species.
-#' @param species A string specifying the species, one of "human", "mouse", 
+#' @param species A string specifying the species, one of "human", "mouse",
 #' or "rhesus".
-#' 
+#'
 #' @return A character vector of gene names.
 #' @export
 #' @keywords internal
 #' @examples
 #' parse_mixcr_csv("human")
 parse_mixcr_csv <- function(species) {
-
   ## Throw error if input is not one of "human", "mouse", or "rhesus"
   if (!species %in% c("human", "mouse", "rhesus")) {
     stop("Input must be one of \'human\', \'mouse\', or \'rhesus\'")
@@ -85,10 +84,9 @@ parse_mixcr_csv <- function(species) {
 
   ## For each .csv file in the species subfolder, select only the 'name' and 'geneName'
   ## column and combine them. Capture the result in a list of dataframes (genes)
-  genes <- lapply(dir(directory, full.names = TRUE), function(path) { 
-
+  genes <- lapply(dir(directory, full.names = TRUE), function(path) {
     df <- read.csv(path)
-    mixcr <- c(df[['name']], df[['geneName']])
+    mixcr <- c(df[["name"]], df[["geneName"]])
     return(mixcr)
   })
 
