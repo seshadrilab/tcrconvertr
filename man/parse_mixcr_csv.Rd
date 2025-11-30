@@ -2,13 +2,12 @@
 % Please edit documentation in R/build_lookup.R
 \name{parse_mixcr_csv}
 \alias{parse_mixcr_csv}
-\title{Extact gene names from a reference CSV for a given species}
+\title{Extract gene names from a reference CSV for a given species}
 \usage{
-parse_mixcr_csv(species)
+parse_mixcr_csv(data_dir)
 }
 \arguments{
-\item{species}{A string specifying the species, one of "human", "mouse",
-or "rhesus".}
+\item{data_dir}{A string, the path to directory containing mixcr CSV files.}
 }
 \value{
 A character vector of gene names.
@@ -17,6 +16,7 @@ A character vector of gene names.
 \code{parse_mixcr_csv()} generates mixcr gene name data for a given species.
 }
 \examples{
-parse_mixcr_csv("human")
+mixcr_dir <- get_example_path("mixcr_dir/")
+parse_mixcr_csv(mixcr_dir)
 }
 \keyword{internal}
