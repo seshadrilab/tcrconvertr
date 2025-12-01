@@ -16,7 +16,7 @@ A character vector of gene names.
 \code{parse_mixcr_csv()} generates mixcr gene name data for a given species.
 }
 \examples{
-mixcr_dir <- get_example_path("mixcr_dir/")
+mixcr_dir <- get_example_path("mixcr_dir/test_mixcr")
 parse_mixcr_csv(mixcr_dir)
 }
 \keyword{internal}

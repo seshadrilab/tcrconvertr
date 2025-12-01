@@ -71,7 +71,7 @@ parse_imgt_fasta <- function(infile) {
 #' @export
 #' @keywords internal
 #' @examples
-#' mixcr_dir <- get_example_path("mixcr_dir/")
+#' mixcr_dir <- get_example_path("mixcr_dir/test_mixcr")
 #' parse_mixcr_csv(mixcr_dir)
 parse_mixcr_csv <- function(data_dir) {
   ## Throw error if the directory provided for data_dir is not valid
@@ -81,17 +81,20 @@ parse_mixcr_csv <- function(data_dir) {
 
   ## For each .csv file data_dir, select only the 'name' and 'geneName'
   ## column and combine them. Capture the result in a list of dataframes (genes)
-  genes <- lapply(dir(data_dir, full.names = TRUE), function(path) {
-    df <- read.csv(path)
+  mixcr_files <- list.files(data_dir, pattern = ".csv", full.names = TRUE)
+  genes <- lapply(mixcr_files, function(path) {
+    df <- utils::read.csv(path)
     mixcr <- c(df[["name"]], df[["geneName"]])
     return(mixcr)
   })
 
-  ## Extract unique gene names and convert to a single column dataframe
+  ## Create and sort output dataframe
   genes <- unique(unlist(genes))
-  genes <- as.data.frame(genes)
+  genes <- as.data.frame(genes, row.names = NULL)
   colnames(genes) <- c("mixcr")
-  return(genes)
+  genes_sorted <- genes[order(genes[["mixcr"]]), , drop = FALSE]
+  rownames(genes_sorted) <- NULL
+  return(genes_sorted)
 }
 
 #' Extract all gene names from a folder of FASTAs
