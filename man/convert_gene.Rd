@@ -4,7 +4,15 @@
 \alias{convert_gene}
 \title{Convert gene names}
 \usage{
-convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
+convert_gene(
+  df,
+  frm,
+  to,
+  species = "human",
+  frm_cols = NULL,
+  verbose = TRUE,
+  bad_genes_col = FALSE
+)
 }
 \arguments{
 \item{df}{A dataframe containing TCR gene names.}
@@ -21,6 +29,9 @@ convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
 Optional; defaults to \code{NULL}.}
 
 \item{verbose}{A boolean, whether to display messages. Optional; defaults to \code{TRUE}.}
+
+\item{bad_genes_col}{A boolean, whether to add a column of the
+unconvertable genes. Defaults to \code{FALSE}.}
 }
 \value{
 A dataframe with converted TCR gene names.
@@ -41,6 +52,8 @@ genes in all three formats.
 \itemize{
 \item If a gene name cannot be mapped, it is replaced with \code{NA} and a warning is
 raised.
+\item If \code{bad_genes_col = TRUE}, appends a 'bad_genes' column containing
+comma-separated gene names that could not be converted for each row.
 \item If \code{frm} is \code{'imgt'} and \code{frm_cols} is not provided, 10X column
 names are assumed.
 \item Constant (C) genes are set to \code{NA} when converting to Adaptive formats,
