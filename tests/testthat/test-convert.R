@@ -304,3 +304,50 @@ test_that("convert_gene verbose flag works", {
     captured_warnings
   )))
 })
+
+
+test_that("bad_genes_col flag works", {
+  # Test dataframe with some genes that won't convert
+  tenx_df_bad <- data.frame(
+    v_gene = c("TRAV12-1", "BAD_V_GENE"),
+    d_gene = c(NA, "TRBD1"),
+    j_gene = c("TRAJ16", "BAD_J_GENE"),
+    c_gene = c("BAD_C_GENE", "TRBC2"),
+    cdr3 = c("CAVLIF", "CASSGF")
+  )
+
+  # Expected output with bad_genes_col=TRUE
+  expected_with_bad <- data.frame(
+    v_gene = c("TRAV12-1*01", NA),
+    d_gene = c(NA, "TRBD1*01"),
+    j_gene = c("TRAJ16*01", NA),
+    c_gene = c(NA, "TRBC2*01"),
+    cdr3 = c("CAVLIF", "CASSGF"),
+    bad_genes = c("BAD_C_GENE", "BAD_V_GENE,BAD_J_GENE")
+  )
+
+  # Expected output with bad_genes_col=FALSE
+  expected_without_bad <- data.frame(
+    v_gene = c("TRAV12-1*01", NA),
+    d_gene = c(NA, "TRBD1*01"),
+    j_gene = c("TRAJ16*01", NA),
+    c_gene = c(NA, "TRBC2*01"),
+    cdr3 = c("CAVLIF", "CASSGF")
+  )
+
+  suppressWarnings({
+    # Test with bad_genes_col=TRUE
+    result_with <- convert_gene(
+      tenx_df_bad, "tenx", "imgt",
+      bad_genes_col = TRUE, verbose = FALSE
+    )
+    expect_equal(result_with, expected_with_bad)
+
+    # Test with bad_genes_col=FALSE
+    result_without <- convert_gene(
+      tenx_df_bad, "tenx", "imgt",
+      bad_genes_col = FALSE, verbose = FALSE
+    )
+    expect_equal(result_without, expected_without_bad)
+  })
+})

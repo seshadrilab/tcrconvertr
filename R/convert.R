@@ -112,6 +112,8 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #' **Behavioral Notes**
 #' - If a gene name cannot be mapped, it is replaced with `NA` and a warning is
 #' raised.
+#' - If ``bad_genes_col = TRUE``, appends a 'bad_genes' column containing
+#' comma-separated gene names that could not be converted for each row.
 #' - If `frm` is `'imgt'` and `frm_cols` is not provided, 10X column
 #' names are assumed.
 #' - Constant (C) genes are set to `NA` when converting to Adaptive formats,
@@ -138,6 +140,8 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #' @param frm_cols A character vector of custom gene column names.
 #' Optional; defaults to `NULL`.
 #' @param verbose A boolean, whether to display messages. Optional; defaults to `TRUE`.
+#' @param bad_genes_col A boolean, whether to add a column of the
+#' unconvertable genes. Defaults to ``FALSE``.
 #'
 #' @return A dataframe with converted TCR gene names.
 #' @autoglobal
@@ -147,7 +151,8 @@ which_frm_cols <- function(df, frm, frm_cols = NULL, verbose = TRUE) {
 #' df <- read.csv(tcr_file)[c("barcode", "v_gene", "j_gene", "cdr3")]
 #' df
 #' convert_gene(df, "tenx", "adaptive", verbose = FALSE)
-convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE) {
+convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL,
+                         verbose = TRUE, bad_genes_col = FALSE) {
   if (frm == to) {
     stop('"frm" and "to" formats should be different.')
   }
@@ -180,11 +185,25 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
   new_genes <- list()
   bad_genes_all <- c()
 
+  # Make empty dataframe that has same index/rownames as input dataframe
+  if (bad_genes_col) {
+    bad_df <- data.frame(row.names = rownames(df))
+  }
+
+
   for (col in cols_from) {
     if (col %in% colnames(df)) {
       merged <- merge(df[, c(col, "id"), drop = FALSE], lookup, by.x = col, by.y = frm, all.x = TRUE)
       merged <- merged[order(merged$id), ]
       good_genes <- merged[, to]
+
+      if (bad_genes_col) {
+        # Keep bad genes and make good genes NA
+        # Note that when good_genes is NA, it means there was no match in the
+        # lookup table, so the original gene is "bad"
+        bad_df[[col]] <- ifelse(is.na(good_genes), df[[col]], NA)
+      }
+
       # Note genes where the merge produced an NA on the 'to' format side
       new_bad_genes <- merged[is.na(merged[, to]), col]
       # We don't expect the entire column of genes to be empty.
@@ -212,6 +231,21 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL, verbos
     df_out[, col] <- new_genes[[col]]
     df_out[[col]][df_out[[col]] == "NoData"] <- NA_character_
   }
+
+  if (bad_genes_col) {
+    # Append the column of bad genes
+    # For each row, concatenate non-NA values with commas and store in the
+    # 'bad_genes' column
+    df_out$bad_genes <- apply(bad_df, 1, function(row) {
+      non_na <- row[!is.na(row)]
+      if (length(non_na) > 0) {
+        paste(non_na, collapse = ",")
+      } else {
+        NA_character_
+      }
+    })
+  }
+
   df_out <- subset(df_out, select = -c(id)) # Remove row number column
 
   df_out
