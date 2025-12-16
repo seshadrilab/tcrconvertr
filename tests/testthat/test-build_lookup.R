@@ -1,4 +1,4 @@
-test_that("can parse a mixcr CSV", {
+test_that("can parse a MIXCR CSV", {
   mixcr <- get_example_path("mixcr_dir/test_mixcr/")
   expected_out <- data.frame(
     "mixcr" = c(

@@ -62,10 +62,11 @@ parse_imgt_fasta <- function(infile) {
   imgt_list
 }
 
-#' Extract gene names from a reference CSV for a given species
+#' Extract gene names from a reference MIXCR CSVs
 #'
-#' `parse_mixcr_csv()` generates mixcr gene name data for a given species.
-#' @param data_dir A string, the path to directory containing mixcr CSV files.
+#' `parse_mixcr_csv()` extracts all "name" and "geneName" values from MIXCR CSV files in a given
+#' folder and combines them into one column.
+#' @param data_dir A string, the path to directory containing MIXCR reference CSV files.
 #'
 #' @return A character vector of gene names.
 #' @export
@@ -74,13 +75,13 @@ parse_imgt_fasta <- function(infile) {
 #' mixcr_dir <- get_example_path("mixcr_dir/test_mixcr")
 #' parse_mixcr_csv(mixcr_dir)
 parse_mixcr_csv <- function(data_dir) {
-  ## Throw error if the directory provided for data_dir is not valid
+  # Throw error if the directory provided for data_dir is not valid
   if (!dir.exists(data_dir)) {
     stop("Directory doesn't exist")
   }
 
-  ## For each .csv file data_dir, select only the 'name' and 'geneName'
-  ## column and combine them. Capture the result in a list of dataframes (genes)
+  # For each .csv file data_dir, select only the 'name' and 'geneName'
+  # column and combine them. Capture the result in a list of dataframes (genes)
   mixcr_files <- list.files(data_dir, pattern = ".csv", full.names = TRUE)
   genes <- lapply(mixcr_files, function(path) {
     df <- utils::read.csv(path)
@@ -88,7 +89,7 @@ parse_mixcr_csv <- function(data_dir) {
     return(mixcr)
   })
 
-  ## Create and sort output dataframe
+  # Create and sort output dataframe
   genes <- unique(unlist(genes))
   genes <- as.data.frame(genes, row.names = NULL)
   colnames(genes) <- c("mixcr")
