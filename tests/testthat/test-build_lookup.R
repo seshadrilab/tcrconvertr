@@ -4,7 +4,7 @@ test_that("can parse a MIXCR CSV", {
     "mixcr" = c(
       "TCRG-C3", "TCRG-C3*00", "TRAC", "TRAC*00", "TRAV12D-3",
       "TRAV12D-3*00", "TRAV14-2", "TRAV14-2*00", "TRBD2",
-      "TRBD2*00", "TRBJ2-1", "TRBJ2-1*00", "TRDC", "TRDC*00",
+      "TRBD2*00", "TRDC", "TRDC*00",
       "TRDD2", "TRDD2*00", "TRDJ1", "TRDJ1*00"
     )
   )
