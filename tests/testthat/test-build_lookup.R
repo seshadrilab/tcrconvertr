@@ -1,3 +1,17 @@
+test_that("can parse a MIXCR CSV", {
+  mixcr <- get_example_path("mixcr_dir/test_mixcr/")
+  expected_out <- data.frame(
+    "mixcr" = c(
+      "TCRG-C3", "TCRG-C3*00", "TRAC", "TRAC*00", "TRAV12D-3",
+      "TRAV12D-3*00", "TRAV14-2", "TRAV14-2*00", "TRBD2",
+      "TRBD2*00", "TRDC", "TRDC*00",
+      "TRDD2", "TRDD2*00", "TRDJ1", "TRDJ1*00"
+    )
+  )
+  rownames(expected_out) <- NULL
+  expect_equal(parse_mixcr_csv(mixcr), expected_out)
+})
+
 test_that("can parse an imgt fasta", {
   fasta <- get_example_path("fasta_dir/test_trav.fa")
   expected_out <- c(
