@@ -58,7 +58,15 @@ while preserving row order.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_gene</span><span class="op">(</span><span class="va">df</span>, <span class="va">frm</span>, <span class="va">to</span>, species <span class="op">=</span> <span class="st">"human"</span>, frm_cols <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_gene</span><span class="op">(</span></span>
+<span>  <span class="va">df</span>,</span>
+<span>  <span class="va">frm</span>,</span>
+<span>  <span class="va">to</span>,</span>
+<span>  species <span class="op">=</span> <span class="st">"human"</span>,</span>
+<span>  frm_cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bad_genes_col <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -91,6 +99,11 @@ Optional; defaults to <code>NULL</code>.</p></dd>
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>A boolean, whether to display messages. Optional; defaults to <code>TRUE</code>.</p></dd>
 
+
+<dt id="arg-bad-genes-col">bad_genes_col<a class="anchor" aria-label="anchor" href="#arg-bad-genes-col"></a></dt>
+<dd><p>A boolean, whether to add a column of the
+unconvertable genes. Defaults to <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -103,6 +116,8 @@ input columns and a species-specific lookup table containing IMGT reference
 genes in all three formats.</p>
 <p><strong>Behavioral Notes</strong></p><ul><li><p>If a gene name cannot be mapped, it is replaced with <code>NA</code> and a warning is
 raised.</p></li>
+<li><p>If <code>bad_genes_col = TRUE</code>, appends a 'bad_genes' column containing
+comma-separated gene names that could not be converted for each row.</p></li>
 <li><p>If <code>frm</code> is <code>'imgt'</code> and <code>frm_cols</code> is not provided, 10X column
 names are assumed.</p></li>
 <li><p>Constant (C) genes are set to <code>NA</code> when converting to Adaptive formats,

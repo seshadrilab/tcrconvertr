@@ -9,7 +9,15 @@ converted gene names while preserving row order.
 ## Usage
 
 ``` r
-convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
+convert_gene(
+  df,
+  frm,
+  to,
+  species = "human",
+  frm_cols = NULL,
+  verbose = TRUE,
+  bad_genes_col = FALSE
+)
 ```
 
 ## Arguments
@@ -41,6 +49,11 @@ convert_gene(df, frm, to, species = "human", frm_cols = NULL, verbose = TRUE)
 
   A boolean, whether to display messages. Optional; defaults to `TRUE`.
 
+- bad_genes_col:
+
+  A boolean, whether to add a column of the unconvertable genes.
+  Defaults to `FALSE`.
+
 ## Value
 
 A dataframe with converted TCR gene names.
@@ -55,6 +68,9 @@ reference genes in all three formats.
 
 - If a gene name cannot be mapped, it is replaced with `NA` and a
   warning is raised.
+
+- If `bad_genes_col = TRUE`, appends a 'bad_genes' column containing
+  comma-separated gene names that could not be converted for each row.
 
 - If `frm` is `'imgt'` and `frm_cols` is not provided, 10X column names
   are assumed.

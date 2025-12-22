@@ -14,8 +14,7 @@ constructed from IMGT reference FASTA files and account for the specific
 naming peculiarities of each platform. The built-in lookup tables are
 located under `inst/extdata/`. The code used to build the lookup tables,
 which demonstrates the conversion logic, is within the
-[build_lookup_from_fastas](https://github.com/seshadrilab/tcrconvert/blob/361f930d598996f3fa239a715c829ad8c107c63e/tcrconvert/build_lookup.py#L196)
-function.
+`build_lookup_from_fastas` function in the `convert.R` script.
 
 ## What input columns are required?
 
@@ -67,6 +66,16 @@ tables.
 
 Combinations of gene names, like `TCRAV01-02/12-02`, will be converted
 to `NA` because they are not in the IMGT reference.
+
+## What about genes that aren’t the reference?
+
+A warning message always lists all unique genes that could not be
+converted.
+
+Genes not in the reference are replaced with NA in the converted columns
+by default. If `bad_genes_col = TRUE`, the original unconverted gene
+names are retained in a ‘bad_genes’ column that contains the
+comma-separated ‘bad’ names for each row.
 
 ## Are non-human species supported?
 
