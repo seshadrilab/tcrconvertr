@@ -217,11 +217,11 @@ convert_gene <- function(df, frm, to, species = "human", frm_cols = NULL,
   }
 
   # Display genes we couldn't convert
-  if (!all(is.na(bad_genes_all))) {
-    bad_genes <- unique(bad_genes_all)
+  bad_genes <- unique(bad_genes_all[!is.na(bad_genes_all)])
+  if (length(bad_genes) > 0) {
     warning(paste(
       "These genes are not in IMGT for this species and will be replaced with NA:\n",
-      paste(unique(bad_genes), collapse = ", ")
+      paste(bad_genes, collapse = ", ")
     ))
   }
 

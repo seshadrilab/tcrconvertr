@@ -306,6 +306,18 @@ test_that("convert_gene verbose flag works", {
 })
 
 
+test_that("NA gene values do not trigger a bad-genes warning", {
+  adapt_v2_df <- data.frame(
+    vMaxResolved = c("TCRAV12-01*01", NA),
+    jMaxResolved = c("TCRAJ16-01*01", NA),
+    aminoAcid = c("CAVLIF", NA)
+  )
+  suppressMessages({
+    expect_no_warning(convert_gene(adapt_v2_df, "adaptivev2", "imgt", verbose = FALSE))
+  })
+})
+
+
 test_that("bad_genes_col flag works", {
   # Test dataframe with some genes that won't convert
   tenx_df_bad <- data.frame(
