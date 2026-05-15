@@ -12,6 +12,7 @@ To report a bug or request a feature please open an
 **1. Install suggested dependencies**
 
 ``` r
+
 install.packages(c("knitr", "rmarkdown", "roxyglobals", "testthat", "mockery"))
 
 # Additional packages for running checks locally
@@ -30,6 +31,7 @@ GitHub Actions will perform linting and run package checks and tests
 when you push changes. You can also check your code ahead of time:
 
 ``` r
+
 devtools::load_all()
 
 # Testing

@@ -92,6 +92,7 @@ Create them by combining `x_gene`/`xGeneName` and
 `x_allele`/`xGeneAllele` with `*` as a separator. Example code:
 
 ``` r
+
 library(dplyr)
 
 # Adaptive

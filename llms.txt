@@ -26,12 +26,14 @@ Install the latest stable version from
 [CRAN](https://cran.r-project.org/web/packages/TCRconvertR/index.html):
 
 ``` r
+
 install.packages("TCRconvertR")
 ```
 
 You can also install the development version from GitHub:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("seshadrilab/tcrconvertr")
 ```
@@ -47,6 +49,7 @@ Examples of files you may want to load:
 - **IMGT**: Output from `MiXCR` or other tools
 
 ``` r
+
 library(TCRconvertR)
 
 tcr_file <- get_example_path("tenx.csv") # Using built-in example file
@@ -62,6 +65,7 @@ tcrs
 #### 2. Convert
 
 ``` r
+
 new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
 #> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive only
 #> captures VDJ genes; C genes will be NA.

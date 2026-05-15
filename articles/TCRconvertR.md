@@ -6,6 +6,7 @@ Install from
 [CRAN](https://cran.r-project.org/web/packages/TCRconvertR/index.html):
 
 ``` r
+
 install.packages("TCRconvertR")
 ```
 
@@ -20,6 +21,7 @@ Examples of files you may want to load:
 - **IMGT**: Output from `MiXCR` or other tools
 
 ``` r
+
 library(TCRconvertR)
 
 tcr_file <- get_example_path("tenx.csv") # Using built-in example file
@@ -35,6 +37,7 @@ tcrs
 #### 2. Convert
 
 ``` r
+
 new_tcrs <- convert_gene(tcrs, frm = "tenx", to = "adaptive")
 #> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive only
 #> captures VDJ genes; C genes will be NA.
@@ -59,6 +62,7 @@ new_tcrs
 Supply the standard AIRR gene column names to `frm_cols`:
 
 ``` r
+
 new_airr <- convert_gene(airr, frm = "imgt", to = "adaptive", 
                          frm_cols = c('v_call', 'd_call', 'j_call', 'c_call'))
 ```
@@ -79,6 +83,7 @@ You can override these columns using `frm_cols`:
 **1. Load 10X data with custom column names**
 
 ``` r
+
 custom_file <- get_example_path("customcols.csv")
 
 custom <- read.csv(custom_file)
@@ -94,6 +99,7 @@ custom
 **2. Specify names using `frm_cols` and convert to IMGT**
 
 ``` r
+
 custom_new <- convert_gene(
   custom,
   frm = "tenx",
@@ -115,6 +121,7 @@ custom_new
 Use `species = "rhesus"` or `species = "mouse"`
 
 ``` r
+
 new_tcrs <- convert_gene(
   tcrs,
   frm = "tenx",

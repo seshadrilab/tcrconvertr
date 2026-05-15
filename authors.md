@@ -10,13 +10,13 @@
 Source:
 [`DESCRIPTION`](https://github.com/seshadrilab/tcrconvertr/blob/main/DESCRIPTION)
 
-Bishop E (2025). *TCRconvertR: Convert TCR Gene Names*. R package
+Bishop E (2026). *TCRconvertR: Convert TCR Gene Names*. R package
 version 1.0, <https://github.com/seshadrilab/tcrconvertr>.
 
     @Manual{,
       title = {TCRconvertR: Convert TCR Gene Names},
       author = {Emma Bishop},
-      year = {2025},
+      year = {2026},
       note = {R package version 1.0},
       url = {https://github.com/seshadrilab/tcrconvertr},
     }
